@@ -1,36 +1,21 @@
 // Server-side contract interaction utilities
 import { createPublicClient, http, type Address } from "viem"
-import { base } from "viem/chains"
+import { base, baseSepolia } from "viem/chains"
 import { InvoiceNFTABI, YieldVaultABI, AgentRouterABI, type Invoice, type Deposit, InvoiceStatus, Strategy } from "./abis"
 import { CHAIN_IDS, getContractAddresses } from "./addresses"
-import { createMantleSepoliaTransport, getMantleSepoliaRpcUrls } from "../mantle-rpc"
+import { createBaseSepoliaTransport } from "../base-sepolia-rpc"
 
-const MANTLE_SEPOLIA_CHAIN = {
-  id: CHAIN_IDS.MANTLE_SEPOLIA,
-  name: "Mantle Sepolia",
-  nativeCurrency: { name: "Mantle", symbol: "MNT", decimals: 18 },
-  rpcUrls: {
-    default: { http: getMantleSepoliaRpcUrls() },
-    public: { http: getMantleSepoliaRpcUrls() },
-  },
-  blockExplorers: {
-    default: { name: "Mantle Explorer", url: "https://explorer.sepolia.mantle.xyz" },
-  },
-} as const
-
-// Get chain based on environment (defaults to Mantle Sepolia for testnet)
-const chainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID || CHAIN_IDS.MANTLE_SEPOLIA)
+// Get chain based on environment (defaults to Base Sepolia for testnet)
+const chainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID || CHAIN_IDS.BASE_SEPOLIA)
 const chain = chainId === CHAIN_IDS.BASE
   ? base
-  : chainId === CHAIN_IDS.MANTLE_SEPOLIA
-    ? MANTLE_SEPOLIA_CHAIN
-    : MANTLE_SEPOLIA_CHAIN
+  : baseSepolia
 
 // Create public client for reading contracts
 export const publicClient = createPublicClient({
   chain,
-  transport: chain.id === CHAIN_IDS.MANTLE_SEPOLIA
-    ? createMantleSepoliaTransport()
+  transport: chain.id === CHAIN_IDS.BASE_SEPOLIA
+    ? createBaseSepoliaTransport()
     : http(process.env.NEXT_PUBLIC_RPC_URL || chain.rpcUrls.default.http[0]),
 })
 

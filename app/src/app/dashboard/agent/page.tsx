@@ -12,12 +12,14 @@ import { StatusBar } from "@/components/ui/status-bar"
 import { TerminalNav } from "@/components/terminal-nav"
 import { LiveAgentLog } from "@/components/live-agent-log"
 import { useYieldVault } from "@/hooks/use-yield-vault"
+import { useGatewayBalance } from "@/hooks/use-gateway-balance"
 import { formatUnits } from "viem"
 
 export default function AgentPage() {
   const [autoExecute, setAutoExecute] = useState(true)
   const { address, isConnected } = useAccount()
   const { activeDepositsCount, totalYield } = useYieldVault()
+  const { data: gwBalance, isLoading: gwLoading } = useGatewayBalance(30_000)
 
   const yieldFormatted = Number(formatUnits(BigInt(totalYield || 0), 18))
 
@@ -91,6 +93,71 @@ export default function AgentPage() {
           )}
         </div>
 
+        {/* Circle Gateway Nanopayments */}
+        <div className="terminal-card p-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-[14px] font-semibold mb-1">Gateway Nanopayments</h2>
+              <p className="text-[11px] text-[#666666]">Circle x402 · Base Sepolia · gasless USDC micropayments</p>
+            </div>
+            <div className="flex items-center gap-1.5">
+              {gwBalance?.configured ? (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] status-pulse" />
+                  <span className="text-[10px] text-[#10b981]">ACTIVE</span>
+                </>
+              ) : (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#666666]" />
+                  <span className="text-[10px] text-[#666666]">NOT CONFIGURED</span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {gwLoading ? (
+            <div className="text-[12px] text-[#666666]">loading gateway balance...</div>
+          ) : gwBalance?.configured && gwBalance.gateway ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-[12px]">
+              <div className="rounded border border-[#1f1f1f] bg-[#0a0a0a] p-3">
+                <div className="text-[10px] text-[#666666] uppercase tracking-wider mb-1">Gateway Available</div>
+                <div className="font-mono text-[#10b981] text-[15px]">${gwBalance.gateway.available}</div>
+                <div className="text-[10px] text-[#666666] mt-1">USDC (ready to collect)</div>
+              </div>
+              <div className="rounded border border-[#1f1f1f] bg-[#0a0a0a] p-3">
+                <div className="text-[10px] text-[#666666] uppercase tracking-wider mb-1">Wallet Balance</div>
+                <div className="font-mono text-[#e5e5e5] text-[15px]">${gwBalance.wallet?.balance ?? '—'}</div>
+                <div className="text-[10px] text-[#666666] mt-1">USDC (EOA wallet)</div>
+              </div>
+              <div className="rounded border border-[#1f1f1f] bg-[#0a0a0a] p-3">
+                <div className="text-[10px] text-[#666666] uppercase tracking-wider mb-1">Price per Request</div>
+                <div className="font-mono text-[#e5e5e5] text-[15px]">$0.001</div>
+                <div className="text-[10px] text-[#666666] mt-1">USDC · gasless EIP-3009</div>
+              </div>
+              <div className="rounded border border-[#1f1f1f] bg-[#0a0a0a] p-3">
+                <div className="text-[10px] text-[#666666] uppercase tracking-wider mb-1">Seller Address</div>
+                <div className="font-mono text-[#e5e5e5] text-[11px] truncate">
+                  {gwBalance.sellerAddress
+                    ? `${gwBalance.sellerAddress.slice(0, 6)}...${gwBalance.sellerAddress.slice(-4)}`
+                    : '—'}
+                </div>
+                <div className="text-[10px] text-[#666666] mt-1">Base Sepolia</div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-[12px] text-[#666666] p-3 rounded border border-[#1f1f1f] bg-[#0a0a0a]">
+              {gwBalance?.message ?? 'Set GATEWAY_SELLER_PRIVATE_KEY to enable nanopayment balance tracking.'}
+            </div>
+          )}
+
+          <div className="mt-4 p-3 bg-[#111111] rounded border border-[#1f1f1f] text-[11px] text-[#666666]">
+            <span className="text-[#e5e5e5] font-semibold">Protected endpoint: </span>
+            <span className="font-mono">GET /api/payments</span>
+            <span className="mx-2">·</span>
+            <span>Invoice dataset · $0.001 USDC · x402 protocol</span>
+          </div>
+        </div>
+
         {/* Live Agent Log */}
         <div className="terminal-card mb-8">
           <div className="px-4 py-3 border-b border-[#1f1f1f] bg-[#111111]">
@@ -118,7 +185,7 @@ export default function AgentPage() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] status-pulse" />
-                <span className="text-[#e5e5e5]">Checking MNT price via Pyth</span>
+                <span className="text-[#e5e5e5]">Checking ETH price via Pyth</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] status-pulse" />
@@ -163,7 +230,7 @@ export default function AgentPage() {
       </main>
 
       {/* Status Bar */}
-      <StatusBar status="online" network="MANTLE SEPOLIA" />
+      <StatusBar status="online" network="BASE SEPOLIA" />
     </div>
   )
 }

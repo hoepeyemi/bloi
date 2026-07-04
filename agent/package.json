@@ -12,8 +12,12 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
+    "@circle-fin/app-kit": "^1.0.0",
+    "@circle-fin/adapter-viem-v2": "^1.0.0",
+    "@circle-fin/x402-batching": "^3.2.0",
     "dotenv": "^16.4.7",
     "ethers": "^6.13.4",
+    "viem": "^2.43.3",
     "ws": "^8.18.0"
   },
   "devDependencies": {

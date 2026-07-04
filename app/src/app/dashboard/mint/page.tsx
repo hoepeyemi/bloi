@@ -205,7 +205,7 @@ function MintInvoiceContent() {
             {hash && (
               <div className="mb-8">
                 <a
-                  href={`https://explorer.sepolia.mantle.xyz/tx/${hash}`}
+                  href={`https://sepolia.basescan.org/tx/${hash}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-xs text-[#10b981] hover:underline"
@@ -229,7 +229,7 @@ function MintInvoiceContent() {
             </div>
           </div>
         </main>
-        <StatusBar status="online" network="MANTLE SEPOLIA" />
+        <StatusBar status="online" network="BASE SEPOLIA" />
       </div>
     )
   }
@@ -446,7 +446,7 @@ function MintInvoiceContent() {
               <div className="p-4 bg-[#111111] rounded border border-[#1f1f1f]">
                 <div className="flex items-center justify-between text-[11px] mb-2">
                   <span className="text-[#666666]">est_gas_fee</span>
-                  <span className="tabular-nums">~0.001 MNT</span>
+                  <span className="tabular-nums">~0.0001 ETH</span>
                 </div>
                 <div className="flex items-center justify-between text-[11px]">
                   <span className="text-[#666666]">network</span>
@@ -543,7 +543,7 @@ function MintInvoiceContent() {
         )}
       </main>
 
-      <StatusBar status="online" network="MANTLE SEPOLIA" />
+      <StatusBar status="online" network="BASE SEPOLIA" />
     </div>
   )
 }

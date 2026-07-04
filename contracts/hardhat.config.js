@@ -37,14 +37,14 @@ loadEnvFile(path.join(__dirname, ".env"));
 loadEnvFile(path.join(__dirname, ".env.local"));
 loadEnvFile(path.join(__dirname, "..", ".env"));
 
-const MANTLE_SEPOLIA_RPC_FALLBACKS = [
-  process.env.MANTLE_SEPOLIA_RPC,
-  process.env.MANTLE_SEPOLIA_RPC_SELECTED,
-  process.env.MANTLE_SEPOLIA_RPC_FALLBACK_1,
-  process.env.MANTLE_SEPOLIA_RPC_FALLBACK_2,
-  "https://rpc.sepolia.mantle.xyz",
-  "https://mantle-sepolia.drpc.org",
-  "https://5003.rpc.thirdweb.com/",
+const BASE_SEPOLIA_RPC_FALLBACKS = [
+  process.env.BASE_SEPOLIA_RPC,
+  process.env.BASE_SEPOLIA_RPC_URL,
+  process.env.BASE_SEPOLIA_RPC_FALLBACK_1,
+  process.env.BASE_SEPOLIA_RPC_FALLBACK_2,
+  "https://sepolia.base.org",
+  "https://base-sepolia.drpc.org",
+  "https://84532.rpc.thirdweb.com/",
 ].filter(Boolean);
 
 const optimizerSettings = {
@@ -67,13 +67,13 @@ module.exports = {
     settings: optimizerSettings,
   },
   networks: {
-    mantleSepolia: {
+    baseSepolia: {
       url:
-        process.env.MANTLE_SEPOLIA_RPC ||
-        process.env.MANTLE_SEPOLIA_RPC_SELECTED ||
-        MANTLE_SEPOLIA_RPC_FALLBACKS[0] ||
-        "https://rpc.sepolia.mantle.xyz",
-      chainId: 5003,
+        process.env.BASE_SEPOLIA_RPC ||
+        process.env.BASE_SEPOLIA_RPC_URL ||
+        BASE_SEPOLIA_RPC_FALLBACKS[0] ||
+        "https://sepolia.base.org",
+      chainId: 84532,
       accounts: PRIVATE_KEY,
     },
   },

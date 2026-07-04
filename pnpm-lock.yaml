@@ -17,12 +17,18 @@ importers:
       '@anthropic-ai/sdk':
         specifier: ^0.52.0
         version: 0.52.0
+      '@circle-fin/x402-batching':
+        specifier: ^3.2.0
+        version: 3.2.0(@x402/core@2.17.0)(viem@2.43.4(typescript@5.9.3)(zod@4.3.4))
       dotenv:
         specifier: ^16.4.7
         version: 16.6.1
       ethers:
         specifier: ^6.13.4
         version: 6.16.0
+      viem:
+        specifier: ^2.43.3
+        version: 2.43.4(typescript@5.9.3)(zod@4.3.4)
       ws:
         specifier: ^8.18.0
         version: 8.18.3
@@ -45,6 +51,9 @@ importers:
 
   app:
     dependencies:
+      '@circle-fin/x402-batching':
+        specifier: ^3.2.0
+        version: 3.2.0(@x402/core@2.17.0)(viem@2.43.4(typescript@5.9.3)(zod@4.3.4))
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.69.0(react@19.2.3))
@@ -368,6 +377,17 @@ packages:
   '@babel/types@7.28.5':
     resolution: {integrity: sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA==}
     engines: {node: '>=6.9.0'}
+
+  '@circle-fin/x402-batching@3.2.0':
+    resolution: {integrity: sha512-ft+ynAsYIGGQNAeud8v73GKyg1qonycMVqEK8Gt+ATwtrNBikYhfMtO9l7zMZCOTA1hJ1NJOnGWBFUR/gvDHjw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@x402/core': ^2.3.0
+      '@x402/evm': ^2.3.0
+      viem: ^2.0.0
+    peerDependenciesMeta:
+      '@x402/evm':
+        optional: true
 
   '@date-fns/tz@1.4.1':
     resolution: {integrity: sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==}
@@ -2737,6 +2757,9 @@ packages:
 
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
+
+  '@x402/core@2.17.0':
+    resolution: {integrity: sha512-BBooe9Kewl5KLaKadElFwhZzZ+n/X/m2djzGtc7OY51D8fk2vHTVvDZtBFEJYdJxtQoUZMKX73hew0ss81FENQ==}
 
   '@xtuc/ieee754@1.2.0':
     resolution: {integrity: sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA==}
@@ -5706,6 +5729,11 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
+  '@circle-fin/x402-batching@3.2.0(@x402/core@2.17.0)(viem@2.43.4(typescript@5.9.3)(zod@4.3.4))':
+    dependencies:
+      '@x402/core': 2.17.0
+      viem: 2.43.4(typescript@5.9.3)(zod@4.3.4)
+
   '@date-fns/tz@1.4.1': {}
 
   '@emnapi/core@1.7.1':
@@ -7987,6 +8015,10 @@ snapshots:
     dependencies:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
+
+  '@x402/core@2.17.0':
+    dependencies:
+      zod: 3.25.76
 
   '@xtuc/ieee754@1.2.0': {}
 

@@ -19,7 +19,7 @@ function validateEnvironment(addresses: ContractAddresses): { valid: boolean; wa
   const errors: string[] = [];
 
   const envVars: EnvValidation[] = [
-    { name: 'MANTLE_RPC_URL', value: process.env.RPC_URL || process.env.CHAIN_RPC_URL || process.env.MANTLE_RPC_URL, required: false, description: 'RPC endpoint' },
+    { name: 'BASE_SEPOLIA_RPC_URL', value: process.env.RPC_URL || process.env.CHAIN_RPC_URL || process.env.BASE_SEPOLIA_RPC_URL, required: false, description: 'RPC endpoint' },
     { name: 'AGENT_PRIVATE_KEY', value: process.env.AGENT_PRIVATE_KEY, required: false, description: 'Agent wallet key' },
     { name: 'ANTHROPIC_API_KEY', value: process.env.ANTHROPIC_API_KEY, required: false, description: 'LLM API key' },
     { name: 'WS_PORT', value: process.env.WS_PORT, required: false, description: 'WebSocket port' },
@@ -42,7 +42,7 @@ function validateEnvironment(addresses: ContractAddresses): { valid: boolean; wa
   }
 
   // Validate RPC URL format
-  const rpcUrl = process.env.RPC_URL || process.env.CHAIN_RPC_URL || process.env.MANTLE_RPC_URL || 'http://127.0.0.1:8545';
+  const rpcUrl = process.env.RPC_URL || process.env.CHAIN_RPC_URL || process.env.BASE_SEPOLIA_RPC_URL || 'http://127.0.0.1:8545';
   if (!rpcUrl.startsWith('http://') && !rpcUrl.startsWith('https://')) {
     errors.push('RPC_URL must be a valid HTTP(S) URL');
   }
@@ -92,17 +92,16 @@ function normalizePrivateKey(value: string | undefined): string | undefined {
   return /^0x[0-9a-fA-F]{64}$/.test(value) ? value : undefined;
 }
 
-const MANTLE_SEPOLIA_RPC_FALLBACKS = uniqueUrls([
+const BASE_SEPOLIA_RPC_FALLBACKS = uniqueUrls([
   process.env.RPC_URL,
   process.env.CHAIN_RPC_URL,
-  process.env.MANTLE_RPC_URL,
-  process.env.MANTLE_SEPOLIA_RPC,
-  process.env.MANTLE_SEPOLIA_RPC_SELECTED,
-  process.env.MANTLE_SEPOLIA_RPC_FALLBACK_1,
-  process.env.MANTLE_SEPOLIA_RPC_FALLBACK_2,
-  'https://rpc.sepolia.mantle.xyz',
-  'https://mantle-sepolia.drpc.org',
-  'https://5003.rpc.thirdweb.com/',
+  process.env.BASE_SEPOLIA_RPC_URL,
+  process.env.BASE_SEPOLIA_RPC,
+  process.env.BASE_SEPOLIA_RPC_FALLBACK_1,
+  process.env.BASE_SEPOLIA_RPC_FALLBACK_2,
+  'https://sepolia.base.org',
+  'https://base-sepolia.drpc.org',
+  'https://84532.rpc.thirdweb.com/',
 ]);
 
 async function selectWorkingRpcUrl(urls: string[]): Promise<string> {
@@ -143,7 +142,7 @@ async function selectWorkingRpcUrl(urls: string[]): Promise<string> {
 const PRIVATE_KEY = normalizePrivateKey(process.env.AGENT_PRIVATE_KEY);
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const WS_PORT = parseInt(process.env.WS_PORT || '8080');
-const DEPLOYMENT_NETWORK = process.env.DEPLOYMENT_NETWORK || 'mantleSepolia';
+const DEPLOYMENT_NETWORK = process.env.DEPLOYMENT_NETWORK || 'baseSepolia';
 const DEPLOYMENT_DEFAULTS = readDeploymentDefaults(DEPLOYMENT_NETWORK);
 
 // Contract addresses (update after deployment)
@@ -162,7 +161,7 @@ const ADDRESSES: ContractAddresses = {
 const isProduction = !!ADDRESSES.pythOracle || !!ADDRESSES.aaveYieldSource;
 
 async function main() {
-  const RPC_URL = await selectWorkingRpcUrl(MANTLE_SEPOLIA_RPC_FALLBACKS);
+  const RPC_URL = await selectWorkingRpcUrl(BASE_SEPOLIA_RPC_FALLBACKS);
 
   console.log('');
   console.log('  ███████╗ █████╗ ██╗  ██╗████████╗ ██████╗ ██████╗ ██╗   ██╗');

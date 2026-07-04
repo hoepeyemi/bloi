@@ -47,28 +47,15 @@ export const skaleEuropa = defineChain({
   },
 });
 
-export const mantleSepolia = defineChain({
-  id: 5003,
-  name: 'Mantle Sepolia',
-  nativeCurrency: { name: 'Mantle', symbol: 'MNT', decimals: 18 },
-  rpcUrls: {
-    default: { http: ['https://rpc.sepolia.mantle.xyz'] },
-    public: { http: ['https://rpc.sepolia.mantle.xyz', 'https://mantle-sepolia.drpc.org', 'https://5003.rpc.thirdweb.com/'] },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Mantle Explorer',
-      url: 'https://explorer.sepolia.mantle.xyz',
-    },
-  },
-});
+// Re-export baseSepolia for use in the app
+export { baseSepolia };
 
 const isTestnet = process.env.NEXT_PUBLIC_NETWORK_MODE !== 'mainnet';
 
 // Mainnet chains
 const mainnetChains = [mainnet, bsc, base, arbitrum, polygon, skaleEuropa] as const;
-// Testnet chains
-const testnetChains = [mantleSepolia] as const;
+// Testnet chains — Base Sepolia is the primary testnet (supports Circle Gateway nanopayments)
+const testnetChains = [baseSepolia] as const;
 // Dev chain
 const devChains = [anvil] as const;
 
@@ -95,7 +82,7 @@ export const config = createConfig({
     [polygon.id]: http(process.env.NEXT_PUBLIC_POLYGON_RPC || undefined),
     [skaleEuropa.id]: http('https://mainnet.skalenodes.com/v1/elated-tan-skat'),
     // Testnets
-    [mantleSepolia.id]: createMantleSepoliaTransport(),
+    [baseSepolia.id]: createBaseSepoliaTransport(),
     // Local
     [anvil.id]: http('http://127.0.0.1:8545'),
   },

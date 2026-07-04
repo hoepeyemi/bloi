@@ -6,6 +6,8 @@ import { AgentWebSocket } from './websocket.js';
 import { analyzeInvoice, applyMarketAdjustment, updateMarketRegime, applyRegimeAdjustment, getCurrentRegime, getRegimeStats } from './optimizer.js';
 import { AgentConfig, AgentThought, Strategy, AnalysisResult, MarketConditions, MarketAlert } from './types.js';
 import { STRATEGY_NAMES } from './constants.js';
+import { createNanopayments, AgentNanopayments } from './nanopayments.js';
+import { createArcAgentKit, ArcAgentKit } from './arc-appkit.js';
 
 export class VasmoAgent {
   private blockchain: BlockchainService;
@@ -14,6 +16,8 @@ export class VasmoAgent {
   private config: AgentConfig;
   private isRunning = false;
   private analysisLoop: NodeJS.Timeout | null = null;
+
+  private nanopay: AgentNanopayments | null = null;
 
   // Rate limiting: track last analysis time per invoice
   private lastAnalysisTime: Map<string, number> = new Map();
@@ -53,6 +57,11 @@ export class VasmoAgent {
       this.analyzeInvoice(tokenId);
     };
 
+    // Initialize Circle Gateway nanopayments buyer (Base Sepolia)
+    this.nanopay = createNanopayments();
+    if (this.nanopay) {
+      console.log('[nanopay] AgentNanopayments initialized — will auto-fund and pay for x402 resources');
+    }
   }
 
   async start(): Promise<void> {
@@ -74,6 +83,25 @@ export class VasmoAgent {
       }
     } else {
       console.warn('⚠️  No private key provided - agent will run in read-only mode');
+    }
+
+    // Ensure the agent's Gateway balance is funded before starting analysis
+    if (this.nanopay) {
+      try {
+        await this.nanopay.ensureFunded();
+        const balances = await this.nanopay.getBalances();
+        console.log(
+          `[nanopay] Gateway: ${balances.gateway.formattedAvailable} USDC | Wallet: ${balances.wallet.formatted} USDC`
+        );
+        this.broadcastThought({
+          type: 'thinking',
+          tokenId: 'system',
+          message: `💳 Gateway funded: ${balances.gateway.formattedAvailable} USDC available for nanopayments`,
+          timestamp: Date.now(),
+        });
+      } catch (err) {
+        console.warn('[nanopay] ensureFunded failed (non-fatal):', err);
+      }
     }
 
     this.isRunning = true;
@@ -287,6 +315,10 @@ export class VasmoAgent {
         timestamp: Date.now(),
       });
 
+      // Optional: fetch enriched invoice data from vasmo app via Circle Gateway nanopayment
+      // Runs in parallel with blockchain scan; failure is non-fatal
+      const paidFetchPromise = this.fetchPaidInvoiceData();
+
       // Get ALL active invoices (not just those in yield strategies)
       const [invoicesResult, depositsResult] = await Promise.all([
         this.blockchain.getActiveInvoices(),
@@ -307,6 +339,12 @@ export class VasmoAgent {
 
       const activeInvoices = invoicesResult.ids;
       const activeDeposits = depositsResult.ids;
+
+      // Await the paid fetch (if it was initiated) — result used for logging/enrichment
+      const paidInvoices = await paidFetchPromise;
+      if (paidInvoices !== null) {
+        console.log(`[nanopay] Paid fetch returned ${paidInvoices.length} invoice records`);
+      }
 
       // Combine and deduplicate - prioritize all invoices
       const allTokenIds = [...new Set([...activeInvoices, ...activeDeposits])];
@@ -555,6 +593,44 @@ export class VasmoAgent {
 
   private delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Fetches the active invoice dataset from the vasmo app's x402-gated endpoint,
+   * paying $0.001 USDC via Circle Gateway nanopayments.
+   *
+   * Falls back gracefully if nanopayments are not configured or the endpoint
+   * is unreachable — the agent continues using direct blockchain reads.
+   */
+  async fetchPaidInvoiceData(): Promise<unknown[] | null> {
+    if (!this.nanopay) return null;
+
+    const appUrl = process.env.VASMO_APP_URL || 'http://localhost:3000';
+    const endpoint = `${appUrl}/api/payments`;
+
+    try {
+      const supported = await this.nanopay.supports(endpoint);
+      if (!supported) {
+        console.log('[nanopay] /api/payments does not advertise x402 support — skipping paid fetch');
+        return null;
+      }
+
+      const { data, amountPaid } = await this.nanopay.pay<{
+        data: { invoices: unknown[]; total: number };
+      }>(endpoint);
+
+      this.broadcastThought({
+        type: 'thinking',
+        tokenId: 'system',
+        message: `💳 Paid ${amountPaid} USDC → fetched ${(data as { data: { invoices: unknown[] } }).data.invoices.length} invoices via Circle Gateway`,
+        timestamp: Date.now(),
+      });
+
+      return (data as { data: { invoices: unknown[] } }).data.invoices;
+    } catch (err) {
+      console.warn('[nanopay] fetchPaidInvoiceData failed (non-fatal):', err);
+      return null;
+    }
   }
 
   // Public API for manual triggers

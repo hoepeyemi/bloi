@@ -68,6 +68,9 @@
     "vaul": "^1.1.2",
     "viem": "^2.43.3",
     "wagmi": "^3.1.0",
+    "@circle-fin/app-kit": "^1.0.0",
+    "@circle-fin/adapter-viem-v2": "^1.0.0",
+    "@circle-fin/x402-batching": "^3.2.0",
     "zod": "^4.2.1",
     "zustand": "^5.0.9"
   },

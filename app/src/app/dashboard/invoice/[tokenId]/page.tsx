@@ -130,7 +130,7 @@ function InvoiceDetailContent() {
                     {deposit?.active ? "Earning Yield" : invoice.statusLabel}
                   </h1>
                   <p className="text-sm text-[#666666] mt-2">
-                    Privacy-preserving invoice commitment stored on Mantle Sepolia.
+                    Privacy-preserving invoice commitment stored on Base Sepolia.
                   </p>
                 </div>
                 <div className="inline-flex items-center gap-2 rounded border border-[#10b981]/20 bg-[#10b981]/10 px-4 py-2 text-sm">
@@ -240,7 +240,7 @@ function InvoiceDetailContent() {
                   </Button>
                 </Link>
                 <a
-                  href={`https://explorer.mantle.xyz/address/${contractAddress}`}
+                  href={`https://sepolia.basescan.org/address/${contractAddress}`}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 rounded border border-[#1f1f1f] px-4 py-2 text-sm text-[#d6d6d6] hover:border-[#10b981]/40 hover:text-white transition-colors"
@@ -254,7 +254,7 @@ function InvoiceDetailContent() {
         </div>
       </main>
 
-      <StatusBar status="online" network="MANTLE SEPOLIA" />
+      <StatusBar status="online" network="BASE SEPOLIA" />
     </div>
   )
 }

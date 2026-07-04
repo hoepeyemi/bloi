@@ -7,10 +7,10 @@ export const CHAIN_IDS = {
   POLYGON: 137,
   BASE: 8453,
   ARBITRUM: 42161,
-  MANTLE_SEPOLIA: 5003,
   SKALE: 2046399126,
   // Testnets
   SEPOLIA: 11155111,
+  BASE_SEPOLIA: 84532,
   BSC_TESTNET: 97,
   POLYGON_AMOY: 80002,
   ARBITRUM_SEPOLIA: 421614,
@@ -45,14 +45,14 @@ const emptyAddresses: ContractAddresses = {
 
 // Contract addresses per chain - populated after deployment
 const addresses: Partial<Record<ChainId, ContractAddresses>> = {
-  // Testnets - will be populated after deployment
-  [CHAIN_IDS.MANTLE_SEPOLIA]: {
-    invoiceNFT: "0x018ee8F363421016177DbC8F9492fe2a1C720e29",
-    yieldVault: "0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6",
-    agentRouter: "0x4430248F3b2304F946f08c43A06C3451657FD658",
-    privacyRegistry: "0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0",
-    pythOracle: "0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3",
-    aaveYieldSource: "0x5a179d261fD322ecaED06FA9Aa2973980D74322c",
+  // Testnets - Base Sepolia is the primary testnet (Circle Gateway nanopayments supported)
+  [CHAIN_IDS.BASE_SEPOLIA]: {
+    invoiceNFT: (process.env.NEXT_PUBLIC_INVOICE_NFT_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
+    yieldVault: (process.env.NEXT_PUBLIC_YIELD_VAULT_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
+    agentRouter: (process.env.NEXT_PUBLIC_AGENT_ROUTER_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
+    privacyRegistry: (process.env.NEXT_PUBLIC_PRIVACY_REGISTRY_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
+    pythOracle: (process.env.NEXT_PUBLIC_PYTH_ORACLE_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
+    aaveYieldSource: (process.env.NEXT_PUBLIC_AAVE_YIELD_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
   },
   [CHAIN_IDS.ARBITRUM_SEPOLIA]: { ...emptyAddresses },
   [CHAIN_IDS.POLYGON_AMOY]: { ...emptyAddresses },
@@ -118,9 +118,9 @@ export const CHAIN_META: Partial<Record<ChainId, ChainMeta>> = {
     name: "Sepolia", shortName: "SEP", hasAave: true, hasPyth: true,
     gasLabel: "~$0", explorerUrl: "https://sepolia.etherscan.io", nativeCurrency: "ETH",
   },
-  [CHAIN_IDS.MANTLE_SEPOLIA]: {
-    name: "Mantle Sepolia", shortName: "M-SEP", hasAave: false, hasPyth: true,
-    gasLabel: "~$0", explorerUrl: "https://explorer.sepolia.mantle.xyz", nativeCurrency: "MNT",
+  [CHAIN_IDS.BASE_SEPOLIA]: {
+    name: "Base Sepolia", shortName: "B-SEP", hasAave: true, hasPyth: true,
+    gasLabel: "~$0", explorerUrl: "https://sepolia.basescan.org", nativeCurrency: "ETH",
   },
   [CHAIN_IDS.ARBITRUM_SEPOLIA]: {
     name: "Arbitrum Sepolia", shortName: "A-SEP", hasAave: true, hasPyth: true,
@@ -138,7 +138,7 @@ export const SUPPORTED_MAINNET_CHAINS = [
 ] as const
 
 export const SUPPORTED_TESTNET_CHAINS = [
-  CHAIN_IDS.MANTLE_SEPOLIA,
+  CHAIN_IDS.BASE_SEPOLIA,
 ] as const
 
 export function getContractAddresses(chainId: number): ContractAddresses {

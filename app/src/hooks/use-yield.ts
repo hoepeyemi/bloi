@@ -130,7 +130,7 @@ export function useYieldAPY(asset: string = "USDC") {
     }
   }
 
-  // Fallback: simulated data (SKALE, Mantle Sepolia, unsupported chains, read errors, non-USDC assets)
+  // Fallback: simulated data (SKALE, Base Sepolia testnet, unsupported chains, read errors, non-USDC assets)
   return {
     supplyAPY: fallback.supply,
     borrowAPY: fallback.borrow,

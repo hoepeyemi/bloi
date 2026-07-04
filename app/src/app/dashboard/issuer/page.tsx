@@ -366,7 +366,7 @@ export default function IssuerDashboardPage() {
         </DialogContent>
       </Dialog>
 
-      <StatusBar network="MANTLE SEPOLIA" />
+      <StatusBar network="BASE SEPOLIA" />
     </div>
   )
 }
