@@ -13,6 +13,10 @@ import { TerminalNav } from "@/components/terminal-nav"
 import { LiveAgentLog } from "@/components/live-agent-log"
 import { useYieldVault } from "@/hooks/use-yield-vault"
 import { useGatewayBalance } from "@/hooks/use-gateway-balance"
+import { ArcSendPanel } from "@/components/arc/ArcSendPanel"
+import { ArcBridgePanel } from "@/components/arc/ArcBridgePanel"
+import { ArcSwapPanel } from "@/components/arc/ArcSwapPanel"
+import { ArcUnifiedBalancePanel } from "@/components/arc/ArcUnifiedBalancePanel"
 import { formatUnits } from "viem"
 
 export default function AgentPage() {
@@ -155,6 +159,40 @@ export default function AgentPage() {
             <span className="font-mono">GET /api/payments</span>
             <span className="mx-2">·</span>
             <span>Invoice dataset · $0.001 USDC · x402 protocol</span>
+          </div>
+        </div>
+
+        {/* Arc App Kit — Unified Balance */}
+        <div className="terminal-card p-6 mb-8">
+          <div className="mb-4">
+            <h2 className="text-[14px] font-semibold mb-1">Unified USDC Balance</h2>
+            <p className="text-[11px] text-[#666666]">Arc App Kit · kit.unifiedBalance.getBalances() · all chains</p>
+          </div>
+          <ArcUnifiedBalancePanel />
+        </div>
+
+        {/* Arc App Kit — Send, Bridge, Swap */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="terminal-card p-6">
+            <div className="mb-4">
+              <h2 className="text-[14px] font-semibold mb-1">Send USDC</h2>
+              <p className="text-[11px] text-[#666666]">kit.send() · Base Sepolia</p>
+            </div>
+            <ArcSendPanel />
+          </div>
+          <div className="terminal-card p-6">
+            <div className="mb-4">
+              <h2 className="text-[14px] font-semibold mb-1">Bridge to Base Sepolia</h2>
+              <p className="text-[11px] text-[#666666]">kit.bridge() · CCTP</p>
+            </div>
+            <ArcBridgePanel />
+          </div>
+          <div className="terminal-card p-6">
+            <div className="mb-4">
+              <h2 className="text-[14px] font-semibold mb-1">Swap Tokens</h2>
+              <p className="text-[11px] text-[#666666]">kit.swap() · Arc Testnet</p>
+            </div>
+            <ArcSwapPanel />
           </div>
         </div>
 

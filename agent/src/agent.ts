@@ -18,10 +18,16 @@ export class VasmoAgent {
   private analysisLoop: NodeJS.Timeout | null = null;
 
   private nanopay: AgentNanopayments | null = null;
+  private arcKit: ArcAgentKit | null = null;
 
   // Rate limiting: track last analysis time per invoice
   private lastAnalysisTime: Map<string, number> = new Map();
   private readonly ANALYSIS_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
+
+  // Yield distribution: rate-limit distributions per invoice
+  private yieldDistributionTime: Map<string, number> = new Map();
+  private readonly YIELD_DISTRIBUTION_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
+  private readonly YIELD_DISTRIBUTION_THRESHOLD_USDC = 0.01; // $0.01 minimum
 
   // Circuit breaker for analysis cycles
   private consecutiveFailures = 0;
@@ -61,6 +67,12 @@ export class VasmoAgent {
     this.nanopay = createNanopayments();
     if (this.nanopay) {
       console.log('[nanopay] AgentNanopayments initialized — will auto-fund and pay for x402 resources');
+    }
+
+    // Initialize Arc App Kit for USDC send operations on Base Sepolia
+    this.arcKit = createArcAgentKit();
+    if (this.arcKit) {
+      console.log('[arc] ArcAgentKit initialized — arc.send() available for USDC transfers on Base Sepolia');
     }
   }
 
@@ -530,6 +542,12 @@ export class VasmoAgent {
         }
       }
 
+      // Distribute accrued yield to issuer via Arc App Kit if threshold is met.
+      // Runs every analysis cycle for deposited invoices — independent of strategy changes.
+      if (isDeposited && invoice?.issuer && deposit?.active) {
+        await this.maybeDistributeYield(tokenId, invoice.issuer, deposit);
+      }
+
       // Record analysis time for rate limiting
       this.recordAnalysisTime(tokenId);
 
@@ -593,6 +611,91 @@ export class VasmoAgent {
 
   private delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Checks whether the invoice has enough accrued yield to distribute,
+   * respects a per-invoice cooldown, and calls sendYieldToIssuer() if so.
+   *
+   * Called every analysis cycle for deposited invoices — distribution is
+   * independent of strategy changes so yield flows continuously as it accrues.
+   */
+  private async maybeDistributeYield(
+    tokenId: string,
+    issuerAddress: string,
+    deposit: import('./types.js').Deposit
+  ): Promise<void> {
+    if (!this.arcKit) return;
+
+    // Per-invoice cooldown: don't distribute more often than every 5 minutes
+    const lastDist = this.yieldDistributionTime.get(tokenId) ?? 0;
+    if (Date.now() - lastDist < this.YIELD_DISTRIBUTION_COOLDOWN_MS) return;
+
+    // accruedYield is stored as 18-decimal bigint in the vault contract
+    const yieldFloat = Number(deposit.accruedYield) / 1e18;
+    if (yieldFloat < this.YIELD_DISTRIBUTION_THRESHOLD_USDC) return;
+
+    const yieldFormatted = yieldFloat.toFixed(6);
+
+    this.broadcastThought({
+      type: 'thinking',
+      tokenId,
+      message: `💰 Invoice #${tokenId}: $${yieldFormatted} USDC yield accrued → distributing to issuer via Arc`,
+      timestamp: Date.now(),
+      data: { yieldAmount: yieldFormatted, issuer: issuerAddress },
+    });
+
+    await this.sendYieldToIssuer(issuerAddress, yieldFormatted);
+    this.yieldDistributionTime.set(tokenId, Date.now());
+  }
+
+  /**
+   * Sends USDC yield to an invoice issuer using Arc App Kit (kit.send()).
+   * Called after a yield strategy succeeds and the agent needs to distribute
+   * earnings from the vault to the original issuer address.
+   *
+   * Arc App Kit handles fee estimation, transaction submission, and receipt
+   * on Base Sepolia without the agent managing raw contract calls.
+   */
+  async sendYieldToIssuer(issuerAddress: string, amount: string): Promise<void> {
+    if (!this.arcKit) {
+      console.log('[arc] ArcAgentKit not configured — skipping yield distribution');
+      return;
+    }
+
+    this.broadcastThought({
+      type: 'execution',
+      tokenId: 'system',
+      message: `💸 Arc: Sending ${amount} USDC yield to issuer ${issuerAddress.slice(0, 8)}...`,
+      timestamp: Date.now(),
+    });
+
+    try {
+      const estimate = await this.arcKit.estimateSend(issuerAddress, amount);
+      console.log(`[arc] Send estimate:`, estimate);
+
+      const result = await this.arcKit.sendUsdc(issuerAddress, amount);
+
+      this.broadcastThought({
+        type: 'execution',
+        tokenId: 'system',
+        message: `✅ Arc: Yield sent — ${result.txHash ? result.txHash.slice(0, 16) + '...' : result.state}`,
+        timestamp: Date.now(),
+        data: { txHash: result.txHash, explorerUrl: result.explorerUrl },
+      });
+
+      if (result.explorerUrl) {
+        console.log(`[arc] Explorer: ${result.explorerUrl}`);
+      }
+    } catch (err) {
+      console.error('[arc] sendYieldToIssuer failed:', err);
+      this.broadcastThought({
+        type: 'error',
+        tokenId: 'system',
+        message: `❌ Arc: Yield distribution failed — ${err instanceof Error ? err.message : String(err)}`,
+        timestamp: Date.now(),
+      });
+    }
   }
 
   /**

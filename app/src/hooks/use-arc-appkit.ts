@@ -12,7 +12,8 @@
 
 import { useCallback, useState } from 'react';
 import { useAccount } from 'wagmi';
-import type { SendParams, BridgeParams } from '@circle-fin/app-kit';
+import type { SendParams, BridgeParams, SwapParams } from '@circle-fin/app-kit';
+import { SwapChain } from '@circle-fin/app-kit';
 import { getAppKit, ARC_CHAIN_BASE_SEPOLIA, DEFAULT_TOKEN } from '@/lib/arc-appkit';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -21,6 +22,15 @@ export interface ArcSendRequest {
   to: string;
   amount: string;
   token?: string;
+}
+
+export interface ArcSwapRequest {
+  /** Token to swap from (e.g. 'USDC') */
+  tokenIn: string;
+  /** Token to swap to (e.g. 'USDT') */
+  tokenOut: string;
+  /** Human-readable amount of tokenIn (e.g. '10.00') */
+  amountIn: string;
 }
 
 export interface ArcBridgeRequest {
@@ -121,8 +131,10 @@ export function useArcAppKit() {
       const kit = getAppKit();
       const adapter = await getAdapter();
       const params: BridgeParams = {
-        from: { adapter, chain: req.fromChain },
-        to: { adapter, chain: ARC_CHAIN_BASE_SEPOLIA },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        from: { adapter, chain: req.fromChain as any },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        to: { adapter, chain: ARC_CHAIN_BASE_SEPOLIA as any },
         amount: req.amount,
         ...(req.toAddress ? { toAddress: req.toAddress } : {}),
       };
@@ -145,10 +157,64 @@ export function useArcAppKit() {
     }
   }, [isConnected, address, getAdapter]);
 
+  /**
+   * Estimate the output and fees for a swap before submitting.
+   * Runs on Arc Testnet (the testnet swap chain in App Kit).
+   */
+  const estimateSwap = useCallback(async (req: ArcSwapRequest) => {
+    const kit = getAppKit();
+    const adapter = await getAdapter();
+    const params: SwapParams = {
+      from: { adapter, chain: SwapChain.Arc_Testnet },
+      tokenIn: req.tokenIn,
+      tokenOut: req.tokenOut,
+      amountIn: req.amountIn,
+    };
+    return kit.estimateSwap(params);
+  }, [getAdapter]);
+
+  /**
+   * Swap tokens on Arc Testnet via Arc App Kit.
+   * Arc_Testnet is the testnet-equivalent chain for swap operations.
+   */
+  const swap = useCallback(async (req: ArcSwapRequest): Promise<ArcOperationResult> => {
+    if (!isConnected) throw new Error('Wallet not connected');
+    setIsPending(true);
+    setLastError(null);
+    try {
+      const kit = getAppKit();
+      const adapter = await getAdapter();
+      const params: SwapParams = {
+        from: { adapter, chain: SwapChain.Arc_Testnet },
+        tokenIn: req.tokenIn,
+        tokenOut: req.tokenOut,
+        amountIn: req.amountIn,
+      };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = await kit.swap(params) as any;
+      const out: ArcOperationResult = {
+        name: result.name ?? 'swap',
+        state: result.state ?? result.progress?.status ?? 'success',
+        txHash: result.txHash,
+        explorerUrl: result.explorerUrl,
+      };
+      setLastResult(out);
+      return out;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setLastError(msg);
+      throw err;
+    } finally {
+      setIsPending(false);
+    }
+  }, [isConnected, getAdapter]);
+
   return {
     send,
     bridge,
+    swap,
     estimateSend,
+    estimateSwap,
     isPending,
     lastResult,
     lastError,
