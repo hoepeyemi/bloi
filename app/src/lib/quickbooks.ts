@@ -175,15 +175,7 @@ export async function fetchInvoices(
   const { status = "open", limit = 100 } = options || {}
 
   // Build query
-  let query = `SELECT * FROM Invoice`
-
-  if (status === "open") {
-    query += ` WHERE Balance > 0`
-  } else if (status === "paid") {
-    query += ` WHERE Balance = 0`
-  }
-
-  query += ` MAXRESULTS ${limit}`
+  let query = `SELECT * FROM Invoice MAXRESULTS ${limit}`
 
   const encodedQuery = encodeURIComponent(query)
   const url = `${QUICKBOOKS_BASE_URL}/v3/company/${realmId}/query?query=${encodedQuery}`
@@ -201,7 +193,11 @@ export async function fetchInvoices(
   }
 
   const data = await response.json()
-  return data.QueryResponse?.Invoice || []
+  const invoices: QuickBooksInvoice[] = data.QueryResponse?.Invoice || []
+
+  if (status === "open") return invoices.filter((inv) => inv.Balance > 0)
+  if (status === "paid") return invoices.filter((inv) => inv.Balance === 0)
+  return invoices
 }
 
 // Fetch a single invoice by ID
