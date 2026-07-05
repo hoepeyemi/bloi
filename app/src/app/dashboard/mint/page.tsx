@@ -136,6 +136,7 @@ function MintInvoiceContent() {
       dueDate: new Date(invoice.dueDate),
       quickbooksId: invoice.id,
     })
+    setStep(2)
   }
 
   const handleNext = () => {
