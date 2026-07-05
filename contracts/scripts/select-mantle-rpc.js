@@ -2,19 +2,18 @@ const fs = require("fs");
 const path = require("path");
 
 const TIMEOUT_MS = 4000;
-const CHAIN_ID = "0x138b";
+const CHAIN_ID = "0x14a34"; // Base Sepolia (84532)
 const OUT_FILE = path.join(__dirname, "..", ".env.local");
 
 const CANDIDATES = [
-  process.env.MANTLE_SEPOLIA_RPC,
-  process.env.MANTLE_SEPOLIA_RPC_SELECTED,
-  process.env.MANTLE_SEPOLIA_RPC_FALLBACK_1,
-  process.env.MANTLE_SEPOLIA_RPC_FALLBACK_2,
-  "https://rpc.sepolia.mantle.xyz",
-  "https://mantle-sepolia.drpc.org",
-  "https://5003.rpc.thirdweb.com/",
-  "https://mantle-sepolia.gateway.tenderly.co",
-  "https://testnet-rpc.etherspot.io/v1/5003",
+  process.env.BASE_SEPOLIA_RPC,
+  process.env.BASE_SEPOLIA_RPC_SELECTED,
+  process.env.BASE_SEPOLIA_RPC_FALLBACK_1,
+  process.env.BASE_SEPOLIA_RPC_FALLBACK_2,
+  "https://sepolia.base.org",
+  "https://base-sepolia.drpc.org",
+  "https://84532.rpc.thirdweb.com/",
+  "https://base-sepolia.gateway.tenderly.co",
 ].filter(Boolean);
 
 async function probeRpc(url) {
@@ -54,16 +53,16 @@ async function probeRpc(url) {
 async function main() {
   for (const url of CANDIDATES) {
     if (await probeRpc(url)) {
-      fs.writeFileSync(OUT_FILE, `MANTLE_SEPOLIA_RPC_SELECTED=${url}\n`, "utf8");
-      console.log(`Selected Mantle Sepolia RPC: ${url}`);
+      fs.writeFileSync(OUT_FILE, `BASE_SEPOLIA_RPC_SELECTED=${url}\n`, "utf8");
+      console.log(`Selected Base Sepolia RPC: ${url}`);
       return;
     }
   }
 
   throw new Error(
     [
-      "Could not reach any Mantle Sepolia RPC endpoint.",
-      "Try setting MANTLE_SEPOLIA_RPC manually to a working public/private RPC.",
+      "Could not reach any Base Sepolia RPC endpoint.",
+      "Try setting BASE_SEPOLIA_RPC manually to a working public/private RPC.",
     ].join(" ")
   );
 }

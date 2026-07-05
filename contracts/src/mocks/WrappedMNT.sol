@@ -4,10 +4,10 @@ pragma solidity ^0.8.26;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-/// @notice Simple wrapped MNT token for Sepolia testing.
-/// @dev Users deposit native MNT and receive an ERC20 balance one-to-one.
+/// @notice Simple wrapped ETH token for Base Sepolia testing.
+/// @dev Users deposit native ETH and receive an ERC20 balance one-to-one.
 contract WrappedMNT is ERC20, Ownable {
-    constructor() ERC20("Wrapped Mantle", "WMNT") Ownable(msg.sender) {}
+    constructor() ERC20("Wrapped Ether", "WETH") Ownable(msg.sender) {}
 
     receive() external payable {
         deposit();
