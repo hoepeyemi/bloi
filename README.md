@@ -170,7 +170,7 @@ cd contracts && npm run build && npm test
 - [x] Smart contracts deployed on Base Sepolia
 - [x] All 6 contracts verified on Basescan
 - [x] AI-powered function callable on-chain via AgentRouter
-- [x] Frontend publicly accessible (Netlify)
+- [x] Frontend publicly accessible (Vercel)
 - [x] Deployed addresses documented (above + deployment manifest)
 - [x] Architecture documented
 - [ ] Demo video (2+ minutes, core use case walkthrough)
@@ -179,6 +179,5 @@ cd contracts && npm run build && npm test
 
 ## Notes
 
-- QuickBooks integration has a demo fallback — OAuth is optional for local testing
 - The agent streams reasoning to the frontend in real-time; connect MetaMask to Base Sepolia to see live data
 - All contract addresses in `contracts/deployments/baseSepolia.json` are the canonical source of truth
