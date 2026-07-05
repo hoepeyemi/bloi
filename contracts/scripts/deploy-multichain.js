@@ -16,12 +16,11 @@ async function main() {
     (hre.network.name === "mantleSepolia" ? MANTLE_SEPOLIA_PYTH_ADDRESS : hre.ethers.ZeroAddress);
   const nativeUsdFeed =
     process.env.PYTH_NATIVE_USD_FEED ||
-    process.env.MNT_USD_FEED ||
     (hre.network.name === "mantleSepolia" ? MANTLE_SEPOLIA_NATIVE_USD_FEED : hre.ethers.ZeroHash);
   const deploymentState = readDeploymentState(hre.network.name);
   const aavePool = process.env.AAVE_POOL || deploymentState.mockAavePool || hre.ethers.ZeroAddress;
   const mockAaveAsset = process.env.MOCK_AAVE_ASSET || deploymentState.mockAaveAsset || hre.ethers.ZeroAddress;
-  const wrapNativeMnt = process.env.MOCK_AAVE_WRAP_NATIVE === "true";
+  const wrapNativeEth = process.env.MOCK_AAVE_WRAP_NATIVE === "true";
 
   console.log("=== vasmo Multichain Deployment ===");
   console.log("Deployer:", deployer.address);
@@ -33,9 +32,9 @@ async function main() {
   console.log("Native USD Feed:", nativeUsdFeed);
   console.log("Aave V3 Pool:", aavePool);
   console.log("Mock Aave Asset:", mockAaveAsset);
-  console.log("Wrap Native MNT:", wrapNativeMnt);
+  console.log("Wrap Native ETH:", wrapNativeEth);
 
-  const InvoiceNFT = await hre.ethers.getContractFactory("InvoiceNFT");
+  const InvoiceNFT = await hre.ethers.getContractFactory("src/InvoiceNFT.sol:InvoiceNFT");
   const YieldVault = await hre.ethers.getContractFactory("YieldVault");
   const PrivacyRegistry = await hre.ethers.getContractFactory("PrivacyRegistry");
   const AgentRouter = await hre.ethers.getContractFactory("AgentRouter");
@@ -56,7 +55,7 @@ async function main() {
   let oracleAddress = hre.ethers.ZeroAddress;
   if (pythAddress !== hre.ethers.ZeroAddress) {
     if (nativeUsdFeed === hre.ethers.ZeroHash) {
-      throw new Error("Set PYTH_NATIVE_USD_FEED (or MNT_USD_FEED) before deploying PythOracle.");
+      throw new Error("Set PYTH_NATIVE_USD_FEED before deploying PythOracle.");
     }
 
     const pythOracle = await PythOracle.deploy(pythAddress, nativeUsdFeed);
@@ -74,11 +73,11 @@ async function main() {
     console.log("MockAaveV3Pool deployed at:", resolvedAavePool);
 
     let assetToRegister = mockAaveAsset;
-    if (assetToRegister === hre.ethers.ZeroAddress && wrapNativeMnt) {
-      const wrappedMnt = await WrappedMNT.deploy();
-      await wrappedMnt.waitForDeployment();
-      assetToRegister = await wrappedMnt.getAddress();
-      console.log("WrappedMNT deployed at:", assetToRegister);
+    if (assetToRegister === hre.ethers.ZeroAddress && wrapNativeEth) {
+      const wrappedEth = await WrappedMNT.deploy();
+      await wrappedEth.waitForDeployment();
+      assetToRegister = await wrappedEth.getAddress();
+      console.log("WrappedETH deployed at:", assetToRegister);
     }
 
     if (assetToRegister !== hre.ethers.ZeroAddress) {

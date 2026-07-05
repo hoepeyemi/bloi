@@ -61,7 +61,7 @@ contract PythOracle is Ownable {
     }
 
     /// @notice Get the native token price in USD from Pyth with fallback
-    /// @dev Use ETH/USD on ETH-like chains, or MNT/USD on Mantle Sepolia.
+    /// @dev Use ETH/USD feed on Base Sepolia (feed ID: 0xff61491a...).
     /// @return price The price with 8 decimal places
     function getNativeUsdPrice() public view returns (int64) {
         if (isFallbackActive()) {

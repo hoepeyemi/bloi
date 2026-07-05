@@ -6,7 +6,7 @@ import "./InvoiceNFT.sol";
 
 /// @title VasmoOracle - Simulated oracle for invoice risk assessment
 /// @notice Provides mock risk scores and payment probabilities for demo
-/// @dev Part of vasmo Protocol - Production integrates with RedStone on Mantle
+/// @dev Part of vasmo Protocol - Production integrates with Pyth on Base Sepolia
 contract MockOracle is Ownable {
     // ============ Structs ============
 

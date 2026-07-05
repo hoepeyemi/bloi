@@ -17,7 +17,7 @@ const ACTIVITY_MESSAGES = [
   { message: 'yield +$0.003 accrued', type: 'yield' as const },
   { message: 'pyth oracle: connected', type: 'success' as const },
   { message: 'rebalance check: optimal', type: 'info' as const },
-  { message: 'MNT/USD $0.082 ↑0.5%', type: 'success' as const },
+  { message: 'ETH/USD $3,524 ↑1.2%', type: 'success' as const },
   { message: 'strategy scoring complete', type: 'success' as const },
   { message: 'gas: 5000 gwei (low)', type: 'info' as const },
   { message: 'yield +$0.002 accrued', type: 'yield' as const },

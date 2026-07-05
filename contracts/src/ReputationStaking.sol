@@ -27,7 +27,7 @@ contract ReputationStaking is Ownable, ReentrancyGuard {
 
     // ============ State ============
 
-    // Staking token (e.g., USDC, MNT)
+    // Staking token (e.g., USDC, ETH)
     IERC20 public stakingToken;
 
     // Issuer profiles

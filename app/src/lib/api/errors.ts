@@ -170,7 +170,7 @@ export function parseContractError(error: unknown): ContractError {
       message,
       ErrorCode.INSUFFICIENT_FUNDS,
       'Insufficient balance to complete this transaction.',
-      'Please add more MNT to your wallet to cover gas fees.',
+      'Please add more ETH to your wallet to cover gas fees.',
       error
     )
   }
