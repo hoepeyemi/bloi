@@ -68,12 +68,12 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
 
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
   const { totalInvoices } = useInvoiceNFT()
   const { tvl, totalYield, activeDepositsCount, conservativeAPY, aggressiveAPY } = useYieldVault()
 
   const fetchInvoices = async () => {
-    if (!isConnected) {
+    if (!isConnected || !address) {
       setInvoices([])
       setIsLoading(false)
       return
@@ -83,7 +83,7 @@ export default function Dashboard() {
     setError(null)
 
     try {
-      const response = await fetch(`/api/invoices?active=true`, {
+      const response = await fetch(`/api/invoices?issuer=${address}`, {
         cache: "no-store",
       })
       const data = await response.json()
@@ -127,7 +127,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchInvoices()
-  }, [isConnected, conservativeAPY, aggressiveAPY])
+  }, [isConnected, address, conservativeAPY, aggressiveAPY])
 
   useEffect(() => {
     const refresh = () => {
@@ -141,7 +141,7 @@ export default function Dashboard() {
       window.removeEventListener("focus", refresh)
       document.removeEventListener("visibilitychange", refresh)
     }
-  }, [isConnected, conservativeAPY, aggressiveAPY])
+  }, [isConnected, address, conservativeAPY, aggressiveAPY])
 
   const filteredInvoices = invoices.filter((inv) =>
     inv.id.toLowerCase().includes(searchQuery.toLowerCase())

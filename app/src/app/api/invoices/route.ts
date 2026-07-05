@@ -33,8 +33,11 @@ function formatStrategy(strategy: number): string {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url)
+    const issuerFilter = searchParams.get("issuer")?.toLowerCase()
+
     const activeInvoices = await getActiveInvoices()
 
     const invoices = await Promise.all(
@@ -72,11 +75,17 @@ export async function GET() {
       })
     )
 
+    const filtered = invoices.filter((invoice) => {
+      if (!invoice) return false
+      if (issuerFilter && invoice.issuer?.toLowerCase() !== issuerFilter) return false
+      return true
+    })
+
     return NextResponse.json({
       success: true,
       data: {
-        invoices: invoices.filter((invoice) => invoice !== null),
-        total: activeInvoices.length,
+        invoices: filtered,
+        total: filtered.length,
       },
     })
   } catch (error) {
