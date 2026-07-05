@@ -1,102 +1,71 @@
-// LLM integration for generating natural language explanations
-
 import OpenAI from 'openai';
 import { AnalysisResult, Strategy, AgentThought } from './types.js';
 import { STRATEGY_NAMES } from './constants.js';
 
-// Configuration
-const LLM_CONFIG = {
-  model: 'gpt-4o-mini',
-  maxTokens: 300,
-  timeoutMs: 30000, // 30 second timeout
-  maxRetries: 2,
-};
+const MODEL = 'gpt-4o-mini';
+const MAX_TOKENS = 300;
+const TIMEOUT_MS = 30_000;
+const MAX_CALLS_PER_MINUTE = 30;
 
-// Timeout wrapper for API calls
-function withTimeout<T>(promise: Promise<T>, timeoutMs: number, operationName: string): Promise<T> {
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      reject(new Error(`${operationName} timed out after ${timeoutMs}ms`));
-    }, timeoutMs);
-
-    promise
-      .then((result) => {
-        clearTimeout(timeout);
-        resolve(result);
-      })
-      .catch((error) => {
-        clearTimeout(timeout);
-        reject(error);
-      });
+    const id = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+    promise.then((v) => { clearTimeout(id); resolve(v); })
+           .catch((e) => { clearTimeout(id); reject(e); });
   });
 }
 
 export class LLMService {
   private client: OpenAI | null = null;
-  private enabled: boolean = false;
-  private callCount: number = 0;
-  private lastCallTime: number = 0;
-  private rateLimitWindowMs: number = 60000; // 1 minute
-  private maxCallsPerWindow: number = 30;
+  private enabled = false;
+  private callCount = 0;
+  private windowStart = 0;
 
   constructor(apiKey?: string) {
     if (apiKey) {
       this.client = new OpenAI({ apiKey });
       this.enabled = true;
-      console.log(`LLM Service initialized with model: ${LLM_CONFIG.model}`);
+      console.log(`LLM Service initialized: ${MODEL}`);
     } else {
-      console.warn('No OpenAI API key provided. Using template-based explanations.');
+      console.warn('No OPENAI_API_KEY provided — using template-based explanations.');
     }
   }
 
   private checkRateLimit(): boolean {
     const now = Date.now();
-    if (now - this.lastCallTime > this.rateLimitWindowMs) {
+    if (now - this.windowStart > 60_000) {
       this.callCount = 0;
-      this.lastCallTime = now;
+      this.windowStart = now;
     }
-    return this.callCount < this.maxCallsPerWindow;
+    return this.callCount < MAX_CALLS_PER_MINUTE;
   }
 
   async generateExplanation(analysis: AnalysisResult): Promise<string> {
-    if (!this.enabled || !this.client) {
-      return this.generateTemplateExplanation(analysis);
-    }
-
-    // Check rate limit
-    if (!this.checkRateLimit()) {
-      console.warn('LLM rate limit reached, using template');
+    if (!this.enabled || !this.client || !this.checkRateLimit()) {
       return this.generateTemplateExplanation(analysis);
     }
 
     try {
-      const prompt = this.buildPrompt(analysis);
-
-      const apiCall = this.client.chat.completions.create({
-        model: LLM_CONFIG.model,
-        max_tokens: LLM_CONFIG.maxTokens,
+      const call = this.client.chat.completions.create({
+        model: MODEL,
+        max_tokens: MAX_TOKENS,
         messages: [
           {
             role: 'system',
-            content: `You are an AI financial advisor agent analyzing tokenized invoices for yield optimization.
-Your role is to explain investment decisions in clear, concise language that a small business owner can understand.
-Keep explanations under 3 sentences. Be direct and actionable.
-Never use jargon without explanation. Focus on the "why" behind recommendations.`,
+            content: `You are an AI financial advisor agent analyzing tokenized invoices for yield optimization on Base Sepolia.
+Explain investment decisions in clear, concise language a small business owner can understand.
+Keep explanations under 3 sentences. Be direct and actionable. Focus on the "why" behind recommendations.`,
           },
-          {
-            role: 'user',
-            content: prompt,
-          },
+          { role: 'user', content: this.buildPrompt(analysis) },
         ],
       });
 
-      const response = await withTimeout(apiCall, LLM_CONFIG.timeoutMs, 'LLM generateExplanation');
+      const response = await withTimeout(call, TIMEOUT_MS, 'LLM generateExplanation');
       this.callCount++;
 
-      return response.choices[0]?.message?.content || this.generateTemplateExplanation(analysis);
+      return response.choices[0]?.message?.content ?? this.generateTemplateExplanation(analysis);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      console.error('LLM error, falling back to template:', errorMessage);
+      console.error('LLM error, falling back to template:', error instanceof Error ? error.message : error);
       return this.generateTemplateExplanation(analysis);
     }
   }
@@ -116,8 +85,8 @@ Invoice Details:
 
 Strategy Definitions:
 - Hold: Keep invoice without yield optimization (0% APY)
-- Conservative: Low-risk lending pools (3-4% APY)
-- Aggressive: Higher-yield opportunities (6-8% APY)
+- Conservative: Low-risk Aave V3 lending (3.5% APY)
+- Aggressive: Higher-yield Aave V3 pools (7% APY)
 
 Explain why we're ${analysis.shouldAct ? 'changing to' : 'keeping'} the ${STRATEGY_NAMES[analysis.recommendedStrategy]} strategy in 2-3 sentences.`;
   }
@@ -137,11 +106,11 @@ Explain why we're ${analysis.shouldAct ? 'changing to' : 'keeping'} the ${STRATE
     }
 
     if (analysis.recommendedStrategy === Strategy.Aggressive) {
-      return `Upgrading to Aggressive strategy for higher yields (6-8% APY). ` +
+      return `Upgrading to Aggressive strategy for higher yields (7% APY via Aave V3). ` +
         `Strong fundamentals: ${analysis.riskScore}/100 risk score, ${analysis.paymentProbability}% payment probability, ` +
         `and ${analysis.daysUntilDue} days of yield accumulation time make this a confident move.`;
     } else if (analysis.recommendedStrategy === Strategy.Conservative) {
-      return `Moving to Conservative strategy for balanced risk-reward (3-4% APY). ` +
+      return `Moving to Conservative strategy for balanced risk-reward (3.5% APY via Aave V3). ` +
         `Moderate conditions suggest stable yield generation while protecting capital. ` +
         `${analysis.confidence}% confidence in this recommendation.`;
     } else {
@@ -155,7 +124,6 @@ Explain why we're ${analysis.shouldAct ? 'changing to' : 'keeping'} the ${STRATE
     const thoughts: AgentThought[] = [];
     const now = Date.now();
 
-    // Step 1: Acknowledging the invoice
     thoughts.push({
       type: 'thinking',
       tokenId: analysis.tokenId,
@@ -164,7 +132,6 @@ Explain why we're ${analysis.shouldAct ? 'changing to' : 'keeping'} the ${STRATE
       data: { step: 1, total: 4 },
     });
 
-    // Step 2: Risk assessment
     thoughts.push({
       type: 'analysis',
       tokenId: analysis.tokenId,
@@ -177,7 +144,6 @@ Explain why we're ${analysis.shouldAct ? 'changing to' : 'keeping'} the ${STRATE
       },
     });
 
-    // Step 3: Strategy evaluation
     const strategyName = STRATEGY_NAMES[analysis.recommendedStrategy];
     thoughts.push({
       type: 'analysis',
@@ -191,7 +157,6 @@ Explain why we're ${analysis.shouldAct ? 'changing to' : 'keeping'} the ${STRATE
       },
     });
 
-    // Step 4: Decision
     thoughts.push({
       type: 'decision',
       tokenId: analysis.tokenId,

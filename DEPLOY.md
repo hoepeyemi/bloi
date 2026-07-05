@@ -81,7 +81,7 @@ AAVE_YIELD_ADDRESS=0x5a179d261fD322ecaED06FA9Aa2973980D74322c
 
 # Keys (server-side only — never expose to frontend)
 AGENT_PRIVATE_KEY=0x...
-ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
 ```
 
 ### Run Locally
@@ -247,4 +247,4 @@ Without QuickBooks credentials set, the app automatically falls back to demo inv
 | Pyth Network | https://pyth.network |
 | Aave V3 | https://aave.com |
 | Circle x402 Docs | https://developers.circle.com/gateway/nanopayments |
-| Anthropic API | https://docs.anthropic.com |
+| Anthropic API | https://platform.openai.com/docs |

@@ -36,7 +36,7 @@ Import Invoice (QuickBooks / Manual)
 **Key differentiators:**
 - Not invoice factoring — no credit checks, no lockups, no liquidity advances
 - Real yield from Aave V3, not simulated numbers
-- AI agent powered by Claude Haiku 4.5 for autonomous optimization
+- AI agent powered by GPT-4o mini for autonomous optimization
 - Invoice data is never stored in plaintext on-chain
 - QuickBooks integration for direct import of real invoices
 
@@ -49,7 +49,7 @@ The autonomous agent runs continuously and:
 1. Reads all active deposits from `InvoiceNFT` + `YieldVault` contracts
 2. Fetches real-time market data from Pyth oracle
 3. Scores each invoice: risk profile, days until due, current APY rates
-4. Claude Haiku 4.5 generates a strategy recommendation with a confidence score
+4. GPT-4o mini generates a strategy recommendation with a confidence score
 5. If confidence ≥ 70%, the agent submits the decision to `AgentRouter.recordDecision()` on-chain
 6. The decision is executed on-chain and streamed to the frontend via WebSocket in real-time
 
@@ -81,7 +81,7 @@ The agent automatically downgrades risk as invoice due dates approach and upgrad
 | Smart Contracts | Solidity 0.8.24 + Hardhat |
 | Frontend | Next.js 15 + React 19 + wagmi v3 |
 | AI Agent | TypeScript + Node.js |
-| LLM | Anthropic Claude Haiku 4.5 |
+| LLM | OpenAI GPT-4o mini |
 | Yield | Aave V3 (real DeFi yields, 3–7% APY) |
 | Oracle | Pyth Network |
 | Privacy | keccak256 commitment hashes + Merkle trees |
@@ -122,7 +122,7 @@ All 6 contracts deployed and verified on Base Sepolia:
 |---------|--------|
 | Invoice tokenization with privacy commitments | Live on Base Sepolia |
 | Real DeFi yield via Aave V3 | Live |
-| Autonomous AI agent with Claude Haiku 4.5 | Live |
+| Autonomous AI agent with GPT-4o mini | Live |
 | Real-time WebSocket streaming of agent reasoning | Live |
 | QuickBooks OAuth 2.0 import | Live |
 | Circle x402 nanopayments | Live |

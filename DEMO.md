@@ -82,7 +82,7 @@ Click any invoice row to open the **Invoice Detail** page, which shows the full 
 2. The agent panel shows:
    - Connection status (online/offline)
    - Agent wallet balances (ETH + USDC)
-   - Live reasoning stream from Claude Haiku 4.5
+   - Live reasoning stream from GPT-4o mini
    - Strategy decisions with confidence scores
    - On-chain execution confirmations
 
@@ -121,7 +121,7 @@ You can verify:
 | Smart contracts | Yes — deployed and verified on Base Sepolia |
 | Aave V3 yield | Yes — real Aave V3 pool integration |
 | Pyth oracle data | Yes — live price feeds |
-| AI reasoning | Yes — Claude Haiku 4.5 (real LLM, not templates) |
+| AI reasoning | Yes — GPT-4o mini (real LLM, not templates) |
 | On-chain agent decisions | Yes — AgentRouter writes to Base Sepolia |
 | WebSocket streaming | Yes — live from the agent process |
 | QuickBooks invoices | Yes — real OAuth 2.0 connection to your QB account |
@@ -148,7 +148,7 @@ Configure environment variables:
 ```bash
 cp app/.env.example app/.env.local
 cp agent/.env.example agent/.env.local
-# Fill in your ANTHROPIC_API_KEY and AGENT_PRIVATE_KEY
+# Fill in your OPENAI_API_KEY and AGENT_PRIVATE_KEY
 ```
 
 ---

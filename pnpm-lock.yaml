@@ -16,13 +16,13 @@ importers:
     dependencies:
       '@circle-fin/adapter-viem-v2':
         specifier: ^1.0.0
-        version: 1.12.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))
+        version: 1.12.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.67))
       '@circle-fin/app-kit':
         specifier: ^1.0.0
         version: 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)
       '@circle-fin/x402-batching':
         specifier: ^3.2.0
-        version: 3.2.0(@x402/core@2.17.0)(viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))
+        version: 3.2.0(@x402/core@2.17.0)(viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.67))
       dotenv:
         specifier: ^16.4.7
         version: 16.6.1
@@ -30,11 +30,11 @@ importers:
         specifier: ^6.13.4
         version: 6.16.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
       openai:
-        specifier: ^4.104.0
-        version: 4.104.0(ws@8.18.3(bufferutil@4.1.0)(utf-8-validate@6.0.6))(zod@3.25.76)
+        specifier: ^4.96.0
+        version: 4.104.0(ws@8.18.3(bufferutil@4.1.0)(utf-8-validate@6.0.6))(zod@3.25.67)
       viem:
         specifier: ^2.43.3
-        version: 2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+        version: 2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.67)
       ws:
         specifier: ^8.18.0
         version: 8.18.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
@@ -6255,7 +6255,7 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@circle-fin/adapter-viem-v2@1.12.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))':
+  '@circle-fin/adapter-viem-v2@1.12.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.67))':
     dependencies:
       '@ethersproject/address': 5.8.0
       '@ethersproject/bytes': 5.8.0
@@ -6265,7 +6265,7 @@ snapshots:
       abitype: 1.2.3(typescript@5.9.3)(zod@3.25.67)
       bs58: 6.0.0
       pino: 10.1.0
-      viem: 2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+      viem: 2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.67)
       zod: 3.25.67
     transitivePeerDependencies:
       - bufferutil
@@ -6440,10 +6440,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@circle-fin/x402-batching@3.2.0(@x402/core@2.17.0)(viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))':
+  '@circle-fin/x402-batching@3.2.0(@x402/core@2.17.0)(viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.67))':
     dependencies:
       '@x402/core': 2.17.0
-      viem: 2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+      viem: 2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.67)
 
   '@circle-fin/x402-batching@3.2.0(@x402/core@2.17.0)(viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.3.4))':
     dependencies:
@@ -8057,14 +8057,14 @@ snapshots:
       '@remotion/media-parser': 4.0.409
       '@remotion/studio': 4.0.409(bufferutil@4.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(utf-8-validate@6.0.6)
       '@remotion/studio-shared': 4.0.409(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      css-loader: 5.2.7(webpack@5.96.1)
+      css-loader: 5.2.7(webpack@5.96.1(esbuild@0.25.0))
       esbuild: 0.25.0
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
       react-refresh: 0.9.0
       remotion: 4.0.409(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       source-map: 0.7.3
-      style-loader: 4.0.0(webpack@5.96.1)
+      style-loader: 4.0.0(webpack@5.96.1(esbuild@0.25.0))
       webpack: 5.96.1(esbuild@0.25.0)
     transitivePeerDependencies:
       - '@swc/core'
@@ -8958,11 +8958,6 @@ snapshots:
       typescript: 5.9.3
       zod: 3.25.67
 
-  abitype@1.2.3(typescript@5.9.3)(zod@3.25.76):
-    optionalDependencies:
-      typescript: 5.9.3
-      zod: 3.25.76
-
   abitype@1.2.3(typescript@5.9.3)(zod@4.3.4):
     optionalDependencies:
       typescript: 5.9.3
@@ -9449,7 +9444,7 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  css-loader@5.2.7(webpack@5.96.1):
+  css-loader@5.2.7(webpack@5.96.1(esbuild@0.25.0)):
     dependencies:
       icss-utils: 5.1.0(postcss@8.5.6)
       loader-utils: 2.0.4
@@ -9675,7 +9670,7 @@ snapshots:
       has-property-descriptors: 1.0.2
       has-proto: 1.2.0
       has-symbols: 1.1.0
-      hasown: 2.0.2
+      hasown: 2.0.4
       internal-slot: 1.1.0
       is-array-buffer: 3.0.5
       is-callable: 1.2.7
@@ -9746,7 +9741,7 @@ snapshots:
 
   es-shim-unscopables@1.1.0:
     dependencies:
-      hasown: 2.0.2
+      hasown: 2.0.4
 
   es-to-primitive@1.3.0:
     dependencies:
@@ -10240,7 +10235,7 @@ snapshots:
       call-bound: 1.0.4
       define-properties: 1.2.1
       functions-have-names: 1.2.3
-      hasown: 2.0.2
+      hasown: 2.0.4
       is-callable: 1.2.7
 
   functions-have-names@1.2.3: {}
@@ -10263,7 +10258,7 @@ snapshots:
       get-proto: 1.0.1
       gopd: 1.2.0
       has-symbols: 1.1.0
-      hasown: 2.0.2
+      hasown: 2.0.4
       math-intrinsics: 1.1.0
 
   get-nonce@1.0.1: {}
@@ -10500,7 +10495,7 @@ snapshots:
   internal-slot@1.1.0:
     dependencies:
       es-errors: 1.3.0
-      hasown: 2.0.2
+      hasown: 2.0.4
       side-channel: 1.1.0
 
   internmap@2.0.3: {}
@@ -10601,7 +10596,7 @@ snapshots:
       call-bound: 1.0.4
       gopd: 1.2.0
       has-tostringtag: 1.0.2
-      hasown: 2.0.2
+      hasown: 2.0.4
 
   is-set@2.0.3: {}
 
@@ -11072,7 +11067,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@4.104.0(ws@8.18.3(bufferutil@4.1.0)(utf-8-validate@6.0.6))(zod@3.25.76):
+  openai@4.104.0(ws@8.18.3(bufferutil@4.1.0)(utf-8-validate@6.0.6))(zod@3.25.67):
     dependencies:
       '@types/node': 18.19.130
       '@types/node-fetch': 2.6.13
@@ -11083,7 +11078,7 @@ snapshots:
       node-fetch: 2.7.0
     optionalDependencies:
       ws: 8.18.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
-      zod: 3.25.76
+      zod: 3.25.67
     transitivePeerDependencies:
       - encoding
 
@@ -11106,7 +11101,7 @@ snapshots:
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
 
-  ox@0.11.1(typescript@5.9.3)(zod@3.25.76):
+  ox@0.11.1(typescript@5.9.3)(zod@3.25.67):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/ciphers': 1.3.0
@@ -11114,7 +11109,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.9.3)(zod@3.25.76)
+      abitype: 1.2.3(typescript@5.9.3)(zod@3.25.67)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.9.3
@@ -11898,7 +11893,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  style-loader@4.0.0(webpack@5.96.1):
+  style-loader@4.0.0(webpack@5.96.1(esbuild@0.25.0)):
     dependencies:
       webpack: 5.96.1(esbuild@0.25.0)
 
@@ -12218,15 +12213,15 @@ snapshots:
       d3-time: 3.1.0
       d3-timer: 3.0.1
 
-  viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76):
+  viem@2.43.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.67):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.9.3)(zod@3.25.76)
+      abitype: 1.2.3(typescript@5.9.3)(zod@3.25.67)
       isows: 1.0.7(ws@8.18.3(bufferutil@4.1.0)(utf-8-validate@6.0.6))
-      ox: 0.11.1(typescript@5.9.3)(zod@3.25.76)
+      ox: 0.11.1(typescript@5.9.3)(zod@3.25.67)
       ws: 8.18.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
     optionalDependencies:
       typescript: 5.9.3

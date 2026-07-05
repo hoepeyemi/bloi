@@ -89,7 +89,7 @@
 | Real Aave V3 yield (3–7% APY), not simulated | Portfolio dashboard |
 | QuickBooks import — real invoices, not test data | Mint step 1 |
 | Privacy: commitment hash on-chain, not plaintext | Mint step 2 |
-| Claude Haiku 4.5 — real LLM, not templates | Agent page |
+| GPT-4o mini — real LLM, not templates | Agent page |
 | On-chain execution via AgentRouter | Agent page — tx hash |
 | Base Sepolia — low fees, fast confirmations | Mint confirmation |
 

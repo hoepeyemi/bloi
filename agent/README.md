@@ -2,7 +2,7 @@
 
 > Autonomous yield optimization agent for the bloi Invoice Yield Protocol
 
-The bloi agent is a TypeScript Node.js service that monitors active invoice deposits on Base Sepolia, analyzes yield opportunities using Pyth oracle data, generates strategy recommendations via Claude Haiku 4.5, and executes on-chain decisions through the `AgentRouter` contract.
+The bloi agent is a TypeScript Node.js service that monitors active invoice deposits on Base Sepolia, analyzes yield opportunities using Pyth oracle data, generates strategy recommendations via GPT-4o mini, and executes on-chain decisions through the `AgentRouter` contract.
 
 ---
 
@@ -13,7 +13,7 @@ Every 30 seconds, the agent:
 1. Reads all active invoice deposits from `InvoiceNFT` and `YieldVault`
 2. Fetches real-time market data from Pyth oracle
 3. Computes a risk score for each invoice based on: days until due, payment probability, current APY rates
-4. Sends the analysis to Claude Haiku 4.5, which generates a human-readable recommendation with a confidence score
+4. Sends the analysis to GPT-4o mini, which generates a human-readable recommendation with a confidence score
 5. Submits decisions with ≥ 70% confidence to `AgentRouter.recordDecision()` on Base Sepolia
 6. Streams all reasoning and execution events to connected frontend clients via WebSocket
 
@@ -59,7 +59,7 @@ AAVE_YIELD_ADDRESS=0x5a179d261fD322ecaED06FA9Aa2973980D74322c
 
 # Secrets — server-side only, never expose to frontend
 AGENT_PRIVATE_KEY=0x...
-ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
 ```
 
 ---
@@ -116,7 +116,7 @@ agent/src/
 ├── agent.ts          Main loop — orchestrates analysis and execution per invoice
 ├── analyzer.ts       Risk scoring — days until due, payment probability
 ├── optimizer.ts      Strategy selection — confidence thresholds and downgrade logic
-├── llm.ts            Claude Haiku 4.5 integration — generates human-readable reasoning
+├── llm.ts            GPT-4o mini integration — generates human-readable reasoning
 ├── blockchain.ts     Contract interactions — reads state, writes AgentRouter decisions
 └── websocket.ts      WebSocket server — broadcasts events to connected frontends
 ```
@@ -129,7 +129,7 @@ The agent serializes blockchain writes with a promise-chain mutex to prevent non
 
 ## Production Notes
 
-- Keep `AGENT_PRIVATE_KEY` and `ANTHROPIC_API_KEY` on the server only — never in frontend env
+- Keep `AGENT_PRIVATE_KEY` and `OPENAI_API_KEY` on the server only — never in frontend env
 - The agent wallet needs ETH for gas on Base Sepolia; monitor the balance via the frontend's low-balance warning
 - For production, use a process manager (PM2, Docker restart policy) to ensure the agent stays running
 - The WebSocket endpoint must use `wss://` (TLS) for browser connections; use nginx or Caddy as a TLS terminator

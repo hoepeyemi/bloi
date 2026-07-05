@@ -759,7 +759,7 @@ function getAccruedYield(uint256 tokenId) returns (uint256)
 - pnpm 8+
 - Foundry (forge, cast, anvil)
 - Base Sepolia testnet ETH ([Faucet](https://www.alchemy.com/faucets/base-sepolia))
-- (Optional) Anthropic API key for LLM features
+- (Optional) OpenAI API key for LLM features
 
 ### 8.2 Contract Deployment
 
@@ -797,7 +797,7 @@ cp .env.example .env
 # 3. Edit .env with deployed addresses
 BASE_SEPOLIA_RPC_URL=https://84532.rpc.thirdweb.com/
 AGENT_PRIVATE_KEY=your_agent_wallet_private_key
-ANTHROPIC_API_KEY=your_anthropic_key  # Optional
+OPENAI_API_KEY=your_anthropic_key  # Optional
 WS_PORT=8080
 
 INVOICE_NFT_ADDRESS=0x...

@@ -28,7 +28,7 @@ BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
 WS_PORT=8080
 NODE_ENV=production
 AGENT_PRIVATE_KEY=<your-agent-wallet-private-key>
-ANTHROPIC_API_KEY=<your-anthropic-api-key>
+OPENAI_API_KEY=<your-anthropic-api-key>
 ```
 
 ### Step 3: Deploy

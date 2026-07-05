@@ -2,7 +2,7 @@
 
 > Turn Invoices into Yield. Automatically.
 
-**bloi** tokenizes B2B invoices as Real-World Assets (RWAs) on Base Sepolia, then deploys an autonomous AI agent powered by Claude Haiku 4.5 to continuously optimize yield via Aave V3 — while protecting sensitive invoice data with cryptographic commitments.
+**bloi** tokenizes B2B invoices as Real-World Assets (RWAs) on Base Sepolia, then deploys an autonomous AI agent powered by GPT-4o mini to continuously optimize yield via Aave V3 — while protecting sensitive invoice data with cryptographic commitments.
 
 Built for the **Mantle Global Hackathon 2025**.
 
@@ -37,7 +37,7 @@ Connect Wallet → Import Invoice (QuickBooks / Manual)
 
 - **Real yield** from Aave V3 (3–7% APY) — not simulated
 - **Privacy-first** — invoice data stored as keccak256 commitment hashes, never in plaintext on-chain
-- **Autonomous AI** — Claude Haiku 4.5 monitors and rebalances positions automatically
+- **Autonomous AI** — GPT-4o mini monitors and rebalances positions automatically
 - **No lockups** — withdraw anytime
 - **No KYC** — permissionless; your wallet is your identity
 - **QuickBooks integration** — import real invoices directly with OAuth 2.0
@@ -52,7 +52,7 @@ Connect Wallet → Import Invoice (QuickBooks / Manual)
 │                                                                 │
 │  ┌──────────────┐   WebSocket    ┌────────────────────────┐    │
 │  │  Next.js 15  │◄──────────────►│  AI Agent (Node.js)    │    │
-│  │  Frontend    │                │  Claude Haiku 4.5       │    │
+│  │  Frontend    │                │  GPT-4o mini       │    │
 │  └──────┬───────┘                └──────────┬─────────────┘    │
 │         │ wagmi/viem                        │ ethers.js         │
 │         ▼                                   ▼                   │
@@ -98,7 +98,7 @@ Deployment manifest: [`contracts/deployments/baseSepolia.json`](contracts/deploy
 | Frontend | Next.js 15 + React 19 + TypeScript |
 | Wallet / Web3 | wagmi v3 + viem v2 |
 | AI Agent | TypeScript + Node.js + WebSocket (ws) |
-| LLM | Anthropic Claude Haiku 4.5 |
+| LLM | OpenAI GPT-4o mini |
 | Yield Source | Aave V3 (real DeFi, 3–7% APY) |
 | Oracle | Pyth Network (real-time price feeds) |
 | Privacy | keccak256 commitment hashes + Merkle trees |
@@ -114,7 +114,7 @@ The agent-to-contract path is the core AI-powered function:
 
 1. Agent reads active deposits from `InvoiceNFT` and `YieldVault`
 2. Agent fetches risk data from Pyth oracle
-3. Claude Haiku 4.5 generates human-readable reasoning with confidence scores
+3. GPT-4o mini generates human-readable reasoning with confidence scores
 4. Decisions above **70% confidence** are submitted to `AgentRouter.recordDecision()`
 5. `AgentRouter` validates authorization and executes the strategy change on-chain
 6. Frontend receives the result in real-time via WebSocket and displays the agent's reasoning

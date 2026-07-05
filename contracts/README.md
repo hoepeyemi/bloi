@@ -61,7 +61,7 @@ InvoiceNFT
     │  (mint, commit, reveal)
     ▼
 YieldVault ◄────── AgentRouter ◄──── AI Agent (off-chain)
-    │                                (Claude Haiku 4.5)
+    │                                (GPT-4o mini)
     ├── Conservative ──► AaveV3YieldSource
     ├── Aggressive   ──► AaveV3YieldSource
     └── Hold         ──► (no yield source)
