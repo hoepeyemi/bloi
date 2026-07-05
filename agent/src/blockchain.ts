@@ -90,6 +90,8 @@ const AGENT_ROUTER_ABI = [
   'function getLatestDecision(uint256 tokenId) view returns (tuple(uint256 tokenId, uint8 recommendedStrategy, string reasoning, uint256 confidence, uint256 timestamp, bool executed))',
   'function needsAnalysis(uint256 tokenId, uint256 maxAge) view returns (bool)',
   'function isAgentAuthorized(address agent) view returns (bool)',
+  'function lastAnalysis(uint256 tokenId) view returns (uint256)',
+  'function decisionCooldown() view returns (uint256)',
   'event DecisionRecorded(uint256 indexed tokenId, uint8 strategy, uint256 confidence, string reasoning)',
   'event DecisionExecuted(uint256 indexed tokenId, uint8 strategy, address indexed executor)',
 ];
@@ -306,6 +308,19 @@ export class BlockchainService {
     }
 
     try {
+      // Pre-flight: check contract-level cooldown to avoid a guaranteed revert
+      const [lastTs, cooldown] = await Promise.all([
+        this.agentRouter.lastAnalysis(tokenId).catch(() => 0n),
+        this.agentRouter.decisionCooldown().catch(() => 0n),
+      ]);
+      const nowSec = BigInt(Math.floor(Date.now() / 1000));
+      const readyAt = BigInt(lastTs) + BigInt(cooldown);
+      if (nowSec < readyAt) {
+        const secsLeft = Number(readyAt - nowSec);
+        console.log(`⏳ Decision cooldown active for invoice #${tokenId} — ${secsLeft}s remaining, skipping`);
+        return { success: false, error: `Cooldown: ${secsLeft}s remaining` };
+      }
+
       const result = await withRetry(
         async () => {
           const tx = await this.agentRouter.recordDecision(tokenId, strategy, confidence, reasoning);

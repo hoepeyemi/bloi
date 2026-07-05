@@ -30,6 +30,9 @@ export class BloiAgent {
   private readonly YIELD_DISTRIBUTION_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
   private readonly YIELD_DISTRIBUTION_THRESHOLD_USDC = 0.01; // $0.01 minimum
 
+  // Serialise on-chain writes — prevents nonce collisions when multiple invoices act in the same cycle
+  private txMutex: Promise<void> = Promise.resolve();
+
   // Circuit breaker for analysis cycles
   private consecutiveFailures = 0;
   private readonly MAX_CONSECUTIVE_FAILURES = 3;
@@ -568,12 +571,24 @@ export class BloiAgent {
       timestamp: Date.now(),
     });
 
-    const result = await this.blockchain.recordDecision(
-      tokenId,
-      analysis.recommendedStrategy,
-      analysis.confidence,
-      analysis.reasoning
-    );
+    // Queue behind any in-flight transaction to avoid nonce collisions
+    let releaseMutex!: () => void;
+    const acquired = new Promise<void>((resolve) => { releaseMutex = resolve; });
+    const previous = this.txMutex;
+    this.txMutex = acquired;
+    await previous;
+
+    let result: Awaited<ReturnType<typeof this.blockchain.recordDecision>>;
+    try {
+      result = await this.blockchain.recordDecision(
+        tokenId,
+        analysis.recommendedStrategy,
+        analysis.confidence,
+        analysis.reasoning
+      );
+    } finally {
+      releaseMutex();
+    }
 
     if (result.success) {
       this.ws.broadcastExecution(tokenId, true, result.txHash);
@@ -583,6 +598,13 @@ export class BloiAgent {
         message: `✅ Strategy updated to ${STRATEGY_NAMES[analysis.recommendedStrategy]}`,
         timestamp: Date.now(),
         data: { txHash: result.txHash },
+      });
+    } else if (result.error?.startsWith('Cooldown:')) {
+      this.broadcastThought({
+        type: 'thinking',
+        tokenId,
+        message: `⏳ ${result.error} — will retry when cooldown expires`,
+        timestamp: Date.now(),
       });
     } else {
       this.ws.broadcastExecution(tokenId, false);
