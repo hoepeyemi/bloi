@@ -1,89 +1,250 @@
-# vasmo Deployment Guide
+# bloi — Deployment Guide
 
-This guide reflects the current Mantle Sepolia deployment, verified contracts, and Docker-based agent deployment.
+> Mantle Global Hackathon 2025
 
-## 1. Deploy or verify contracts
+This guide covers the full deployment: smart contracts on Mantle Sepolia, the AI agent, and the Next.js frontend.
 
-The live Mantle Sepolia deployment is already recorded in:
+---
 
-- [`contracts/deployments/mantleSepolia.json`](C:/Users/jwavo/vasmo/contracts/deployments/mantleSepolia.json)
+## 1. Smart Contracts
 
-To verify the deployment programmatically:
+### Live Deployment (Already Deployed)
+
+All 6 contracts are deployed and verified on Mantle Sepolia. The canonical addresses are in:
+
+```
+contracts/deployments/mantleSepolia.json
+```
+
+| Contract | Address |
+|----------|---------|
+| InvoiceNFT | `0x018ee8F363421016177DbC8F9492fe2a1C720e29` |
+| YieldVault | `0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6` |
+| AgentRouter | `0x4430248F3b2304F946f08c43A06C3451657FD658` |
+| PrivacyRegistry | `0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0` |
+| PythOracle | `0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3` |
+| AaveV3YieldSource | `0x5a179d261fD322ecaED06FA9Aa2973980D74322c` |
+
+### Redeploy to Mantle Sepolia
+
+Only needed if you modify and redeploy contracts:
 
 ```bash
 cd contracts
+
+# Set environment variables
+export MANTLE_SEPOLIA_RPC=https://rpc.sepolia.mantle.xyz
+export DEPLOYER_PRIVATE_KEY=0x...
+export ETHERSCAN_API_KEY=your_mantle_explorer_api_key
+
+# Deploy
+npm run deploy:mantle-sepolia
+
+# Verify on Mantle Explorer
 npm run verify:mantle-sepolia
 ```
 
-Required environment variable:
+After redeployment, update:
+1. `contracts/deployments/mantleSepolia.json`
+2. `app/.env` — all `NEXT_PUBLIC_*_ADDRESS` values
+3. `agent/.env` — all `*_ADDRESS` values
+
+### Local Development Network
 
 ```bash
-ETHERSCAN_API_KEY=your_api_key_here
+cd contracts
+npm run deploy:local
 ```
 
-## 2. Agent deployment
+---
 
-The agent reads the live Mantle Sepolia deployment manifest by default.
+## 2. AI Agent
 
-### Required environment variables
+### Environment Variables
+
+Create `agent/.env` with:
 
 ```bash
+# Network
 DEPLOYMENT_NETWORK=mantleSepolia
 MANTLE_RPC_URL=https://rpc.sepolia.mantle.xyz
+
+# WebSocket server
 WS_PORT=8080
+
+# Contract addresses (Mantle Sepolia)
 INVOICE_NFT_ADDRESS=0x018ee8F363421016177DbC8F9492fe2a1C720e29
 YIELD_VAULT_ADDRESS=0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6
 AGENT_ROUTER_ADDRESS=0x4430248F3b2304F946f08c43A06C3451657FD658
 PYTH_ORACLE_ADDRESS=0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3
 AAVE_YIELD_ADDRESS=0x5a179d261fD322ecaED06FA9Aa2973980D74322c
+
+# Keys (server-side only — never expose to frontend)
 AGENT_PRIVATE_KEY=0x...
 ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-## 3. Docker deployment
-
-The Docker deployment path now targets the agent only.
-
-### Build locally
+### Run Locally
 
 ```bash
-pnpm run docker:build:agent
+cd agent
+pnpm install
+pnpm dev
+# WebSocket server starts at ws://localhost:8080
+# Health check: http://localhost:8080/health
 ```
 
-### Run locally
+### Docker Deployment
+
+Build the agent image:
 
 ```bash
-docker run -p 8080:8080 --env-file agent/.env.local vasmo-agent
+# From repo root
+docker build -f Dockerfile.mcp -t bloi-agent .
 ```
 
-### GitHub Actions workflow
+Run the container:
 
-The repo includes:
+```bash
+docker run -d \
+  -p 8080:8080 \
+  --env-file agent/.env \
+  --name bloi-agent \
+  bloi-agent
+```
 
-- [`Dockerfile.mcp`](C:/Users/jwavo/vasmo/Dockerfile.mcp)
-- [`.github/workflows/ci.yml`](C:/Users/jwavo/vasmo/.github/workflows/ci.yml)
+Health check:
 
-The workflow:
+```bash
+curl https://your-agent-domain/health
+```
 
-1. Builds and pushes the agent image.
-2. SSHes into an Ubuntu host.
-3. Pulls the latest agent image.
-4. Starts `vasmo-agent` on port `8080`.
-5. Checks `/health` on the agent service.
+### Cloud Deployment Options
 
-## 4. User-facing checklist
+| Platform | Command / Notes |
+|----------|----------------|
+| Railway | Connect repo → set env vars → deploy from `Dockerfile.mcp` |
+| Render | New Web Service → Docker → set root to `/` → `Dockerfile.mcp` |
+| Fly.io | `fly launch` → set secrets via `fly secrets set KEY=VALUE` |
+| VPS | `docker run` as above, expose port 8080, add TLS via nginx/caddy |
 
-Before submission, confirm:
+The agent exposes a single WebSocket endpoint. In production, use `wss://` (TLS required for browser connections).
 
-- Smart contracts are deployed on Mantle Sepolia
-- Smart contracts are verified on Mantle Explorer
-- Frontend is publicly accessible through its own hosting provider
-- The agent can call the on-chain strategy flow
-- Deployment addresses are included in the submission
-- Demo video is at least 2 minutes
+---
 
-## 5. Helpful URLs
+## 3. Frontend
 
-- Agent health: `https://your-public-agent-domain/health`
-- Mantle Sepolia Explorer: [https://explorer.sepolia.mantle.xyz](https://explorer.sepolia.mantle.xyz)
-- Mantle Sepolia faucet: [https://faucet.sepolia.mantle.xyz/](https://faucet.sepolia.mantle.xyz/)
+### Environment Variables
+
+Create `app/.env` (or `.env.local`) with:
+
+```bash
+# Chain
+NEXT_PUBLIC_CHAIN_ID=5003
+NEXT_PUBLIC_NETWORK_MODE=testnet
+
+# RPC
+NEXT_PUBLIC_BASE_SEPOLIA_RPC=https://rpc.sepolia.mantle.xyz
+NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_1=https://mantle-sepolia.drpc.org
+NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_2=https://5003.rpc.thirdweb.com/
+
+# Contract addresses (Mantle Sepolia)
+NEXT_PUBLIC_INVOICE_NFT_ADDRESS=0x018ee8F363421016177DbC8F9492fe2a1C720e29
+NEXT_PUBLIC_YIELD_VAULT_ADDRESS=0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6
+NEXT_PUBLIC_AGENT_ROUTER_ADDRESS=0x4430248F3b2304F946f08c43A06C3451657FD658
+NEXT_PUBLIC_PRIVACY_REGISTRY_ADDRESS=0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0
+NEXT_PUBLIC_PYTH_ORACLE_ADDRESS=0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3
+NEXT_PUBLIC_AAVE_YIELD_ADDRESS=0x5a179d261fD322ecaED06FA9Aa2973980D74322c
+
+# Agent
+NEXT_PUBLIC_AGENT_WS_URL=wss://your-public-agent-domain
+
+# App
+NEXT_PUBLIC_APP_URL=https://your-public-frontend-domain
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your-walletconnect-project-id
+
+# Circle Gateway (x402 nanopayments)
+NEXT_PUBLIC_GATEWAY_SELLER_ADDRESS=0x...
+GATEWAY_SELLER_ADDRESS=0x...
+GATEWAY_FACILITATOR_URL=https://gateway-api-testnet.circle.com
+GATEWAY_SELLER_PRIVATE_KEY=0x...
+
+# QuickBooks (optional — demo fallback if not set)
+QUICKBOOKS_CLIENT_ID=...
+QUICKBOOKS_CLIENT_SECRET=...
+QUICKBOOKS_REDIRECT_URI=https://your-domain/api/quickbooks/callback
+QUICKBOOKS_ENVIRONMENT=sandbox
+```
+
+### Build and Deploy
+
+```bash
+cd app
+pnpm install
+pnpm build
+pnpm start
+```
+
+#### Netlify
+
+The frontend is configured for Netlify static deployment:
+
+```bash
+# Build command
+pnpm build
+
+# Publish directory
+.next
+
+# Environment variables
+# Add all NEXT_PUBLIC_* vars in Netlify dashboard → Site settings → Environment variables
+```
+
+#### Vercel
+
+```bash
+vercel deploy --prod
+# Set env vars in Vercel dashboard or via `vercel env add`
+```
+
+---
+
+## 4. QuickBooks OAuth Setup
+
+For real QuickBooks connections (not demo):
+
+1. Go to https://developer.intuit.com → My Apps → your app
+2. Under **Keys & credentials**, add your redirect URI:
+   - Dev: `http://localhost:3000/api/quickbooks/callback`
+   - Prod: `https://your-domain.com/api/quickbooks/callback`
+3. Copy Client ID and Client Secret to your env
+
+Without QuickBooks credentials set, the app automatically falls back to demo invoices.
+
+---
+
+## 5. Pre-Submission Checklist
+
+- [ ] Smart contracts deployed on Mantle Sepolia
+- [ ] All 6 contracts verified on Mantle Explorer
+- [ ] Frontend publicly accessible (Netlify / Vercel / VPS)
+- [ ] Agent running with public WebSocket endpoint (`wss://`)
+- [ ] `NEXT_PUBLIC_AGENT_WS_URL` points to public agent URL
+- [ ] Agent successfully calls `AgentRouter.recordDecision()` on Mantle Sepolia
+- [ ] Demo video recorded (2+ minutes, walks through core flow)
+- [ ] `contracts/deployments/mantleSepolia.json` up to date
+- [ ] GitHub repository public
+
+---
+
+## 6. Useful URLs
+
+| Resource | URL |
+|----------|-----|
+| Mantle Sepolia Explorer | https://explorer.sepolia.mantle.xyz |
+| Mantle Sepolia Faucet | https://faucet.sepolia.mantle.xyz/ |
+| Mantle Sepolia RPC | https://rpc.sepolia.mantle.xyz |
+| Pyth Network | https://pyth.network |
+| Aave V3 | https://aave.com |
+| Circle x402 Docs | https://developers.circle.com/gateway/nanopayments |
+| Anthropic API | https://docs.anthropic.com |

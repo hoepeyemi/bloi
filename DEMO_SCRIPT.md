@@ -1,41 +1,103 @@
-# vasmo Demo Script (2 minutes)
+# bloi — 2-Minute Demo Script
 
-## Setup Before Recording
-- Open the app in browser
-- Have MetaMask ready on Base (or any supported chain)
-- Agent service running: `cd agent && pnpm dev`
+> Mantle Global Hackathon 2025
+
+---
+
+## Before You Record
+
+- [ ] Browser open at https://vasmo.netlify.app/ (or localhost:3000)
+- [ ] MetaMask unlocked and connected to Mantle Sepolia (Chain ID 5003)
+- [ ] Agent running (`cd agent && pnpm dev`)
+- [ ] QuickBooks connected (or demo mode ready)
+- [ ] At least one invoice already minted (so portfolio is non-empty)
+- [ ] Screen recording software ready, microphone checked
 
 ---
 
 ## Script
 
-### 1. Hook (15 sec)
-**Show landing page**
-> "Businesses have $3 trillion locked in unpaid invoices. What if you could earn real DeFi yield on that money while you wait to get paid? That's vasmo."
+### 0:00 — Hook (15 seconds)
 
-### 2. Connect + Chain Selection (10 sec)
-**Connect wallet, show chain switcher**
-> "Connect your wallet, pick your chain. We're on Base today - look, real Aave V3 rates right in the header."
+**Show: Landing page**
 
-### 3. Mint Invoice (30 sec)
-**Fill form and submit**
-> "Create an invoice - $10,000, due in 30 days. The details are hashed for privacy. One click to mint it as an NFT."
-
-### 4. Deposit to Yield (20 sec)
-**Deposit to vault**
-> "Now deposit to the yield vault. This goes straight into Aave V3 - real yield, not simulated numbers."
-
-### 5. Agent (30 sec)
-**Show agent page**
-> "The AI agent monitors everything 24/7. It checks market conditions via Pyth, analyzes risk scores, and auto-adjusts strategies. Watch it work in real time."
-
-### 6. Close (15 sec)
-> "vasmo: real yield on real invoices, across 4 chains. Built with Aave V3, Pyth oracles, and an autonomous AI agent."
+> "Businesses are sitting on $3 trillion in unpaid invoices right now — capital locked up for 30 to 90 days while they wait to get paid. bloi puts that money to work. This is real DeFi yield on real invoices, running autonomously on Mantle Sepolia."
 
 ---
 
-## Key Points
-- **Real yield** from Aave V3 (not simulated)
-- **Privacy** - commitment hashes, not plaintext
-- **AI agent** - autonomous, real LLM reasoning
-- **Multichain** - Base, Arbitrum, Polygon, SKALE
+### 0:15 — Connect + Portfolio (20 seconds)
+
+**Show: Connect wallet → Portfolio dashboard**
+
+> "Connect MetaMask on Mantle Sepolia. The portfolio dashboard loads my invoices instantly — total value locked, yield earned, active deposits, and the live APY range from Aave V3. These are real rates, not simulated."
+
+**Point out:** Total Yield Earned, APY Range (3.5–7%), Active Deposits count
+
+---
+
+### 0:35 — Import from QuickBooks (25 seconds)
+
+**Show: Mint page → QuickBooks panel → select invoice**
+
+> "Minting an invoice takes two clicks. I'll import directly from QuickBooks — here are my 20 open invoices from real clients. I'll pick this one for $10,000 due in 30 days."
+
+**Click invoice — watch form auto-fill and advance to Step 2**
+
+> "The form pre-fills automatically. On-chain, only a cryptographic hash is stored — the actual invoice details never touch the blockchain."
+
+---
+
+### 1:00 — Mint Transaction (20 seconds)
+
+**Show: Review screen → MetaMask popup → confirmation**
+
+> "One transaction on Mantle Sepolia — low fees, fast confirmation. The invoice is now an NFT on-chain."
+
+**Show: Transaction confirmed, redirect to portfolio**
+
+---
+
+### 1:20 — AI Agent in Action (30 seconds)
+
+**Show: Agent page — live reasoning stream**
+
+> "This is where it gets interesting. The AI agent is watching my positions 24/7. It just read my new deposit, pulled Pyth oracle data for risk scoring, and Claude Haiku is generating its analysis."
+
+**Point to confidence score and strategy recommendation**
+
+> "87% confidence — it's recommending the Conservative strategy. High enough to execute. Watch it submit the decision to AgentRouter on Mantle Sepolia."
+
+**Show: Transaction hash appears in the stream**
+
+> "That's a real on-chain transaction. The strategy change is recorded in the AgentRouter contract and I can verify it on Mantle Explorer right now."
+
+---
+
+### 1:50 — Close (10 seconds)
+
+**Show: Explorer link or portfolio with updated strategy**
+
+> "bloi. Real yield on real invoices. Autonomous AI. Privacy-preserving. Built natively for Mantle. Thank you."
+
+---
+
+## Key Points to Hit
+
+| Point | Where |
+|-------|-------|
+| $3T problem — invoices sitting idle | Hook |
+| Real Aave V3 yield (3–7% APY), not simulated | Portfolio dashboard |
+| QuickBooks import — real invoices, not test data | Mint step 1 |
+| Privacy: commitment hash on-chain, not plaintext | Mint step 2 |
+| Claude Haiku 4.5 — real LLM, not templates | Agent page |
+| On-chain execution via AgentRouter | Agent page — tx hash |
+| Mantle Sepolia — low fees, fast confirmations | Mint confirmation |
+
+---
+
+## Fallback (If Something Breaks)
+
+- **Agent offline**: Show the agent terminal logs instead of WebSocket stream
+- **QuickBooks slow**: Use manual entry — still shows the 2-step flow
+- **Transaction stuck**: Have a pre-recorded clip of a successful tx for splicing
+- **Wrong network**: MetaMask → Settings → Networks → switch to Mantle Sepolia

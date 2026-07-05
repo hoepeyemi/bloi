@@ -1,126 +1,184 @@
-# vasmo
+# bloi — Invoice Yield Protocol
 
-> Autonomous AI treasury for B2B invoices on Mantle Sepolia
+> Turn Invoices into Yield. Automatically.
 
-vasmo turns invoices into on-chain assets, lets users mint and manage them in the frontend, and lets an AI agent monitor and execute strategy changes on-chain through the deployed contracts.
+**bloi** tokenizes B2B invoices as Real-World Assets (RWAs) on Mantle Sepolia, then deploys an autonomous AI agent powered by Claude Haiku 4.5 to continuously optimize yield via Aave V3 — while protecting sensitive invoice data with cryptographic commitments.
 
-Live demo:
-- [Frontend](https://vasmo.netlify.app/)
+Built for the **Mantle Global Hackathon 2025**.
 
-## Submission checklist
+---
 
-- Smart contracts are deployed on Mantle Sepolia
-- Smart contracts are verified on Mantle Explorer
-- At least one AI-powered function is callable on-chain through the agent and AgentRouter flow
-- Frontend is publicly accessible
-- Deployment addresses are included below and in the deployment manifest
-- Demo video should be at least 2 minutes and walk through the core use case
-- README documents setup, architecture, and deployed addresses
+## Live Demo
 
-## What vasmo does
+| Resource | URL |
+|----------|-----|
+| Frontend | https://vasmo.netlify.app/ |
+| GitHub | https://github.com/hoepeyemi/bloi |
+| Mantle Sepolia Explorer | https://explorer.sepolia.mantle.xyz |
 
-1. User connects a wallet on Mantle Sepolia.
-2. User mints an invoice NFT.
-3. User deposits or manages the invoice in the yield vault flow.
-4. The AI agent monitors invoices and can execute strategy changes on-chain.
-5. The frontend shows portfolio, agent activity, invoice detail pages, and chain status.
+---
+
+## The Problem
+
+B2B businesses wait **30–90 days** for invoice payment. A company with $200,000 in outstanding receivables loses roughly $10,000–$14,000 per year in potential DeFi yield — capital that sits completely idle while payment clears.
+
+Traditional invoice factoring is expensive (2–5% fees), requires credit checks, and exposes sensitive business data to third parties.
+
+## The Solution
+
+bloi turns the waiting period into a productive asset:
+
+```
+Connect Wallet → Import Invoice (QuickBooks / Manual)
+→ Mint NFT → Deposit to Yield Vault
+→ AI Agent Optimizes Strategy 24/7
+→ Withdraw Principal + Yield When Client Pays
+```
+
+- **Real yield** from Aave V3 (3–7% APY) — not simulated
+- **Privacy-first** — invoice data stored as keccak256 commitment hashes, never in plaintext on-chain
+- **Autonomous AI** — Claude Haiku 4.5 monitors and rebalances positions automatically
+- **No lockups** — withdraw anytime
+- **No KYC** — permissionless; your wallet is your identity
+- **QuickBooks integration** — import real invoices directly with OAuth 2.0
+
+---
 
 ## Architecture
 
-- `app/` - Next.js frontend for minting, portfolio, issuer controls, and agent monitoring
-- `agent/` - TypeScript WebSocket service that analyzes invoice state and executes actions
-- `contracts/` - Hardhat workspace with the Mantle Sepolia smart contracts and verification scripts
-- `contracts/deployments/mantleSepolia.json` - canonical live deployment manifest
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    bloi Protocol                                │
+│                                                                 │
+│  ┌──────────────┐   WebSocket    ┌────────────────────────┐    │
+│  │  Next.js 15  │◄──────────────►│  AI Agent (Node.js)    │    │
+│  │  Frontend    │                │  Claude Haiku 4.5       │    │
+│  └──────┬───────┘                └──────────┬─────────────┘    │
+│         │ wagmi/viem                        │ ethers.js         │
+│         ▼                                   ▼                   │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              Mantle Sepolia (Chain ID: 5003)              │  │
+│  │                                                          │  │
+│  │  InvoiceNFT → YieldVault → AgentRouter                  │  │
+│  │       ↕              ↕                                   │  │
+│  │  PrivacyRegistry  AaveV3YieldSource ← PythOracle        │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-## Deployed contracts on Mantle Sepolia
+| Component | Description |
+|-----------|-------------|
+| `app/` | Next.js 15 + React 19 frontend — minting, portfolio, agent monitoring, issuer controls |
+| `agent/` | Autonomous TypeScript service — analyzes invoices, executes strategy changes on-chain via AgentRouter |
+| `contracts/` | Hardhat workspace — 6 Solidity contracts deployed and verified on Mantle Sepolia |
 
-Chain ID: `5003`
+---
+
+## Deployed Contracts — Mantle Sepolia (Chain ID: 5003)
 
 | Contract | Address | Status |
-| --- | --- | --- |
-| InvoiceNFT | `0x018ee8F363421016177DbC8F9492fe2a1C720e29` | Verified |
-| YieldVault | `0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6` | Verified |
-| AgentRouter | `0x4430248F3b2304F946f08c43A06C3451657FD658` | Verified |
-| PrivacyRegistry | `0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0` | Verified |
-| PythOracle | `0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3` | Verified |
-| AaveV3YieldSource | `0x5a179d261fD322ecaED06FA9Aa2973980D74322c` | Verified |
+|----------|---------|--------|
+| InvoiceNFT | [`0x018ee8F363421016177DbC8F9492fe2a1C720e29`](https://explorer.sepolia.mantle.xyz/address/0x018ee8F363421016177DbC8F9492fe2a1C720e29) | Verified |
+| YieldVault | [`0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6`](https://explorer.sepolia.mantle.xyz/address/0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6) | Verified |
+| AgentRouter | [`0x4430248F3b2304F946f08c43A06C3451657FD658`](https://explorer.sepolia.mantle.xyz/address/0x4430248F3b2304F946f08c43A06C3451657FD658) | Verified |
+| PrivacyRegistry | [`0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0`](https://explorer.sepolia.mantle.xyz/address/0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0) | Verified |
+| PythOracle | [`0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3`](https://explorer.sepolia.mantle.xyz/address/0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3) | Verified |
+| AaveV3YieldSource | [`0x5a179d261fD322ecaED06FA9Aa2973980D74322c`](https://explorer.sepolia.mantle.xyz/address/0x5a179d261fD322ecaED06FA9Aa2973980D74322c) | Verified |
 
-Deployment manifest:
-- [`contracts/deployments/mantleSepolia.json`](C:/Users/jwavo/vasmo/contracts/deployments/mantleSepolia.json)
+Deployment manifest: [`contracts/deployments/mantleSepolia.json`](contracts/deployments/mantleSepolia.json)
 
-Explorer:
-- [Mantle Sepolia Explorer](https://explorer.sepolia.mantle.xyz)
+---
 
-## Setup
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Blockchain | Mantle Sepolia (Chain ID 5003), native token MNT |
+| Smart Contracts | Solidity 0.8.24 + Hardhat |
+| Frontend | Next.js 15 + React 19 + TypeScript |
+| Wallet / Web3 | wagmi v3 + viem v2 |
+| AI Agent | TypeScript + Node.js + WebSocket (ws) |
+| LLM | Anthropic Claude Haiku 4.5 |
+| Yield Source | Aave V3 (real DeFi, 3–7% APY) |
+| Oracle | Pyth Network (real-time price feeds) |
+| Privacy | keccak256 commitment hashes + Merkle trees |
+| Invoice Import | QuickBooks OAuth 2.0 |
+| Payments | Circle x402 nanopayments |
+| Package Manager | pnpm (monorepo workspace) |
+
+---
+
+## AI-Powered On-Chain Flow
+
+The agent-to-contract path is the core AI-powered function:
+
+1. Agent reads active deposits from `InvoiceNFT` and `YieldVault`
+2. Agent fetches risk data from Pyth oracle
+3. Claude Haiku 4.5 generates human-readable reasoning with confidence scores
+4. Decisions above **70% confidence** are submitted to `AgentRouter.recordDecision()`
+5. `AgentRouter` validates authorization and executes the strategy change on-chain
+6. Frontend receives the result in real-time via WebSocket and displays the agent's reasoning
+
+---
+
+## Quick Start
 
 ### Prerequisites
 
 - Node.js 18+
 - pnpm
-- MetaMask or another wallet connected to Mantle Sepolia
+- MetaMask connected to Mantle Sepolia
 
-### Local development
+### Run everything locally
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-This starts the app and agent in parallel from the workspace root.
+This starts the frontend (port 3000) and agent (port 8080) in parallel.
 
-### Frontend
-
-```bash
-cd app
-pnpm dev
-```
-
-### Agent
+### Individual services
 
 ```bash
-cd agent
-pnpm dev
+# Frontend
+cd app && pnpm dev
+
+# Agent
+cd agent && pnpm dev
+
+# Contracts
+cd contracts && npm run build && npm test
 ```
 
-### Contracts
+### Mantle Sepolia network details
 
-```bash
-cd contracts
-npm run build
-npm test
-npm run verify:mantle-sepolia
-```
+| Field | Value |
+|-------|-------|
+| Chain ID | 5003 |
+| RPC | https://rpc.sepolia.mantle.xyz |
+| Fallback RPC 1 | https://mantle-sepolia.drpc.org |
+| Fallback RPC 2 | https://5003.rpc.thirdweb.com/ |
+| Explorer | https://explorer.sepolia.mantle.xyz |
+| Faucet | https://faucet.sepolia.mantle.xyz/ |
+| Native Token | MNT |
 
-## Docker deployment
+---
 
-- [`Dockerfile.mcp`](C:/Users/jwavo/vasmo/Dockerfile.mcp) builds the agent image
-- [`.github/workflows/ci.yml`](C:/Users/jwavo/vasmo/.github/workflows/ci.yml) handles agent tests and Docker deployment
+## Hackathon Submission Checklist
 
-Local build:
+- [x] Smart contracts deployed on Mantle Sepolia
+- [x] All 6 contracts verified on Mantle Explorer
+- [x] AI-powered function callable on-chain via AgentRouter
+- [x] Frontend publicly accessible (Netlify)
+- [x] Deployed addresses documented (above + deployment manifest)
+- [x] Architecture documented
+- [ ] Demo video (2+ minutes, core use case walkthrough)
 
-```bash
-pnpm run docker:build:agent
-```
-
-## Network configuration
-
-- Network: Mantle Sepolia
-- Chain ID: `5003`
-- Native token symbol: `MNT`
-- Frontend health endpoint: `/health`
-- Agent health endpoint: `/health`
-
-## AI-powered on-chain function
-
-The AI-powered path is the agent-to-contract flow:
-
-- the agent observes invoice state and market data
-- it decides whether to keep or change strategy
-- it can write the decision through `AgentRouter`
-- the result is recorded on-chain and visible in the frontend
+---
 
 ## Notes
 
-- QuickBooks is optional and has a demo fallback if OAuth is not configured
-- The frontend is configured for Mantle Sepolia by default
-- The repo is organized for public deployment, not localhost-only usage
+- QuickBooks integration has a demo fallback — OAuth is optional for local testing
+- The agent streams reasoning to the frontend in real-time; connect MetaMask to Mantle Sepolia to see live data
+- All contract addresses in `contracts/deployments/mantleSepolia.json` are the canonical source of truth

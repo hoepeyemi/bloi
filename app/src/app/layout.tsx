@@ -6,8 +6,20 @@ import { KeyboardShortcutsProvider } from "@/components/keyboard-shortcuts-provi
 import { LiveBackground } from "@/components/live-background";
 
 export const metadata: Metadata = {
-  title: "bloi - AI Treasury Agent",
-  description: "Autonomous AI manages your invoices 24/7. Tokenize, optimize yield, settle via x402.",
+  title: "bloi — Invoice Yield Protocol",
+  description: "Turn invoices into yield. Automatically. Tokenize B2B invoices as RWAs on Mantle, earn 3–7% APY via Aave V3, and let an autonomous AI agent optimize your strategy 24/7.",
+  keywords: ["invoice financing", "RWA", "DeFi", "Mantle", "Aave", "yield optimization", "AI agent"],
+  openGraph: {
+    title: "bloi — Invoice Yield Protocol",
+    description: "Turn invoices into yield. Automatically.",
+    images: [{ url: "/twitter-cover.png", width: 1500, height: 500 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "bloi — Invoice Yield Protocol",
+    description: "Turn invoices into yield. Automatically.",
+    images: ["/twitter-cover.png"],
+  },
 };
 
 export default function RootLayout({
