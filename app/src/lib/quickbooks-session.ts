@@ -1,50 +1,52 @@
-import fs from "fs"
-import path from "path"
+import { cookies } from "next/headers"
+import type { NextResponse } from "next/server"
 import type { QuickBooksTokens } from "./quickbooks"
 
-const DEFAULT_SESSION_KEY = "default"
+const COOKIE_NAME = "qb_tokens"
+const MAX_AGE = 60 * 60 * 24 * 100 // 100 days (QB refresh token validity)
 
-// Persist to a file in .next/cache so tokens survive hot-reloads.
-// The file is gitignored (lives under .next) and never sent to the client.
-function getStorePath(): string {
-  const dir = path.join(process.cwd(), ".next", "cache")
-  try {
-    fs.mkdirSync(dir, { recursive: true })
-  } catch {
-    // already exists
-  }
-  return path.join(dir, "quickbooks-tokens.json")
+function encode(tokens: QuickBooksTokens): string {
+  return Buffer.from(JSON.stringify(tokens)).toString("base64")
 }
 
-function readStore(): Record<string, QuickBooksTokens> {
+function decode(value: string): QuickBooksTokens | null {
   try {
-    const raw = fs.readFileSync(getStorePath(), "utf-8")
-    return JSON.parse(raw) as Record<string, QuickBooksTokens>
+    return JSON.parse(Buffer.from(value, "base64").toString("utf-8")) as QuickBooksTokens
   } catch {
-    return {}
+    return null
   }
 }
 
-function writeStore(store: Record<string, QuickBooksTokens>): void {
-  try {
-    fs.writeFileSync(getStorePath(), JSON.stringify(store), "utf-8")
-  } catch {
-    // non-fatal — fall back to in-memory behaviour
-  }
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: "lax" as const,
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  maxAge: MAX_AGE,
 }
 
-export function storeQuickBooksTokens(tokens: QuickBooksTokens, sessionKey = DEFAULT_SESSION_KEY) {
-  const store = readStore()
-  store[sessionKey] = tokens
-  writeStore(store)
+/**
+ * Read tokens from the incoming request cookies.
+ * Works in any Route Handler. Returns undefined if not connected.
+ */
+export async function getQuickBooksTokens(): Promise<QuickBooksTokens | undefined> {
+  const store = await cookies()
+  const value = store.get(COOKIE_NAME)?.value
+  if (!value) return undefined
+  return decode(value) ?? undefined
 }
 
-export function getQuickBooksTokens(sessionKey = DEFAULT_SESSION_KEY): QuickBooksTokens | undefined {
-  return readStore()[sessionKey]
+/**
+ * Write tokens onto an outgoing response. Setting the cookie directly on the
+ * returned response is required — cookies().set() does NOT attach to a
+ * manually-created NextResponse (e.g. redirect), so the token would be lost
+ * on Vercel where each serverless invocation is isolated.
+ */
+export function setQuickBooksTokensOnResponse(response: NextResponse, tokens: QuickBooksTokens) {
+  response.cookies.set(COOKIE_NAME, encode(tokens), cookieOptions)
 }
 
-export function clearQuickBooksTokens(sessionKey = DEFAULT_SESSION_KEY) {
-  const store = readStore()
-  delete store[sessionKey]
-  writeStore(store)
+/** Clear the tokens cookie on an outgoing response. */
+export function clearQuickBooksTokensOnResponse(response: NextResponse) {
+  response.cookies.set(COOKIE_NAME, "", { ...cookieOptions, maxAge: 0 })
 }
