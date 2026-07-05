@@ -1,7 +1,7 @@
 /**
  * Arc App Kit — Agent integration (server-side, Base Sepolia)
  *
- * Uses createViemAdapterFromPrivateKey to give the vasmo agent a wallet adapter
+ * Uses createViemAdapterFromPrivateKey to give the bloi agent a wallet adapter
  * for kit.send() USDC transfers on Base Sepolia — no browser wallet required.
  *
  * Use cases:

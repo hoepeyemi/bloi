@@ -7,10 +7,10 @@ import "./AgentRouter.sol";
 import "./MockOracle.sol";
 import "./PrivacyRegistry.sol";
 
-/// @title VasmoFactory - Atomic deployment of vasmo Protocol
+/// @title BloiFactory - Atomic deployment of bloi Protocol
 /// @notice Deploys and configures all protocol contracts in a single transaction
 /// @dev Eliminates circular dependency issues by handling initialization order internally
-contract VasmoFactory {
+contract BloiFactory {
     struct DeployedContracts {
         address invoiceNFT;
         address yieldVault;
@@ -28,7 +28,7 @@ contract VasmoFactory {
         address privacyRegistry
     );
 
-    /// @notice Deploy the complete vasmo Protocol stack
+    /// @notice Deploy the complete bloi Protocol stack
     /// @return contracts Struct containing all deployed contract addresses
     function deployProtocol() external returns (DeployedContracts memory contracts) {
         // Step 1: Deploy core contracts (order matters for constructor deps)

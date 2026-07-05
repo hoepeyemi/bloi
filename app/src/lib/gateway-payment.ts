@@ -31,7 +31,7 @@ export function withGatewayPayment(
     const facilitatorUrl =
       process.env.GATEWAY_FACILITATOR_URL || 'https://gateway-api-testnet.circle.com';
     const amount = options.amount ?? '1000';
-    const description = options.description ?? 'vasmo API access';
+    const description = options.description ?? 'bloi API access';
 
     const paymentSignature = request.headers.get('payment-signature');
 

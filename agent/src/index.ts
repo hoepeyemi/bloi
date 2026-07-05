@@ -1,9 +1,9 @@
-// vasmo Agent Service Entry Point
+// bloi Agent Service Entry Point
 
 import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
-import { VasmoAgent } from './agent.js';
+import { BloiAgent } from './agent.js';
 import { ContractAddresses } from './blockchain.js';
 
 // Environment validation
@@ -216,7 +216,7 @@ async function main() {
   }
 
   // Create agent instance
-  const agent = new VasmoAgent(RPC_URL, ADDRESSES, {
+  const agent = new BloiAgent(RPC_URL, ADDRESSES, {
     privateKey: PRIVATE_KEY,
     anthropicApiKey: ANTHROPIC_API_KEY,
     wsPort: WS_PORT,
@@ -236,7 +236,7 @@ async function main() {
 
   // Handle graceful shutdown
   const shutdown = () => {
-    console.log('\n🛑 Shutting down vasmo Agent...');
+    console.log('\n🛑 Shutting down bloi Agent...');
     agent.stop();
     process.exit(0);
   };
@@ -245,7 +245,7 @@ async function main() {
   process.on('SIGTERM', shutdown);
 
   // Keep process alive
-  console.log('\n✅ vasmo Agent is live. Press Ctrl+C to stop.\n');
+  console.log('\n✅ bloi Agent is live. Press Ctrl+C to stop.\n');
 }
 
 // Run

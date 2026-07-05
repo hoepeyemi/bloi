@@ -74,5 +74,5 @@ async function invoiceDataHandler(_request: NextRequest): Promise<NextResponse> 
 
 export const GET = withGatewayPayment(invoiceDataHandler, {
   amount: '1000', // $0.001 USDC
-  description: 'vasmo active invoice dataset — Base Sepolia',
+  description: 'bloi active invoice dataset — Base Sepolia',
 });

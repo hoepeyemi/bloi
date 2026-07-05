@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * vasmo - Landing Page
+ * bloi - Landing Page
  * Terminal/Bloomberg aesthetic - Monospace, data-dense, green accents
  * ALIVE: Grid background, noise texture, typing animation, stagger effects
  */
@@ -56,7 +56,7 @@ export default function LandingPage() {
         <Link href="/" className="flex items-center gap-2">
           <div className="w-5 h-5 bg-[#10b981] rounded" />
           <span className="font-semibold text-sm">
-            vasmo
+            bloi
           </span>
         </Link>
 
@@ -115,7 +115,7 @@ export default function LandingPage() {
               </Button>
             </Link>
             <a
-              href="https://github.com/hoepeyemi/vasmo"
+              href="https://github.com/hoepeyemi/bloi"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -253,7 +253,7 @@ export default function LandingPage() {
         <div className="flex items-center justify-between text-[11px] text-[#666666]">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-[#10b981] rounded" />
-            <span>vasmo protocol</span>
+            <span>bloi protocol</span>
           </div>
           <div className="flex items-center gap-4">
             <span>Base Sepolia AI Treasury</span>

@@ -1,5 +1,5 @@
 /**
- * Arc App Kit — vasmo integration
+ * Arc App Kit — bloi integration
  *
  * Provides a singleton AppKit instance and Base Sepolia chain constants
  * for Send, Bridge, Swap, and Unified Balance operations.

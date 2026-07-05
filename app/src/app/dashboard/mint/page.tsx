@@ -55,7 +55,7 @@ function MintInvoiceContent() {
 
   // Load saved form data from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('vasmo-mint-form')
+    const saved = localStorage.getItem('bloi-mint-form')
     if (saved) {
       try {
         const parsed = JSON.parse(saved)
@@ -85,14 +85,14 @@ function MintInvoiceContent() {
         allowDisclosure: formData.allowDisclosure,
         quickbooksId: formData.quickbooksId,
       }
-      localStorage.setItem('vasmo-mint-form', JSON.stringify(toSave))
+      localStorage.setItem('bloi-mint-form', JSON.stringify(toSave))
     }
   }, [formData, isSuccess])
 
   // Clear saved form data after success
   useEffect(() => {
     if (isSuccess && typeof window !== 'undefined') {
-      localStorage.removeItem('vasmo-mint-form')
+      localStorage.removeItem('bloi-mint-form')
     }
   }, [isSuccess])
 

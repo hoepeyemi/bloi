@@ -22,7 +22,7 @@ async function main() {
   const mockAaveAsset = process.env.MOCK_AAVE_ASSET || deploymentState.mockAaveAsset || hre.ethers.ZeroAddress;
   const wrapNativeEth = process.env.MOCK_AAVE_WRAP_NATIVE === "true";
 
-  console.log("=== vasmo Base Sepolia Deployment ===");
+  console.log("=== bloi Base Sepolia Deployment ===");
   console.log("Deployer:", deployer.address);
   console.log("Chain ID:", hre.network.config.chainId || "unknown");
   console.log("Pyth Oracle:", pythAddress);

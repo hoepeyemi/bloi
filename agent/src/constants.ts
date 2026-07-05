@@ -1,4 +1,4 @@
-// Centralized constants for vasmo Agent
+// Centralized constants for bloi Agent
 
 import { Strategy } from './types.js';
 

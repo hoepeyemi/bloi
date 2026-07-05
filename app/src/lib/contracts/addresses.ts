@@ -47,12 +47,12 @@ const emptyAddresses: ContractAddresses = {
 const addresses: Partial<Record<ChainId, ContractAddresses>> = {
   // Testnets - Base Sepolia is the primary testnet (Circle Gateway nanopayments supported)
   [CHAIN_IDS.BASE_SEPOLIA]: {
-    invoiceNFT: (process.env.NEXT_PUBLIC_INVOICE_NFT_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
-    yieldVault: (process.env.NEXT_PUBLIC_YIELD_VAULT_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
-    agentRouter: (process.env.NEXT_PUBLIC_AGENT_ROUTER_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
-    privacyRegistry: (process.env.NEXT_PUBLIC_PRIVACY_REGISTRY_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
-    pythOracle: (process.env.NEXT_PUBLIC_PYTH_ORACLE_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
-    aaveYieldSource: (process.env.NEXT_PUBLIC_AAVE_YIELD_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
+    invoiceNFT: (process.env.NEXT_PUBLIC_INVOICE_NFT_ADDRESS || "0x1045c1fFf861D9f6F6D00F30eCf6075832d998Ec") as `0x${string}`,
+    yieldVault: (process.env.NEXT_PUBLIC_YIELD_VAULT_ADDRESS || "0x271a64E069E683627C23712156EDC804ac6a2CD7") as `0x${string}`,
+    agentRouter: (process.env.NEXT_PUBLIC_AGENT_ROUTER_ADDRESS || "0xA8fDda52A8022610e94C49E54EF61D8ae9662BE0") as `0x${string}`,
+    privacyRegistry: (process.env.NEXT_PUBLIC_PRIVACY_REGISTRY_ADDRESS || "0xb0e21917954138e84681C3792b9B31D892Bb1670") as `0x${string}`,
+    pythOracle: (process.env.NEXT_PUBLIC_PYTH_ORACLE_ADDRESS || "0x69a23dC9Ba9e5C965beCeF191850E5Cea74954C3") as `0x${string}`,
+    aaveYieldSource: (process.env.NEXT_PUBLIC_AAVE_YIELD_ADDRESS || "0xCE4E72C577031A96e4EAcA48028eE3d23C64eccE") as `0x${string}`,
   },
   [CHAIN_IDS.ARBITRUM_SEPOLIA]: { ...emptyAddresses },
   [CHAIN_IDS.POLYGON_AMOY]: { ...emptyAddresses },

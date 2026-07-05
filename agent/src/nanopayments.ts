@@ -1,7 +1,7 @@
 /**
  * Circle Gateway Nanopayments — Agent buyer (Base Sepolia)
  *
- * Gives the vasmo agent a Gateway wallet so it can autonomously:
+ * Gives the bloi agent a Gateway wallet so it can autonomously:
  *   - Deposit USDC into Gateway (one-time onchain tx)
  *   - Pay for x402-protected resources gaslessly (EIP-3009 offchain signature)
  *   - Withdraw unused Gateway balance back to the agent wallet

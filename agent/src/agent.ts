@@ -1,4 +1,4 @@
-// vasmo Agent - Autonomous yield optimization agent
+// bloi Agent - Autonomous yield optimization agent
 
 import { BlockchainService, ContractAddresses } from './blockchain.js';
 import { LLMService } from './llm.js';
@@ -9,7 +9,7 @@ import { STRATEGY_NAMES } from './constants.js';
 import { createNanopayments, AgentNanopayments } from './nanopayments.js';
 import { createArcAgentKit, ArcAgentKit } from './arc-appkit.js';
 
-export class VasmoAgent {
+export class BloiAgent {
   private blockchain: BlockchainService;
   private llm: LLMService;
   private ws: AgentWebSocket;
@@ -80,7 +80,7 @@ export class VasmoAgent {
   async start(): Promise<void> {
     if (this.isRunning) return;
 
-    console.log('🤖 vasmo Agent starting...');
+    console.log('🤖 bloi Agent starting...');
 
     // Start WebSocket server
     this.ws.start();
@@ -126,14 +126,14 @@ export class VasmoAgent {
     this.broadcastThought({
       type: 'thinking',
       tokenId: 'system',
-      message: '🏭 vasmo Agent is now active and monitoring invoices...',
+      message: '🏭 bloi Agent is now active and monitoring invoices...',
       timestamp: Date.now(),
     });
 
     // Start analysis loop
     this.startAnalysisLoop();
 
-    console.log('🤖 vasmo Agent started successfully');
+    console.log('🤖 bloi Agent started successfully');
   }
 
   stop(): void {
@@ -147,7 +147,7 @@ export class VasmoAgent {
     this.ws.stop();
     this.isRunning = false;
 
-    console.log('🤖 vasmo Agent stopped');
+    console.log('🤖 bloi Agent stopped');
   }
 
   private setupEventListeners(): void {
@@ -718,7 +718,7 @@ export class VasmoAgent {
   async fetchPaidInvoiceData(): Promise<unknown[] | null> {
     if (!this.nanopay) return null;
 
-    const appUrl = process.env.VASMO_APP_URL || 'http://localhost:3000';
+    const appUrl = process.env.BLOI_APP_URL || process.env.VASMO_APP_URL || 'http://localhost:3000';
     const endpoint = `${appUrl}/api/payments`;
 
     try {
