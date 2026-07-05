@@ -36,11 +36,8 @@ export async function GET() {
     let tokens = storedTokens
     if (tokens.expiresAt && tokens.expiresAt <= Date.now() + 60_000) {
       try {
-        const refreshed = await refreshAccessToken(tokens.refreshToken)
-        tokens = {
-          ...refreshed,
-          realmId: tokens.realmId,
-        }
+        const refreshed = await refreshAccessToken(tokens.refreshToken, tokens.realmId)
+        tokens = refreshed
         storeQuickBooksTokens(tokens, SESSION_KEY)
       } catch {
         clearQuickBooksTokens(SESSION_KEY)

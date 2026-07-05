@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard/mint?error=quickbooks_auth_failed", appUrl))
   }
 
-  if (stateCookie && state && stateCookie !== state) {
+  if (!stateCookie || !state || stateCookie !== state) {
     return NextResponse.redirect(new URL("/dashboard/mint?error=quickbooks_auth_failed", appUrl))
   }
 

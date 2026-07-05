@@ -123,7 +123,8 @@ export async function exchangeCodeForTokens(
 
 // Refresh access token
 export async function refreshAccessToken(
-  refreshToken: string
+  refreshToken: string,
+  realmId: string
 ): Promise<QuickBooksTokens> {
   const clientId = process.env.QUICKBOOKS_CLIENT_ID
   const clientSecret = process.env.QUICKBOOKS_CLIENT_SECRET
@@ -159,7 +160,7 @@ export async function refreshAccessToken(
     refreshToken: data.refresh_token,
     expiresIn: data.expires_in,
     tokenType: data.token_type,
-    realmId: "", // Will need to be preserved from original token
+    realmId,
     expiresAt: Date.now() + data.expires_in * 1000,
   }
 }
@@ -267,17 +268,3 @@ export function formatInvoiceForDisplay(invoice: QuickBooksInvoice) {
   }
 }
 
-// Simple in-memory token storage (for demo - use database in production)
-const tokenStore = new Map<string, QuickBooksTokens>()
-
-export function storeTokens(userId: string, tokens: QuickBooksTokens) {
-  tokenStore.set(userId, tokens)
-}
-
-export function getStoredTokens(userId: string): QuickBooksTokens | undefined {
-  return tokenStore.get(userId)
-}
-
-export function clearTokens(userId: string) {
-  tokenStore.delete(userId)
-}

@@ -26,6 +26,7 @@ export function QuickBooksConnect({
   selectedInvoiceId,
 }: QuickBooksConnectProps) {
   const [isConnected, setIsConnected] = useState(false)
+  const [isDemo, setIsDemo] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [invoices, setInvoices] = useState<QuickBooksInvoice[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -44,7 +45,8 @@ export function QuickBooksConnect({
       const data = await response.json()
 
       if (data.success) {
-        setIsConnected(true)
+        setIsDemo(!!data.data?.demo)
+        setIsConnected(!data.data?.demo)
         setInvoices(data.data.invoices || [])
       } else if (data.requiresAuth) {
         setIsConnected(false)
@@ -78,7 +80,7 @@ export function QuickBooksConnect({
     )
   }
 
-  if (!isConnected) {
+  if (!isConnected && !isDemo) {
     return (
       <Card className="glass border-glass-border p-6">
         <div className="text-center space-y-4">
@@ -107,10 +109,15 @@ export function QuickBooksConnect({
 
   return (
     <Card className="glass border-glass-border p-6">
+      {isDemo && (
+        <div className="mb-4 px-3 py-2 rounded-md bg-yellow-500/10 border border-yellow-500/30 text-xs text-yellow-500">
+          Demo data — <button onClick={handleConnect} className="underline font-medium">connect QuickBooks</button> to use real invoices
+        </div>
+      )}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-success" />
-          <span className="font-medium">QuickBooks Connected</span>
+          <CheckCircle2 className={`w-5 h-5 ${isDemo ? "text-yellow-500" : "text-success"}`} />
+          <span className="font-medium">{isDemo ? "QuickBooks (Demo)" : "QuickBooks Connected"}</span>
         </div>
         <Button
           variant="ghost"
