@@ -49,27 +49,30 @@ export default function IssuerDashboardPage() {
   const { writeContract, data: txHash, isPending } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash: txHash })
 
-  // Fetch user's invoices
+  // Fetch user's invoices from API
   useEffect(() => {
     async function fetchUserInvoices() {
-      if (!isConnected || !address || userBalance === 0) {
+      if (!isConnected || !address) {
         setInvoices([])
         setIsLoading(false)
         return
       }
 
       try {
-        // For demo, create mock invoice data based on user balance
-        const mockInvoices: InvoicePrivacy[] = []
-        for (let i = 1; i <= Math.min(userBalance, 5); i++) {
-          mockInvoices.push({
-            tokenId: i.toString(),
-            dataCommitment: `0x${Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`,
-            isRevealed: false,
-            authorizedAddresses: [],
-          })
+        const response = await fetch("/api/invoices", { cache: "no-store" })
+        const data = await response.json()
+
+        if (data.success && data.data.invoices) {
+          const userInvoices: InvoicePrivacy[] = data.data.invoices
+            .filter((inv: { issuer: string }) => inv.issuer?.toLowerCase() === address.toLowerCase())
+            .map((inv: { tokenId: string; dataCommitment: string }) => ({
+              tokenId: inv.tokenId,
+              dataCommitment: inv.dataCommitment || "0x" + "0".repeat(64),
+              isRevealed: false,
+              authorizedAddresses: [],
+            }))
+          setInvoices(userInvoices)
         }
-        setInvoices(mockInvoices)
       } catch (error) {
         console.error("Failed to fetch invoices:", error)
       } finally {
@@ -78,7 +81,7 @@ export default function IssuerDashboardPage() {
     }
 
     fetchUserInvoices()
-  }, [isConnected, address, userBalance])
+  }, [isConnected, address])
 
   const handleAuthorize = () => {
     if (!selectedInvoice || !newAddress || !isAddress(newAddress)) return

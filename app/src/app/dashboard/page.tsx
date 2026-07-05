@@ -105,7 +105,12 @@ export default function Dashboard() {
             daysUntilDue,
             strategy,
             apy: strategy === "aggressive" ? `${aggressiveAPY}%` : strategy === "conservative" ? `${conservativeAPY}%` : "—",
-            accruedYield: inv.deposit ? `+$${Number(formatUnits(BigInt(inv.deposit.accruedYield), 18)).toFixed(2)}` : "$0.00",
+            accruedYield: inv.deposit
+              ? (() => {
+                  const y = Number(formatUnits(BigInt(inv.deposit.accruedYield), 18))
+                  return y > 0 && y < 0.01 ? "+$<0.01" : `+$${y.toFixed(2)}`
+                })()
+              : "$0.00",
             status: isInYield ? "InYield" : inv.status,
             riskScore: inv.riskScore || 75,
           }
@@ -181,7 +186,9 @@ export default function Dashboard() {
               Yield Earned
               <span className="w-1 h-1 rounded-full bg-[#10b981] status-pulse" />
             </div>
-            <div className="stat-value stat-value-green tabular-nums">+${yieldFormatted.toFixed(2)}</div>
+            <div className="stat-value stat-value-green tabular-nums">
+              {yieldFormatted > 0 && yieldFormatted < 0.01 ? "+$<0.01" : `+$${yieldFormatted.toFixed(2)}`}
+            </div>
             {tvlFormatted > 0 && (
               <div className="text-[11px] text-[#10b981] mt-1">+{((yieldFormatted / tvlFormatted) * 100).toFixed(2)}%</div>
             )}
@@ -195,8 +202,16 @@ export default function Dashboard() {
               APY Range
               <span className="w-1 h-1 rounded-full bg-[#f59e0b]" />
             </div>
-            <div className="stat-value stat-value-amber tabular-nums">{conservativeAPY}-{aggressiveAPY}%</div>
-            <div className="text-[10px] text-[#666666] mt-1">via Aave V3</div>
+            <div className="stat-value stat-value-amber tabular-nums">
+              {invoices.some((inv) => inv.strategy !== "hold" && inv.strategy !== "—")
+                ? `${conservativeAPY}-${aggressiveAPY}%`
+                : "—"}
+            </div>
+            <div className="text-[10px] text-[#666666] mt-1">
+              {invoices.some((inv) => inv.strategy !== "hold" && inv.strategy !== "—")
+                ? "via Aave V3"
+                : "no yield strategy active"}
+            </div>
           </div>
         </div>
 
