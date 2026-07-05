@@ -42,13 +42,13 @@ export class BloiAgent {
     addresses: ContractAddresses,
     options: {
       privateKey?: string;
-      anthropicApiKey?: string;
+      openaiApiKey?: string;
       wsPort?: number;
       config?: Partial<AgentConfig>;
     } = {}
   ) {
     this.blockchain = new BlockchainService(rpcUrl, addresses, options.privateKey);
-    this.llm = new LLMService(options.anthropicApiKey);
+    this.llm = new LLMService(options.openaiApiKey);
     this.ws = new AgentWebSocket(options.wsPort || 8080);
 
     this.config = {

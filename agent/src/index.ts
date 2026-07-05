@@ -21,7 +21,7 @@ function validateEnvironment(addresses: ContractAddresses): { valid: boolean; wa
   const envVars: EnvValidation[] = [
     { name: 'BASE_SEPOLIA_RPC_URL', value: process.env.RPC_URL || process.env.CHAIN_RPC_URL || process.env.BASE_SEPOLIA_RPC_URL, required: false, description: 'RPC endpoint' },
     { name: 'AGENT_PRIVATE_KEY', value: process.env.AGENT_PRIVATE_KEY, required: false, description: 'Agent wallet key' },
-    { name: 'ANTHROPIC_API_KEY', value: process.env.ANTHROPIC_API_KEY, required: false, description: 'LLM API key' },
+    { name: 'OPENAI_API_KEY', value: process.env.OPENAI_API_KEY, required: false, description: 'LLM API key' },
     { name: 'WS_PORT', value: process.env.WS_PORT, required: false, description: 'WebSocket port' },
     { name: 'INVOICE_NFT_ADDRESS', value: addresses.invoiceNFT, required: true, description: 'InvoiceNFT contract' },
     { name: 'YIELD_VAULT_ADDRESS', value: addresses.yieldVault, required: true, description: 'YieldVault contract' },
@@ -140,7 +140,7 @@ async function selectWorkingRpcUrl(urls: string[]): Promise<string> {
 
 // Load configuration from environment
 const PRIVATE_KEY = normalizePrivateKey(process.env.AGENT_PRIVATE_KEY);
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const WS_PORT = parseInt(process.env.WS_PORT || '8080');
 const DEPLOYMENT_NETWORK = process.env.DEPLOYMENT_NETWORK || 'baseSepolia';
 const DEPLOYMENT_DEFAULTS = readDeploymentDefaults(DEPLOYMENT_NETWORK);
@@ -195,7 +195,7 @@ async function main() {
   console.log(`  📡 RPC: ${RPC_URL}`);
   console.log(`  🔌 WebSocket: ws://localhost:${WS_PORT}`);
   console.log(`  🔑 Wallet: ${PRIVATE_KEY ? '✅ Configured' : '❌ Read-only mode'}`);
-  console.log(`  🤖 LLM: ${ANTHROPIC_API_KEY ? '✅ AI (Real)' : '⚡ Template mode'}`);
+  console.log(`  🤖 LLM: ${OPENAI_API_KEY ? '✅ AI (Real)' : '⚡ Template mode'}`);
   console.log('='.repeat(60));
   console.log('');
   console.log('  Data Sources:');
@@ -218,7 +218,7 @@ async function main() {
   // Create agent instance
   const agent = new BloiAgent(RPC_URL, ADDRESSES, {
     privateKey: PRIVATE_KEY,
-    anthropicApiKey: ANTHROPIC_API_KEY,
+    openaiApiKey: OPENAI_API_KEY,
     wsPort: WS_PORT,
     config: {
       minConfidence: 70,
