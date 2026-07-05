@@ -32,8 +32,13 @@ export async function GET(request: NextRequest) {
     const response = NextResponse.redirect(new URL("/dashboard/mint?quickbooks=success", appUrl))
     response.cookies.delete("quickbooks_oauth_state")
     return response
-  } catch {
-    return NextResponse.redirect(new URL("/dashboard/mint?error=quickbooks_auth_failed", appUrl))
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error("[QuickBooks callback] token exchange failed:", msg)
+    const url = new URL("/dashboard/mint", appUrl)
+    url.searchParams.set("error", "quickbooks_auth_failed")
+    url.searchParams.set("detail", msg.slice(0, 200))
+    return NextResponse.redirect(url)
   }
 }
 

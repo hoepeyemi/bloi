@@ -5,10 +5,8 @@ const QUICKBOOKS_BASE_URL = process.env.QUICKBOOKS_ENVIRONMENT === "production"
   ? "https://quickbooks.api.intuit.com"
   : "https://sandbox-quickbooks.api.intuit.com"
 
-const OAUTH_BASE_URL = "https://appcenter.intuit.com/connect/oauth2"
-
 // OAuth endpoints
-export const QUICKBOOKS_AUTH_URL = `${OAUTH_BASE_URL}/v1/tokens/bearer`
+export const QUICKBOOKS_AUTH_URL = "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer"
 export const QUICKBOOKS_AUTHORIZE_URL = "https://appcenter.intuit.com/connect/oauth2"
 
 // Scopes required for invoice access

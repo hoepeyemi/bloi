@@ -119,7 +119,8 @@ function MintInvoiceContent() {
     } else if (qbStatus === "demo") {
       toast.info("QuickBooks demo data loaded")
     } else if (error === "quickbooks_auth_failed") {
-      toast.error("QuickBooks connection failed")
+      const detail = searchParams.get("detail")
+      toast.error(detail ? `QuickBooks: ${detail}` : "QuickBooks connection failed")
     }
     if (qbStatus || error) {
       window.history.replaceState({}, '', '/dashboard/mint')
