@@ -1,15 +1,18 @@
 import { NextResponse } from "next/server"
 import { fetchInvoices, formatInvoiceForDisplay, refreshAccessToken } from "@/lib/quickbooks"
 import { getDemoQuickBooksInvoices, isQuickBooksConfigured } from "@/lib/quickbooks-demo"
-import { clearQuickBooksTokens, getQuickBooksTokens, storeQuickBooksTokens } from "@/lib/quickbooks-session"
+import {
+  clearQuickBooksTokensOnResponse,
+  getQuickBooksTokens,
+  setQuickBooksTokensOnResponse,
+} from "@/lib/quickbooks-session"
 
 export const dynamic = "force-dynamic"
 
-const SESSION_KEY = "default"
-
 export async function DELETE() {
-  clearQuickBooksTokens(SESSION_KEY)
-  return NextResponse.json({ success: true })
+  const response = NextResponse.json({ success: true })
+  clearQuickBooksTokensOnResponse(response)
+  return response
 }
 
 export async function GET() {
@@ -27,39 +30,36 @@ export async function GET() {
       })
     }
 
-    const storedTokens = getQuickBooksTokens(SESSION_KEY)
+    const storedTokens = await getQuickBooksTokens()
     if (!storedTokens) {
-      return NextResponse.json(
-        {
-          success: false,
-          requiresAuth: true,
-          error: "QuickBooks is not connected yet.",
-        }
-      )
+      return NextResponse.json({
+        success: false,
+        requiresAuth: true,
+        error: "QuickBooks is not connected yet.",
+      })
     }
 
     let tokens = storedTokens
+    let refreshed = false
     if (tokens.expiresAt && tokens.expiresAt <= Date.now() + 60_000) {
       try {
-        const refreshed = await refreshAccessToken(tokens.refreshToken, tokens.realmId)
-        tokens = refreshed
-        storeQuickBooksTokens(tokens, SESSION_KEY)
+        tokens = await refreshAccessToken(tokens.refreshToken, tokens.realmId)
+        refreshed = true
       } catch {
-        clearQuickBooksTokens(SESSION_KEY)
-        return NextResponse.json(
-          {
-            success: false,
-            requiresAuth: true,
-            error: "QuickBooks session expired. Please reconnect.",
-          }
-        )
+        const response = NextResponse.json({
+          success: false,
+          requiresAuth: true,
+          error: "QuickBooks session expired. Please reconnect.",
+        })
+        clearQuickBooksTokensOnResponse(response)
+        return response
       }
     }
 
     const qbInvoices = await fetchInvoices(tokens.accessToken, tokens.realmId, { status: "open" })
     const invoices = qbInvoices.map(formatInvoiceForDisplay)
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: {
         invoices,
@@ -67,6 +67,8 @@ export async function GET() {
         demo: false,
       },
     })
+    if (refreshed) setQuickBooksTokensOnResponse(response, tokens)
+    return response
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to fetch invoices"
     return NextResponse.json(

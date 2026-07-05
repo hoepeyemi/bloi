@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { exchangeCodeForTokens } from "@/lib/quickbooks"
 import { isQuickBooksConfigured } from "@/lib/quickbooks-demo"
-import { storeQuickBooksTokens } from "@/lib/quickbooks-session"
+import { setQuickBooksTokensOnResponse } from "@/lib/quickbooks-session"
 
 export const dynamic = "force-dynamic"
 
@@ -27,9 +27,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const tokens = await exchangeCodeForTokens(code, realmId)
-    storeQuickBooksTokens(tokens)
 
     const response = NextResponse.redirect(new URL("/dashboard/mint?quickbooks=success", appUrl))
+    setQuickBooksTokensOnResponse(response, tokens)
     response.cookies.delete("quickbooks_oauth_state")
     return response
   } catch (err) {
