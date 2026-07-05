@@ -1,8 +1,8 @@
-# bloi — AI Agent
+﻿# bloi — AI Agent
 
 > Autonomous yield optimization agent for the bloi Invoice Yield Protocol
 
-The bloi agent is a TypeScript Node.js service that monitors active invoice deposits on Mantle Sepolia, analyzes yield opportunities using Pyth oracle data, generates strategy recommendations via Claude Haiku 4.5, and executes on-chain decisions through the `AgentRouter` contract.
+The bloi agent is a TypeScript Node.js service that monitors active invoice deposits on Base Sepolia, analyzes yield opportunities using Pyth oracle data, generates strategy recommendations via Claude Haiku 4.5, and executes on-chain decisions through the `AgentRouter` contract.
 
 ---
 
@@ -14,7 +14,7 @@ Every 30 seconds, the agent:
 2. Fetches real-time market data from Pyth oracle
 3. Computes a risk score for each invoice based on: days until due, payment probability, current APY rates
 4. Sends the analysis to Claude Haiku 4.5, which generates a human-readable recommendation with a confidence score
-5. Submits decisions with ≥ 70% confidence to `AgentRouter.recordDecision()` on Mantle Sepolia
+5. Submits decisions with ≥ 70% confidence to `AgentRouter.recordDecision()` on Base Sepolia
 6. Streams all reasoning and execution events to connected frontend clients via WebSocket
 
 **Strategy tiers:**
@@ -44,13 +44,13 @@ Create `agent/.env`:
 
 ```bash
 # Network
-DEPLOYMENT_NETWORK=mantleSepolia
-MANTLE_RPC_URL=https://rpc.sepolia.mantle.xyz
+DEPLOYMENT_NETWORK=baseSepolia
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
 
 # WebSocket
 WS_PORT=8080
 
-# Contract addresses (Mantle Sepolia)
+# Contract addresses (Base Sepolia)
 INVOICE_NFT_ADDRESS=0x018ee8F363421016177DbC8F9492fe2a1C720e29
 YIELD_VAULT_ADDRESS=0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6
 AGENT_ROUTER_ADDRESS=0x4430248F3b2304F946f08c43A06C3451657FD658
@@ -130,7 +130,7 @@ The agent serializes blockchain writes with a promise-chain mutex to prevent non
 ## Production Notes
 
 - Keep `AGENT_PRIVATE_KEY` and `ANTHROPIC_API_KEY` on the server only — never in frontend env
-- The agent wallet needs MNT for gas on Mantle Sepolia; monitor the balance via the frontend's low-balance warning
+- The agent wallet needs ETH for gas on Base Sepolia; monitor the balance via the frontend's low-balance warning
 - For production, use a process manager (PM2, Docker restart policy) to ensure the agent stays running
 - The WebSocket endpoint must use `wss://` (TLS) for browser connections; use nginx or Caddy as a TLS terminator
 

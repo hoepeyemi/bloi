@@ -7,8 +7,8 @@ import { LiveBackground } from "@/components/live-background";
 
 export const metadata: Metadata = {
   title: "bloi — Invoice Yield Protocol",
-  description: "Turn invoices into yield. Automatically. Tokenize B2B invoices as RWAs on Mantle, earn 3–7% APY via Aave V3, and let an autonomous AI agent optimize your strategy 24/7.",
-  keywords: ["invoice financing", "RWA", "DeFi", "Mantle", "Aave", "yield optimization", "AI agent"],
+  description: "Turn invoices into yield. Automatically. Tokenize B2B invoices as RWAs on Base, earn 3–7% APY via Aave V3, and let an autonomous AI agent optimize your strategy 24/7.",
+  keywords: ["invoice financing", "RWA", "DeFi", "Base", "Base Sepolia", "Aave", "yield optimization", "AI agent"],
   openGraph: {
     title: "bloi — Invoice Yield Protocol",
     description: "Turn invoices into yield. Automatically.",

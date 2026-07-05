@@ -1,8 +1,8 @@
-# bloi — Deployment Guide
+﻿# bloi — Deployment Guide
 
 > Mantle Global Hackathon 2025
 
-This guide covers the full deployment: smart contracts on Mantle Sepolia, the AI agent, and the Next.js frontend.
+This guide covers the full deployment: smart contracts on Base Sepolia, the AI agent, and the Next.js frontend.
 
 ---
 
@@ -10,10 +10,10 @@ This guide covers the full deployment: smart contracts on Mantle Sepolia, the AI
 
 ### Live Deployment (Already Deployed)
 
-All 6 contracts are deployed and verified on Mantle Sepolia. The canonical addresses are in:
+All 6 contracts are deployed and verified on Base Sepolia. The canonical addresses are in:
 
 ```
-contracts/deployments/mantleSepolia.json
+contracts/deployments/baseSepolia.json
 ```
 
 | Contract | Address |
@@ -25,7 +25,7 @@ contracts/deployments/mantleSepolia.json
 | PythOracle | `0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3` |
 | AaveV3YieldSource | `0x5a179d261fD322ecaED06FA9Aa2973980D74322c` |
 
-### Redeploy to Mantle Sepolia
+### Redeploy to Base Sepolia
 
 Only needed if you modify and redeploy contracts:
 
@@ -33,19 +33,19 @@ Only needed if you modify and redeploy contracts:
 cd contracts
 
 # Set environment variables
-export MANTLE_SEPOLIA_RPC=https://rpc.sepolia.mantle.xyz
+export BASE_SEPOLIA_RPC=https://sepolia.base.org
 export DEPLOYER_PRIVATE_KEY=0x...
-export ETHERSCAN_API_KEY=your_mantle_explorer_api_key
+export ETHERSCAN_API_KEY=your_basescan_api_key
 
 # Deploy
-npm run deploy:mantle-sepolia
+npm run deploy:base-sepolia
 
-# Verify on Mantle Explorer
-npm run verify:mantle-sepolia
+# Verify on Basescan
+npm run verify:base-sepolia
 ```
 
 After redeployment, update:
-1. `contracts/deployments/mantleSepolia.json`
+1. `contracts/deployments/baseSepolia.json`
 2. `app/.env` — all `NEXT_PUBLIC_*_ADDRESS` values
 3. `agent/.env` — all `*_ADDRESS` values
 
@@ -66,13 +66,13 @@ Create `agent/.env` with:
 
 ```bash
 # Network
-DEPLOYMENT_NETWORK=mantleSepolia
-MANTLE_RPC_URL=https://rpc.sepolia.mantle.xyz
+DEPLOYMENT_NETWORK=baseSepolia
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
 
 # WebSocket server
 WS_PORT=8080
 
-# Contract addresses (Mantle Sepolia)
+# Contract addresses (Base Sepolia)
 INVOICE_NFT_ADDRESS=0x018ee8F363421016177DbC8F9492fe2a1C720e29
 YIELD_VAULT_ADDRESS=0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6
 AGENT_ROUTER_ADDRESS=0x4430248F3b2304F946f08c43A06C3451657FD658
@@ -140,15 +140,15 @@ Create `app/.env` (or `.env.local`) with:
 
 ```bash
 # Chain
-NEXT_PUBLIC_CHAIN_ID=5003
+NEXT_PUBLIC_CHAIN_ID=84532
 NEXT_PUBLIC_NETWORK_MODE=testnet
 
 # RPC
-NEXT_PUBLIC_BASE_SEPOLIA_RPC=https://rpc.sepolia.mantle.xyz
-NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_1=https://mantle-sepolia.drpc.org
-NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_2=https://5003.rpc.thirdweb.com/
+NEXT_PUBLIC_BASE_SEPOLIA_RPC=https://sepolia.base.org
+NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_1=https://base-sepolia.drpc.org
+NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_2=https://84532.rpc.thirdweb.com/
 
-# Contract addresses (Mantle Sepolia)
+# Contract addresses (Base Sepolia)
 NEXT_PUBLIC_INVOICE_NFT_ADDRESS=0x018ee8F363421016177DbC8F9492fe2a1C720e29
 NEXT_PUBLIC_YIELD_VAULT_ADDRESS=0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6
 NEXT_PUBLIC_AGENT_ROUTER_ADDRESS=0x4430248F3b2304F946f08c43A06C3451657FD658
@@ -225,14 +225,14 @@ Without QuickBooks credentials set, the app automatically falls back to demo inv
 
 ## 5. Pre-Submission Checklist
 
-- [ ] Smart contracts deployed on Mantle Sepolia
-- [ ] All 6 contracts verified on Mantle Explorer
+- [ ] Smart contracts deployed on Base Sepolia
+- [ ] All 6 contracts verified on Basescan
 - [ ] Frontend publicly accessible (Netlify / Vercel / VPS)
 - [ ] Agent running with public WebSocket endpoint (`wss://`)
 - [ ] `NEXT_PUBLIC_AGENT_WS_URL` points to public agent URL
-- [ ] Agent successfully calls `AgentRouter.recordDecision()` on Mantle Sepolia
+- [ ] Agent successfully calls `AgentRouter.recordDecision()` on Base Sepolia
 - [ ] Demo video recorded (2+ minutes, walks through core flow)
-- [ ] `contracts/deployments/mantleSepolia.json` up to date
+- [ ] `contracts/deployments/baseSepolia.json` up to date
 - [ ] GitHub repository public
 
 ---
@@ -241,9 +241,9 @@ Without QuickBooks credentials set, the app automatically falls back to demo inv
 
 | Resource | URL |
 |----------|-----|
-| Mantle Sepolia Explorer | https://explorer.sepolia.mantle.xyz |
-| Mantle Sepolia Faucet | https://faucet.sepolia.mantle.xyz/ |
-| Mantle Sepolia RPC | https://rpc.sepolia.mantle.xyz |
+| Base Sepolia Explorer (Basescan) | https://sepolia.basescan.org |
+| Base Sepolia Faucet | https://www.alchemy.com/faucets/base-sepolia |
+| Base Sepolia RPC | https://sepolia.base.org |
 | Pyth Network | https://pyth.network |
 | Aave V3 | https://aave.com |
 | Circle x402 Docs | https://developers.circle.com/gateway/nanopayments |

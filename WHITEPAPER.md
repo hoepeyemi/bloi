@@ -1,16 +1,16 @@
-# bloi Protocol — Technical Whitepaper
+﻿# bloi Protocol — Technical Whitepaper
 
 > Invoice Yield Optimization via Autonomous AI on Mantle
 
 **Version:** 1.0 — Mantle Global Hackathon 2025
 **GitHub:** https://github.com/hoepeyemi/bloi
-**Live Demo:** https://vasmo.netlify.app/
+**Live Demo:** https://bloi.vercel.app/
 
 ---
 
 ## Abstract
 
-bloi is a permissionless protocol that converts B2B invoice receivables into yield-bearing on-chain positions on Mantle Sepolia. Invoices are tokenized as ERC-721 NFTs using privacy-preserving cryptographic commitments, deposited into a yield vault integrated with Aave V3, and continuously managed by an autonomous AI agent powered by Anthropic Claude Haiku 4.5. The agent monitors market conditions via Pyth Network oracle feeds, scores invoice risk, and executes strategy changes on-chain through the AgentRouter contract — without user intervention. Invoice details never appear in plaintext on-chain; only keccak256 commitment hashes are stored, enabling selective disclosure through Merkle proofs.
+bloi is a permissionless protocol that converts B2B invoice receivables into yield-bearing on-chain positions on Base Sepolia. Invoices are tokenized as ERC-721 NFTs using privacy-preserving cryptographic commitments, deposited into a yield vault integrated with Aave V3, and continuously managed by an autonomous AI agent powered by Anthropic Claude Haiku 4.5. The agent monitors market conditions via Pyth Network oracle feeds, scores invoice risk, and executes strategy changes on-chain through the AgentRouter contract — without user intervention. Invoice details never appear in plaintext on-chain; only keccak256 commitment hashes are stored, enabling selective disclosure through Merkle proofs.
 
 ---
 
@@ -66,7 +66,7 @@ The intersection of DeFi yield infrastructure (Aave V3), real-world asset tokeni
 
 ### 2.2 Privacy Architecture
 
-Invoice data is never stored in plaintext on Mantle Sepolia. The commitment scheme works as follows:
+Invoice data is never stored in plaintext on Base Sepolia. The commitment scheme works as follows:
 
 ```
 dataCommitment  = keccak256(abi.encode(clientName, invoiceId, dueDate, nonce))
@@ -297,7 +297,7 @@ OAuth 2.0 flow with file-based token persistence:
 
 ## 7. Why Mantle
 
-Mantle L2 is uniquely suited for the bloi protocol:
+Base L2 is uniquely suited for the bloi protocol:
 
 - **Low gas fees** enable the agent to make frequent, small strategy adjustments that would be economically unviable on Ethereum L1
 - **EVM compatibility** allows direct integration with Aave V3 and Pyth oracle without custom bridges
@@ -312,7 +312,7 @@ Mantle L2 is uniquely suited for the bloi protocol:
 
 | Limitation | Impact |
 |-----------|--------|
-| Testnet only (Mantle Sepolia) | Requires audit before mainnet deployment |
+| Testnet only (Base Sepolia) | Requires audit before mainnet deployment |
 | File-based token storage for QuickBooks | Not suitable for multi-instance production deployment; needs a database |
 | Risk model uses simplified heuristics | Full credit scoring would require additional data sources |
 | No secondary market for invoice NFTs | Positions cannot be liquidated before due date |
@@ -320,7 +320,7 @@ Mantle L2 is uniquely suited for the bloi protocol:
 
 ### Roadmap
 
-1. **Mainnet deployment** — Mantle Mainnet after security audit
+1. **Mainnet deployment** — Base Mainnet after security audit
 2. **Multi-agent coordination** — distributed agent network with consensus for high-value decisions
 3. **ZK proof disclosure** — replace Merkle proofs with ZK proofs (Noir circuits) for trustless disclosure
 4. **Secondary market** — order book for trading invoice NFTs before maturity
@@ -331,9 +331,9 @@ Mantle L2 is uniquely suited for the bloi protocol:
 
 ## 9. Deployed Infrastructure Summary
 
-**Network:** Mantle Sepolia (Chain ID: 5003)
-**Explorer:** https://explorer.sepolia.mantle.xyz
-**Frontend:** https://vasmo.netlify.app/
+**Network:** Base Sepolia (Chain ID: 84532)
+**Explorer:** https://sepolia.basescan.org
+**Frontend:** https://bloi.vercel.app/
 **GitHub:** https://github.com/hoepeyemi/bloi
 
 | Contract | Address |

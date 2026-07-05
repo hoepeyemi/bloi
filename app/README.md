@@ -1,8 +1,8 @@
-# bloi — Frontend
+﻿# bloi — Frontend
 
 > Next.js 15 frontend for the bloi Invoice Yield Protocol
 
-Built with Next.js 15 + React 19 + wagmi v3, deployed on Mantle Sepolia.
+Built with Next.js 15 + React 19 + wagmi v3, deployed on Base Sepolia.
 
 ---
 
@@ -34,7 +34,7 @@ Built with Next.js 15 + React 19 + wagmi v3, deployed on Mantle Sepolia.
 
 - Node.js 18+
 - pnpm
-- MetaMask connected to Mantle Sepolia
+- MetaMask connected to Base Sepolia
 
 ```bash
 # From repo root (starts frontend + agent together)
@@ -57,12 +57,12 @@ Copy `.env` to `.env.local` and fill in your values:
 NEXT_PUBLIC_CHAIN_ID=5003
 NEXT_PUBLIC_NETWORK_MODE=testnet
 
-# Mantle Sepolia RPC (with fallbacks)
-NEXT_PUBLIC_BASE_SEPOLIA_RPC=https://rpc.sepolia.mantle.xyz
-NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_1=https://mantle-sepolia.drpc.org
-NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_2=https://5003.rpc.thirdweb.com/
+# Base Sepolia RPC (with fallbacks)
+NEXT_PUBLIC_BASE_SEPOLIA_RPC=https://sepolia.base.org
+NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_1=https://base-sepolia.drpc.org
+NEXT_PUBLIC_BASE_SEPOLIA_RPC_FALLBACK_2=https://84532.rpc.thirdweb.com/
 
-# Contract addresses (Mantle Sepolia — do not change unless redeploying)
+# Contract addresses (Base Sepolia — do not change unless redeploying)
 NEXT_PUBLIC_INVOICE_NFT_ADDRESS=0x018ee8F363421016177DbC8F9492fe2a1C720e29
 NEXT_PUBLIC_YIELD_VAULT_ADDRESS=0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6
 NEXT_PUBLIC_AGENT_ROUTER_ADDRESS=0x4430248F3b2304F946f08c43A06C3451657FD658
@@ -143,7 +143,7 @@ vercel deploy --prod
 
 ## Notes
 
-- Contract addresses come from `contracts/deployments/mantleSepolia.json` — the frontend `.env` values must match this manifest
+- Contract addresses come from `contracts/deployments/baseSepolia.json` — the frontend `.env` values must match this manifest
 - If you redeploy contracts, update both the manifest and the frontend env vars together
 - QuickBooks tokens are persisted to `.next/cache/quickbooks-tokens.json` on the server — this file is gitignored
 - The agent WebSocket URL must be `wss://` (not `ws://`) for browser connections in production

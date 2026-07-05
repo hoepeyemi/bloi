@@ -1,10 +1,10 @@
-# bloi — Pitch
+﻿# bloi — Pitch
 
 > Turn Invoices into Yield. Automatically.
 
 **Hackathon:** Mantle Global Hackathon 2025
 **GitHub:** https://github.com/hoepeyemi/bloi
-**Live Demo:** https://vasmo.netlify.app/
+**Live Demo:** https://bloi.vercel.app/
 
 ---
 
@@ -23,7 +23,7 @@ Traditional alternatives fail:
 
 ## The Solution
 
-**bloi** converts the waiting period into a productive yield-generating position on Mantle Sepolia.
+**bloi** converts the waiting period into a productive yield-generating position on Base Sepolia.
 
 ```
 Import Invoice (QuickBooks / Manual)
@@ -66,10 +66,10 @@ The agent automatically downgrades risk as invoice due dates approach and upgrad
 
 ## Why Mantle
 
-- **Low gas fees**: Mantle L2 makes micro-decisions economically viable — the agent can execute strategy changes on-chain without prohibitive gas costs
+- **Low gas fees**: Base L2 makes micro-decisions economically viable — the agent can execute strategy changes on-chain without prohibitive gas costs
 - **EVM compatible**: Full compatibility with Aave V3 and Pyth oracle contracts
 - **Growing ecosystem**: Mantle's DeFi ecosystem provides real yield sources for the protocol
-- **Testnet infrastructure**: Robust Mantle Sepolia testnet with faucet and block explorer
+- **Testnet infrastructure**: Robust Base Sepolia testnet with faucet and block explorer
 
 ---
 
@@ -77,7 +77,7 @@ The agent automatically downgrades risk as invoice due dates approach and upgrad
 
 | Layer | Technology |
 |-------|------------|
-| Blockchain | Mantle Sepolia (Chain ID 5003) |
+| Blockchain | Base Sepolia (Chain ID 84532) |
 | Smart Contracts | Solidity 0.8.24 + Hardhat |
 | Frontend | Next.js 15 + React 19 + wagmi v3 |
 | AI Agent | TypeScript + Node.js |
@@ -91,7 +91,7 @@ The agent automatically downgrades risk as invoice due dates approach and upgrad
 
 ## Deployed Infrastructure
 
-All 6 contracts deployed and verified on Mantle Sepolia:
+All 6 contracts deployed and verified on Base Sepolia:
 
 | Contract | Address |
 |----------|---------|
@@ -120,7 +120,7 @@ All 6 contracts deployed and verified on Mantle Sepolia:
 
 | Feature | Status |
 |---------|--------|
-| Invoice tokenization with privacy commitments | Live on Mantle Sepolia |
+| Invoice tokenization with privacy commitments | Live on Base Sepolia |
 | Real DeFi yield via Aave V3 | Live |
 | Autonomous AI agent with Claude Haiku 4.5 | Live |
 | Real-time WebSocket streaming of agent reasoning | Live |
@@ -133,7 +133,7 @@ All 6 contracts deployed and verified on Mantle Sepolia:
 
 | Limitation | Notes |
 |-----------|-------|
-| Testnet only | Mantle Sepolia; mainnet deployment straightforward once audited |
+| Testnet only | Base Sepolia; mainnet deployment straightforward once audited |
 | Risk model simplified | Scoring uses Pyth oracle data + rule-based heuristics, not full credit scoring |
 | No secondary market | Invoice NFTs are not yet tradeable |
 | Token persistence | Agent token state uses file-based cache; production needs a database |

@@ -1,23 +1,23 @@
-# bloi — Smart Contracts
+﻿# bloi — Smart Contracts
 
-> Hardhat workspace for the bloi Invoice Yield Protocol on Mantle Sepolia
+> Hardhat workspace for the bloi Invoice Yield Protocol on Base Sepolia
 
-Six Solidity contracts deployed and verified on Mantle Sepolia (Chain ID: 5003), implementing invoice tokenization, privacy-preserving commitments, autonomous yield management, and AI-driven strategy execution.
+Six Solidity contracts deployed and verified on Base Sepolia (Chain ID: 84532), implementing invoice tokenization, privacy-preserving commitments, autonomous yield management, and AI-driven strategy execution.
 
 ---
 
-## Deployed Contracts — Mantle Sepolia (Chain ID: 5003)
+## Deployed Contracts — Base Sepolia (Chain ID: 84532)
 
 | Contract | Address | Explorer |
 |----------|---------|---------|
-| InvoiceNFT | `0x018ee8F363421016177DbC8F9492fe2a1C720e29` | [View](https://explorer.sepolia.mantle.xyz/address/0x018ee8F363421016177DbC8F9492fe2a1C720e29) |
-| YieldVault | `0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6` | [View](https://explorer.sepolia.mantle.xyz/address/0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6) |
-| AgentRouter | `0x4430248F3b2304F946f08c43A06C3451657FD658` | [View](https://explorer.sepolia.mantle.xyz/address/0x4430248F3b2304F946f08c43A06C3451657FD658) |
-| PrivacyRegistry | `0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0` | [View](https://explorer.sepolia.mantle.xyz/address/0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0) |
-| PythOracle | `0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3` | [View](https://explorer.sepolia.mantle.xyz/address/0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3) |
-| AaveV3YieldSource | `0x5a179d261fD322ecaED06FA9Aa2973980D74322c` | [View](https://explorer.sepolia.mantle.xyz/address/0x5a179d261fD322ecaED06FA9Aa2973980D74322c) |
+| InvoiceNFT | `0x018ee8F363421016177DbC8F9492fe2a1C720e29` | [View](https://sepolia.basescan.org/address/0x018ee8F363421016177DbC8F9492fe2a1C720e29) |
+| YieldVault | `0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6` | [View](https://sepolia.basescan.org/address/0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6) |
+| AgentRouter | `0x4430248F3b2304F946f08c43A06C3451657FD658` | [View](https://sepolia.basescan.org/address/0x4430248F3b2304F946f08c43A06C3451657FD658) |
+| PrivacyRegistry | `0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0` | [View](https://sepolia.basescan.org/address/0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0) |
+| PythOracle | `0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3` | [View](https://sepolia.basescan.org/address/0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3) |
+| AaveV3YieldSource | `0x5a179d261fD322ecaED06FA9Aa2973980D74322c` | [View](https://sepolia.basescan.org/address/0x5a179d261fD322ecaED06FA9Aa2973980D74322c) |
 
-Deployment manifest: [`deployments/mantleSepolia.json`](deployments/mantleSepolia.json)
+Deployment manifest: [`deployments/baseSepolia.json`](deployments/baseSepolia.json)
 
 ---
 
@@ -47,7 +47,7 @@ This is the **AI-powered on-chain function** — every agent decision produces a
 Implements a Merkle tree-based commitment scheme for selective invoice disclosure. Verified parties can request access to specific invoice fields; the owner reveals only the requested data using Merkle proofs, without exposing the full invoice.
 
 ### PythOracle
-Adapter for Pyth Network price feeds on Mantle Sepolia. Provides real-time asset prices used by the AI agent for risk scoring and strategy decisions. The agent reads oracle data before each analysis cycle.
+Adapter for Pyth Network price feeds on Base Sepolia. Provides real-time asset prices used by the AI agent for risk scoring and strategy decisions. The agent reads oracle data before each analysis cycle.
 
 ### AaveV3YieldSource
 Adapter that deposits USDC into Aave V3 pools and tracks accrued interest. Returns the real Aave V3 APY to the vault and frontend. This is a live integration — yield numbers shown in the UI reflect actual Aave protocol rates.
@@ -85,14 +85,14 @@ npm test
 
 ## Deployment
 
-### Mantle Sepolia (testnet)
+### Base Sepolia (testnet)
 
 ```bash
-export MANTLE_SEPOLIA_RPC=https://rpc.sepolia.mantle.xyz
+export BASE_SEPOLIA_RPC=https://sepolia.base.org
 export DEPLOYER_PRIVATE_KEY=0x...
-export ETHERSCAN_API_KEY=your_mantle_explorer_key
+export ETHERSCAN_API_KEY=your_basescan_api_key
 
-npm run deploy:mantle-sepolia
+npm run deploy:base-sepolia
 ```
 
 ### Local Hardhat Network
@@ -105,11 +105,11 @@ npm run deploy:local
 
 ## Verification
 
-Verify all contracts on Mantle Explorer:
+Verify all contracts on Basescan:
 
 ```bash
-export ETHERSCAN_API_KEY=your_mantle_explorer_key
-npm run verify:mantle-sepolia
+export ETHERSCAN_API_KEY=your_basescan_api_key
+npm run verify:base-sepolia
 ```
 
 This programmatically verifies all 6 contracts and reports status.
@@ -118,6 +118,6 @@ This programmatically verifies all 6 contracts and reports status.
 
 ## Notes
 
-- The deployment manifest (`deployments/mantleSepolia.json`) is the single source of truth for all contract addresses — both the frontend and agent read from this file
+- The deployment manifest (`deployments/baseSepolia.json`) is the single source of truth for all contract addresses — both the frontend and agent read from this file
 - If you redeploy any contract, update the manifest first, then update `app/.env` and `agent/.env` to match
 - All contracts use Solidity 0.8.24 with OpenZeppelin 5.2 and Pyth SDK Solidity 4.0

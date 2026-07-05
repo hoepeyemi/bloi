@@ -1,4 +1,4 @@
-# vasmo Agent - Production Deployment Guide
+﻿# bloi Agent - Production Deployment Guide
 
 ## Quick Deploy to Railway (Recommended)
 
@@ -24,7 +24,7 @@ PYTH_ORACLE_ADDRESS=0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3
 
 **Optional (but recommended):**
 ```
-MANTLE_RPC_URL=https://rpc.sepolia.mantle.xyz
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
 WS_PORT=8080
 NODE_ENV=production
 AGENT_PRIVATE_KEY=<your-agent-wallet-private-key>
@@ -36,13 +36,13 @@ ANTHROPIC_API_KEY=<your-anthropic-api-key>
 1. Railway will auto-detect the `railway.toml` configuration
 2. Click "Deploy" to start the build
 3. Wait for deployment to complete (~2-3 minutes)
-4. Note the public URL (will be something like: `vasmo-agent.up.railway.app`)
+4. Note the public URL (will be something like: `bloi-agent.up.railway.app`)
 
 ### Step 4: Update Frontend
 
 Update your frontend `.env` to use the Railway URL:
 ```
-NEXT_PUBLIC_AGENT_WS_URL=wss://vasmo-agent.up.railway.app
+NEXT_PUBLIC_AGENT_WS_URL=wss://bloi-agent.up.railway.app
 ```
 
 ---
@@ -58,7 +58,7 @@ NEXT_PUBLIC_AGENT_WS_URL=wss://vasmo-agent.up.railway.app
 
 ### Step 2: Configure Service
 
-- **Name:** vasmo-agent
+- **Name:** bloi-agent
 - **Root Directory:** `agent`
 - **Environment:** Node
 - **Build Command:** `pnpm install && pnpm build`
@@ -72,7 +72,7 @@ Add the same environment variables as listed in Railway guide above.
 ### Step 4: Deploy
 
 Render will automatically deploy and provide a URL like:
-`https://vasmo-agent.onrender.com`
+`https://bloi-agent.onrender.com`
 
 ---
 
@@ -84,21 +84,21 @@ The Docker path now targets the agent service only.
 
 ```bash
 # From the repo root
-docker build -f Dockerfile.mcp -t vasmo-agent .
+docker build -f Dockerfile.mcp -t bloi-agent .
 
 # Run container
 docker run -p 8080:8080 \
-  -e DEPLOYMENT_NETWORK=mantleSepolia \
+  -e DEPLOYMENT_NETWORK=baseSepolia \
   -e INVOICE_NFT_ADDRESS=0x018ee8F363421016177DbC8F9492fe2a1C720e29 \
   -e YIELD_VAULT_ADDRESS=0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6 \
   -e AGENT_ROUTER_ADDRESS=0x4430248F3b2304F946f08c43A06C3451657FD658 \
   -e PYTH_ORACLE_ADDRESS=0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3 \
   -e AAVE_YIELD_ADDRESS=0x5a179d261fD322ecaED06FA9Aa2973980D74322c \
-  vasmo-agent
+  bloi-agent
 ```
 
-The production container now reads the Mantle Sepolia deployment manifest from
-[`contracts/deployments/mantleSepolia.json`](/C:/Users/jwavo/vasmo/contracts/deployments/mantleSepolia.json)
+The production container now reads the Base Sepolia deployment manifest from
+[`contracts/deployments/baseSepolia.json`](/C:/Users/jwavo/vasmo/contracts/deployments/baseSepolia.json)
 so you usually only need to provide RPC and private key overrides in the env file.
 
 ### Deploy to Any Cloud

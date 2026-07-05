@@ -1,32 +1,32 @@
-# bloi — Demo Guide
+﻿# bloi — Demo Guide
 
 > Mantle Global Hackathon 2025
 
-This guide walks through the full bloi demo on Mantle Sepolia.
+This guide walks through the full bloi demo on Base Sepolia.
 
 ---
 
 ## Prerequisites
 
 - MetaMask (or compatible wallet) installed
-- Connected to **Mantle Sepolia** (Chain ID: 5003)
-- MNT test tokens for gas — get them at https://faucet.sepolia.mantle.xyz/
-- Live frontend: https://vasmo.netlify.app/ (or `localhost:3000` for local)
+- Connected to **Base Sepolia** (Chain ID: 84532)
+- ETH test tokens for gas — get them at https://www.alchemy.com/faucets/base-sepolia
+- Live frontend: https://bloi.vercel.app/ (or `localhost:3000` for local)
 - Agent running locally or at your public WebSocket endpoint
 
 ---
 
 ## Network Setup
 
-Add Mantle Sepolia to MetaMask:
+Add Base Sepolia to MetaMask:
 
 | Field | Value |
 |-------|-------|
-| Network Name | Mantle Sepolia |
-| RPC URL | https://rpc.sepolia.mantle.xyz |
-| Chain ID | 5003 |
-| Currency Symbol | MNT |
-| Block Explorer | https://explorer.sepolia.mantle.xyz |
+| Network Name | Base Sepolia |
+| RPC URL | https://sepolia.base.org |
+| Chain ID | 84532 |
+| Currency Symbol | ETH |
+| Block Explorer | https://sepolia.basescan.org |
 
 ---
 
@@ -35,7 +35,7 @@ Add Mantle Sepolia to MetaMask:
 ### Step 1 — Connect Wallet
 
 1. Open the app and click **Connect Wallet**
-2. Select MetaMask, approve the Mantle Sepolia connection
+2. Select MetaMask, approve the Base Sepolia connection
 3. The header updates to show your wallet address and the chain badge (B-SEP)
 4. The dashboard loads your portfolio (empty on first connect)
 
@@ -63,7 +63,7 @@ Add Mantle Sepolia to MetaMask:
 1. The review screen shows all invoice details
 2. Invoice data is shown as a keccak256 commitment hash — never in plaintext on-chain
 3. Click **Mint Invoice** and approve the MetaMask transaction
-4. Wait for confirmation on Mantle Sepolia (~2–4 seconds)
+4. Wait for confirmation on Base Sepolia (~2–4 seconds)
 5. You are redirected to the **Portfolio** dashboard
 
 ### Step 4 — Portfolio Dashboard
@@ -74,7 +74,7 @@ The dashboard shows your wallet's invoices with:
 - **Active Deposits** — number of invoices currently earning yield
 - **APY Range** — current Conservative (3.5%) to Aggressive (7%) rates from Aave V3
 
-Click any invoice row to open the **Invoice Detail** page, which shows the full history and a link to the NFT on Mantle Sepolia Explorer.
+Click any invoice row to open the **Invoice Detail** page, which shows the full history and a link to the NFT on Base Sepolia Explorer (Basescan).
 
 ### Step 5 — Watch the AI Agent
 
@@ -91,7 +91,7 @@ Click any invoice row to open the **Invoice Detail** page, which shows the full 
 - It evaluates risk using Pyth oracle data and the invoice due date
 - Claude generates a human-readable explanation for each decision
 - Decisions ≥ 70% confidence are submitted to `AgentRouter` on-chain
-- You can verify the transaction on Mantle Sepolia Explorer
+- You can verify the transaction on Base Sepolia Explorer (Basescan)
 
 ### Step 6 — Issuer Controls
 
@@ -102,9 +102,9 @@ Click any invoice row to open the **Invoice Detail** page, which shows the full 
 
 ### Step 7 — Explorer Verification
 
-On any invoice detail page, click **Show in Explorer**. This opens the NFT on Mantle Sepolia Explorer at:
+On any invoice detail page, click **Show in Explorer**. This opens the NFT on Base Sepolia Explorer (Basescan) at:
 ```
-https://explorer.sepolia.mantle.xyz/token/<InvoiceNFT_address>?a=<tokenId>
+https://sepolia.basescan.org/token/<InvoiceNFT_address>?a=<tokenId>
 ```
 
 You can verify:
@@ -118,15 +118,15 @@ You can verify:
 
 | Feature | Real |
 |---------|------|
-| Smart contracts | Yes — deployed and verified on Mantle Sepolia |
+| Smart contracts | Yes — deployed and verified on Base Sepolia |
 | Aave V3 yield | Yes — real Aave V3 pool integration |
 | Pyth oracle data | Yes — live price feeds |
 | AI reasoning | Yes — Claude Haiku 4.5 (real LLM, not templates) |
-| On-chain agent decisions | Yes — AgentRouter writes to Mantle Sepolia |
+| On-chain agent decisions | Yes — AgentRouter writes to Base Sepolia |
 | WebSocket streaming | Yes — live from the agent process |
 | QuickBooks invoices | Yes — real OAuth 2.0 connection to your QB account |
 
-The only testnet aspect is the chain itself (Mantle Sepolia vs. Mantle Mainnet). All protocol logic, contracts, AI, and yield flows are production-grade.
+The only testnet aspect is the chain itself (Base Sepolia vs. Base Mainnet). All protocol logic, contracts, AI, and yield flows are production-grade.
 
 ---
 
@@ -158,7 +158,7 @@ cp agent/.env.example agent/.env.local
 | Issue | Fix |
 |-------|-----|
 | "Agent offline" | Start the agent: `cd agent && pnpm dev` |
-| No invoices showing | Ensure wallet is on Mantle Sepolia (Chain ID 5003) |
+| No invoices showing | Ensure wallet is on Base Sepolia (Chain ID 84532) |
 | QuickBooks "connection failed" | Verify redirect URI `http://localhost:3000/api/quickbooks/callback` is registered in Intuit Developer Portal |
-| Low balance warning | Get MNT from faucet: https://faucet.sepolia.mantle.xyz/ |
+| Low balance warning | Get ETH from faucet: https://www.alchemy.com/faucets/base-sepolia |
 | Transaction reverts | Agent may be on cooldown — wait 60s and retry |

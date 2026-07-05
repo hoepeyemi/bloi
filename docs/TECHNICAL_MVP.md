@@ -1,9 +1,9 @@
-# vasmo - Technical MVP Documentation
+﻿# vasmo - Technical MVP Documentation
 
 > Turn Invoices into Yield. Automatically.
 
 **Version**: 1.0.0-mvp
-**Network**: Mantle Sepolia (Testnet) / Mantle Mainnet
+**Network**: Base Sepolia (Testnet) / Base Mainnet
 **Last Updated**: December 2024
 
 ---
@@ -33,7 +33,7 @@ Small businesses and freelancers face a $3T+ global cash flow problem: invoices 
 
 ### 1.2 Solution
 
-vasmo tokenizes invoices as Real-World Assets (RWAs) on Mantle Sepolia, then deploys an autonomous AI agent to:
+vasmo tokenizes invoices as Real-World Assets (RWAs) on Base Sepolia, then deploys an autonomous AI agent to:
 
 - **Optimize yield** on tokenized invoices (3-8% APY)
 - **Protect privacy** using cryptographic commitments
@@ -71,7 +71,7 @@ The "Living Agent" architecture streams AI reasoning in real-time via WebSocket,
           │ wagmi/viem     │                │                    │ WebSocket
           │                │                │                    │
 ┌─────────▼────────────────▼────────────────▼────────────────────┼────────────┐
-│                       MANTLE SEPOLIA                           │            │
+│                       Base Sepolia                           │            │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │            │
 │  │ InvoiceNFT  │  │ YieldVault  │  │  Privacy    │            │            │
 │  │  (ERC-721)  │◄─┤             │  │  Registry   │            │            │
@@ -122,7 +122,7 @@ The "Living Agent" architecture streams AI reasoning in real-time via WebSocket,
 
 | Layer | Technology | Purpose |
 |-------|------------|---------|
-| Network | Mantle Sepolia/Mainnet | Low-cost L2 execution |
+| Network | Base Sepolia/Mainnet | Low-cost L2 execution |
 | Contracts | Solidity 0.8.24 + Foundry | Smart contract development |
 | Agent | TypeScript + Node.js | Autonomous agent runtime |
 | LLM | Anthropic API | Natural language explanations |
@@ -758,7 +758,7 @@ function getAccruedYield(uint256 tokenId) returns (uint256)
 - Node.js 18+
 - pnpm 8+
 - Foundry (forge, cast, anvil)
-- Mantle Sepolia testnet ETH ([Faucet](https://faucet.sepolia.mantle.xyz/))
+- Base Sepolia testnet ETH ([Faucet](https://www.alchemy.com/faucets/base-sepolia))
 - (Optional) Anthropic API key for LLM features
 
 ### 8.2 Contract Deployment
@@ -769,7 +769,7 @@ cd /Users/yonko/invoiceagent/contracts
 
 # 2. Set environment
 export PRIVATE_KEY=your_private_key_here
-export MANTLE_SEPOLIA_RPC=https://5003.rpc.thirdweb.com/
+export MANTLE_SEPOLIA_RPC=https://84532.rpc.thirdweb.com/
 
 # 3. Deploy
 forge script script/Deploy.s.sol \
@@ -795,7 +795,7 @@ cd /Users/yonko/invoiceagent/agent
 cp .env.example .env
 
 # 3. Edit .env with deployed addresses
-MANTLE_RPC_URL=https://5003.rpc.thirdweb.com/
+BASE_SEPOLIA_RPC_URL=https://84532.rpc.thirdweb.com/
 AGENT_PRIVATE_KEY=your_agent_wallet_private_key
 ANTHROPIC_API_KEY=your_anthropic_key  # Optional
 WS_PORT=8080
@@ -868,8 +868,8 @@ cd app && pnpm dev
 
 | Network | Chain ID | RPC |
 |---------|----------|-----|
-| Mantle Sepolia | 5003 | https://5003.rpc.thirdweb.com/ |
-| Mantle Mainnet | 5000 | https://rpc.mantle.xyz |
+| Base Sepolia | 84532 | https://84532.rpc.thirdweb.com/ |
+| Base Mainnet | 8453 | https://mainnet.base.org |
 
 ---
 
@@ -992,7 +992,7 @@ pnpm build
 
 ## Appendix A: Contract Addresses
 
-| Contract | Mantle Sepolia | Mantle Mainnet |
+| Contract | Base Sepolia | Base Mainnet |
 |----------|---------------|----------------|
 | InvoiceNFT | TBD | TBD |
 | YieldVault | TBD | TBD |
@@ -1030,11 +1030,11 @@ pnpm build
 
 | Operation | Estimated Gas | Cost @ 0.02 gwei |
 |-----------|--------------|------------------|
-| mint() | ~250,000 | ~0.000005 MNT |
-| deposit() | ~300,000 | ~0.000006 MNT |
-| withdraw() | ~200,000 | ~0.000004 MNT |
-| recordDecision() | ~150,000 | ~0.000003 MNT |
-| changeStrategy() | ~100,000 | ~0.000002 MNT |
+| mint() | ~250,000 | ~0.000005 ETH |
+| deposit() | ~300,000 | ~0.000006 ETH |
+| withdraw() | ~200,000 | ~0.000004 ETH |
+| recordDecision() | ~150,000 | ~0.000003 ETH |
+| changeStrategy() | ~100,000 | ~0.000002 ETH |
 
 *Mantle's low gas costs enable frequent agent execution*
 

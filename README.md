@@ -1,8 +1,8 @@
-# bloi — Invoice Yield Protocol
+﻿# bloi — Invoice Yield Protocol
 
 > Turn Invoices into Yield. Automatically.
 
-**bloi** tokenizes B2B invoices as Real-World Assets (RWAs) on Mantle Sepolia, then deploys an autonomous AI agent powered by Claude Haiku 4.5 to continuously optimize yield via Aave V3 — while protecting sensitive invoice data with cryptographic commitments.
+**bloi** tokenizes B2B invoices as Real-World Assets (RWAs) on Base Sepolia, then deploys an autonomous AI agent powered by Claude Haiku 4.5 to continuously optimize yield via Aave V3 — while protecting sensitive invoice data with cryptographic commitments.
 
 Built for the **Mantle Global Hackathon 2025**.
 
@@ -12,9 +12,9 @@ Built for the **Mantle Global Hackathon 2025**.
 
 | Resource | URL |
 |----------|-----|
-| Frontend | https://vasmo.netlify.app/ |
+| Frontend | https://bloi.vercel.app/ |
 | GitHub | https://github.com/hoepeyemi/bloi |
-| Mantle Sepolia Explorer | https://explorer.sepolia.mantle.xyz |
+| Base Sepolia Explorer (Basescan) | https://sepolia.basescan.org |
 
 ---
 
@@ -57,7 +57,7 @@ Connect Wallet → Import Invoice (QuickBooks / Manual)
 │         │ wagmi/viem                        │ ethers.js         │
 │         ▼                                   ▼                   │
 │  ┌──────────────────────────────────────────────────────────┐  │
-│  │              Mantle Sepolia (Chain ID: 5003)              │  │
+│  │              Base Sepolia (Chain ID: 84532)              │  │
 │  │                                                          │  │
 │  │  InvoiceNFT → YieldVault → AgentRouter                  │  │
 │  │       ↕              ↕                                   │  │
@@ -70,22 +70,22 @@ Connect Wallet → Import Invoice (QuickBooks / Manual)
 |-----------|-------------|
 | `app/` | Next.js 15 + React 19 frontend — minting, portfolio, agent monitoring, issuer controls |
 | `agent/` | Autonomous TypeScript service — analyzes invoices, executes strategy changes on-chain via AgentRouter |
-| `contracts/` | Hardhat workspace — 6 Solidity contracts deployed and verified on Mantle Sepolia |
+| `contracts/` | Hardhat workspace — 6 Solidity contracts deployed and verified on Base Sepolia |
 
 ---
 
-## Deployed Contracts — Mantle Sepolia (Chain ID: 5003)
+## Deployed Contracts — Base Sepolia (Chain ID: 84532)
 
 | Contract | Address | Status |
 |----------|---------|--------|
-| InvoiceNFT | [`0x018ee8F363421016177DbC8F9492fe2a1C720e29`](https://explorer.sepolia.mantle.xyz/address/0x018ee8F363421016177DbC8F9492fe2a1C720e29) | Verified |
-| YieldVault | [`0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6`](https://explorer.sepolia.mantle.xyz/address/0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6) | Verified |
-| AgentRouter | [`0x4430248F3b2304F946f08c43A06C3451657FD658`](https://explorer.sepolia.mantle.xyz/address/0x4430248F3b2304F946f08c43A06C3451657FD658) | Verified |
-| PrivacyRegistry | [`0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0`](https://explorer.sepolia.mantle.xyz/address/0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0) | Verified |
-| PythOracle | [`0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3`](https://explorer.sepolia.mantle.xyz/address/0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3) | Verified |
-| AaveV3YieldSource | [`0x5a179d261fD322ecaED06FA9Aa2973980D74322c`](https://explorer.sepolia.mantle.xyz/address/0x5a179d261fD322ecaED06FA9Aa2973980D74322c) | Verified |
+| InvoiceNFT | [`0x018ee8F363421016177DbC8F9492fe2a1C720e29`](https://sepolia.basescan.org/address/0x018ee8F363421016177DbC8F9492fe2a1C720e29) | Verified |
+| YieldVault | [`0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6`](https://sepolia.basescan.org/address/0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6) | Verified |
+| AgentRouter | [`0x4430248F3b2304F946f08c43A06C3451657FD658`](https://sepolia.basescan.org/address/0x4430248F3b2304F946f08c43A06C3451657FD658) | Verified |
+| PrivacyRegistry | [`0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0`](https://sepolia.basescan.org/address/0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0) | Verified |
+| PythOracle | [`0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3`](https://sepolia.basescan.org/address/0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3) | Verified |
+| AaveV3YieldSource | [`0x5a179d261fD322ecaED06FA9Aa2973980D74322c`](https://sepolia.basescan.org/address/0x5a179d261fD322ecaED06FA9Aa2973980D74322c) | Verified |
 
-Deployment manifest: [`contracts/deployments/mantleSepolia.json`](contracts/deployments/mantleSepolia.json)
+Deployment manifest: [`contracts/deployments/baseSepolia.json`](contracts/deployments/baseSepolia.json)
 
 ---
 
@@ -93,7 +93,7 @@ Deployment manifest: [`contracts/deployments/mantleSepolia.json`](contracts/depl
 
 | Layer | Technology |
 |-------|------------|
-| Blockchain | Mantle Sepolia (Chain ID 5003), native token MNT |
+| Blockchain | Base Sepolia (Chain ID 84532), native token ETH |
 | Smart Contracts | Solidity 0.8.24 + Hardhat |
 | Frontend | Next.js 15 + React 19 + TypeScript |
 | Wallet / Web3 | wagmi v3 + viem v2 |
@@ -127,7 +127,7 @@ The agent-to-contract path is the core AI-powered function:
 
 - Node.js 18+
 - pnpm
-- MetaMask connected to Mantle Sepolia
+- MetaMask connected to Base Sepolia
 
 ### Run everything locally
 
@@ -151,24 +151,24 @@ cd agent && pnpm dev
 cd contracts && npm run build && npm test
 ```
 
-### Mantle Sepolia network details
+### Base Sepolia network details
 
 | Field | Value |
 |-------|-------|
-| Chain ID | 5003 |
-| RPC | https://rpc.sepolia.mantle.xyz |
-| Fallback RPC 1 | https://mantle-sepolia.drpc.org |
-| Fallback RPC 2 | https://5003.rpc.thirdweb.com/ |
-| Explorer | https://explorer.sepolia.mantle.xyz |
-| Faucet | https://faucet.sepolia.mantle.xyz/ |
-| Native Token | MNT |
+| Chain ID | 84532 |
+| RPC | https://sepolia.base.org |
+| Fallback RPC 1 | https://base-sepolia.drpc.org |
+| Fallback RPC 2 | https://84532.rpc.thirdweb.com/ |
+| Explorer | https://sepolia.basescan.org |
+| Faucet | https://www.alchemy.com/faucets/base-sepolia |
+| Native Token | ETH |
 
 ---
 
 ## Hackathon Submission Checklist
 
-- [x] Smart contracts deployed on Mantle Sepolia
-- [x] All 6 contracts verified on Mantle Explorer
+- [x] Smart contracts deployed on Base Sepolia
+- [x] All 6 contracts verified on Basescan
 - [x] AI-powered function callable on-chain via AgentRouter
 - [x] Frontend publicly accessible (Netlify)
 - [x] Deployed addresses documented (above + deployment manifest)
@@ -180,5 +180,5 @@ cd contracts && npm run build && npm test
 ## Notes
 
 - QuickBooks integration has a demo fallback — OAuth is optional for local testing
-- The agent streams reasoning to the frontend in real-time; connect MetaMask to Mantle Sepolia to see live data
-- All contract addresses in `contracts/deployments/mantleSepolia.json` are the canonical source of truth
+- The agent streams reasoning to the frontend in real-time; connect MetaMask to Base Sepolia to see live data
+- All contract addresses in `contracts/deployments/baseSepolia.json` are the canonical source of truth
