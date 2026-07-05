@@ -1,5 +1,6 @@
 "use client"
 
+import { useCallback } from "react"
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount, useChainId } from "wagmi"
 import { YieldVaultABI, InvoiceNFTABI, type Deposit, Strategy } from "@/lib/contracts/abis"
 import { getYieldVaultAddress, getInvoiceNFTAddress } from "@/lib/contracts/addresses"
@@ -50,6 +51,13 @@ export function useYieldVault() {
     functionName: "AGGRESSIVE_APY",
   })
 
+  const refetch = useCallback(() => {
+    refetchTVL()
+    refetchYield()
+    refetchCount()
+    refetchDeposits()
+  }, [refetchTVL, refetchYield, refetchCount, refetchDeposits])
+
   return {
     contractAddress,
     tvl: tvl ? formatUnits(tvl, 18) : "0",
@@ -60,12 +68,7 @@ export function useYieldVault() {
     activeDeposits: activeDeposits || [],
     conservativeAPY: conservativeAPY ? Number(conservativeAPY) / 100 : 3.5,
     aggressiveAPY: aggressiveAPY ? Number(aggressiveAPY) / 100 : 7,
-    refetch: () => {
-      refetchTVL()
-      refetchYield()
-      refetchCount()
-      refetchDeposits()
-    },
+    refetch,
   }
 }
 
@@ -105,13 +108,15 @@ export function useDeposit(tokenId: bigint | number | undefined) {
       }
     : null
 
+  const stableRefetch = useCallback(() => {
+    refetch()
+    refetchYield()
+  }, [refetch, refetchYield])
+
   return {
     deposit: formattedDeposit,
     isLoading,
-    refetch: () => {
-      refetch()
-      refetchYield()
-    },
+    refetch: stableRefetch,
   }
 }
 

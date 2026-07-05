@@ -8,7 +8,7 @@ import { ArrowLeft, ExternalLink, Shield, CircleAlert, Loader2 } from "lucide-re
 import { parseUnits } from "viem"
 import { toast } from "sonner"
 import { useInvoice } from "@/hooks/use-invoice-nft"
-import { useDeposit, useDepositToVault } from "@/hooks/use-yield-vault"
+import { useDeposit, useDepositToVault, useChangeStrategy } from "@/hooks/use-yield-vault"
 import { getInvoiceNFTAddress } from "@/lib/contracts/addresses"
 import { TerminalNav } from "@/components/terminal-nav"
 import { StatusBar } from "@/components/ui/status-bar"
@@ -24,6 +24,7 @@ function InvoiceDetailContent() {
   const chainId = useChainId()
   const contractAddress = getInvoiceNFTAddress(chainId)
   const [showDeposit, setShowDeposit] = useState(false)
+  const [showStrategyPicker, setShowStrategyPicker] = useState(false)
   const [pendingDeposit, setPendingDeposit] = useState<{ principal: string; strategy: number } | null>(null)
   const tokenId = useMemo(() => {
     const raw = params?.tokenId
@@ -33,6 +34,16 @@ function InvoiceDetailContent() {
 
   const { invoice, isLoading, error } = useInvoice(tokenId)
   const { deposit, refetch: refetchDeposit } = useDeposit(tokenId)
+  const { changeStrategy, isPending: isChangingStrategy, isSuccess: isChangeSuccess } = useChangeStrategy()
+
+  useEffect(() => {
+    if (isChangeSuccess) {
+      toast.success("Strategy updated", { description: "Your yield strategy has been changed." })
+      setShowStrategyPicker(false)
+      refetchDeposit()
+    }
+  }, [isChangeSuccess, refetchDeposit])
+
   const {
     approve,
     deposit: depositToVault,
@@ -222,14 +233,45 @@ function InvoiceDetailContent() {
               )}
 
               {deposit?.active && (
-                <div className="rounded-lg border border-[#10b981]/20 bg-[#10b981]/10 p-4 text-sm">
-                  <div className="text-[#10b981] font-semibold mb-2">earning yield</div>
+                <div className="rounded-lg border border-[#10b981]/20 bg-[#10b981]/10 p-4 text-sm space-y-4">
+                  <div className="text-[#10b981] font-semibold">earning yield</div>
                   <div className="grid gap-2 sm:grid-cols-2 text-[#d6d6d6]">
                     <div>strategy: {deposit.strategyLabel}</div>
                     <div>principal: ${Number(deposit.principal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                     <div>accrued yield: ${Number(deposit.accruedYield).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                     <div>deposited: {formatDate(deposit.depositTime)}</div>
                   </div>
+                  {showStrategyPicker ? (
+                    <div className="space-y-2">
+                      <div className="text-[11px] uppercase tracking-wider text-[#666666]">change strategy</div>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { label: "Hold", value: 0, apy: "0%" },
+                          { label: "Conservative", value: 1, apy: "3.5%" },
+                          { label: "Aggressive", value: 2, apy: "7%" },
+                        ].map((s) => (
+                          <button
+                            key={s.value}
+                            onClick={() => tokenId !== undefined && changeStrategy(BigInt(tokenId), s.value as 0 | 1 | 2)}
+                            disabled={isChangingStrategy || deposit.strategy === s.value}
+                            className="flex flex-col items-center gap-1 rounded border border-[#1f1f1f] bg-[#0a0a0a] px-3 py-2 text-xs hover:border-[#10b981]/40 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                          >
+                            <span className="font-semibold">{s.label}</span>
+                            <span className="text-[#10b981]">{s.apy} APY</span>
+                            {deposit.strategy === s.value && <span className="text-[10px] text-[#666666]">current</span>}
+                          </button>
+                        ))}
+                      </div>
+                      <button onClick={() => setShowStrategyPicker(false)} className="text-xs text-[#666666] hover:text-[#e5e5e5]">cancel</button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setShowStrategyPicker(true)}
+                      className="text-xs text-[#10b981] hover:underline"
+                    >
+                      change strategy →
+                    </button>
+                  )}
                 </div>
               )}
 
