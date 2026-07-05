@@ -5,13 +5,13 @@
  * ALIVE: Live agent log, pulse animations, grid background
  */
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAccount } from "wagmi"
+import { formatUnits } from "viem"
 import { Switch } from "@/components/ui/switch"
 import { StatusBar } from "@/components/ui/status-bar"
 import { TerminalNav } from "@/components/terminal-nav"
 import { LiveAgentLog } from "@/components/live-agent-log"
-import { useYieldVault } from "@/hooks/use-yield-vault"
 import { useGatewayBalance } from "@/hooks/use-gateway-balance"
 import { ArcSendPanel } from "@/components/arc/ArcSendPanel"
 import { ArcBridgePanel } from "@/components/arc/ArcBridgePanel"
@@ -20,11 +20,25 @@ import { ArcUnifiedBalancePanel } from "@/components/arc/ArcUnifiedBalancePanel"
 
 export default function AgentPage() {
   const [autoExecute, setAutoExecute] = useState(true)
+  const [activeDepositsCount, setActiveDepositsCount] = useState(0)
+  const [yieldFormatted, setYieldFormatted] = useState(0)
   const { address, isConnected } = useAccount()
-  const { activeDepositsCount, totalYield } = useYieldVault()
   const { data: gwBalance, isLoading: gwLoading } = useGatewayBalance(30_000)
 
-  const yieldFormatted = parseFloat(totalYield || "0")
+  useEffect(() => {
+    if (!address) { setActiveDepositsCount(0); setYieldFormatted(0); return }
+    fetch(`/api/invoices?issuer=${address}`, { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.success) return
+        const invs = data.data.invoices as Array<{ deposit: { accruedYield: string } | null; status: string }>
+        setActiveDepositsCount(invs.filter((i) => i.status === "InYield").length)
+        setYieldFormatted(
+          invs.reduce((sum, i) => sum + (i.deposit ? Number(formatUnits(BigInt(i.deposit.accruedYield), 18)) : 0), 0)
+        )
+      })
+      .catch(() => {})
+  }, [address])
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] bg-grid noise-overlay scan-line pb-8">
@@ -53,7 +67,9 @@ export default function AgentPage() {
           </div>
           <div className="stat-cell">
             <div className="stat-label">Total Yield Generated</div>
-            <div className="stat-value stat-value-green tabular-nums">+${yieldFormatted.toFixed(2)}</div>
+            <div className="stat-value stat-value-green tabular-nums">
+              {yieldFormatted > 0 && yieldFormatted < 0.01 ? "+$<0.01" : `+$${yieldFormatted.toFixed(2)}`}
+            </div>
             <div className="text-[11px] text-[#666666] mt-1">from vault strategies</div>
           </div>
           <div className="stat-cell">

@@ -70,7 +70,7 @@ export default function Dashboard() {
 
   const { isConnected, address } = useAccount()
   const { totalInvoices } = useInvoiceNFT()
-  const { tvl, totalYield, activeDepositsCount, conservativeAPY, aggressiveAPY } = useYieldVault()
+  const { conservativeAPY, aggressiveAPY } = useYieldVault()
 
   const fetchInvoices = async () => {
     if (!isConnected || !address) {
@@ -147,8 +147,13 @@ export default function Dashboard() {
     inv.id.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const tvlFormatted = parseFloat(tvl || "0")
-  const yieldFormatted = parseFloat(totalYield || "0")
+  // Compute per-wallet stats from the filtered invoice list (not global vault totals)
+  const tvlFormatted = invoices.reduce((sum, inv) => sum + inv.amountRaw, 0)
+  const yieldFormatted = invoices.reduce((sum, inv) => {
+    const raw = inv.accruedYield.replace("+$", "").replace("<0.01", "0.005")
+    return sum + (parseFloat(raw) || 0)
+  }, 0)
+  const activeDepositsFormatted = invoices.filter((inv) => inv.status === "InYield").length
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] bg-grid noise-overlay scan-line pb-8">
@@ -195,7 +200,7 @@ export default function Dashboard() {
           </div>
           <div className="stat-cell">
             <div className="stat-label">Active Invoices</div>
-            <div className="stat-value tabular-nums">{activeDepositsCount}</div>
+            <div className="stat-value tabular-nums">{activeDepositsFormatted}</div>
           </div>
           <div className="stat-cell">
             <div className="stat-label flex items-center gap-2">
