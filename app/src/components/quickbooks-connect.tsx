@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, CheckCircle2, Link2, RefreshCw } from "lucide-react"
+import { Loader2, CheckCircle2, Link2, RefreshCw, LogOut } from "lucide-react"
 
 interface QuickBooksInvoice {
   id: string
@@ -69,6 +69,13 @@ export function QuickBooksConnect({
     checkConnectionAndFetchInvoices()
   }
 
+  async function handleDisconnect() {
+    await fetch("/api/quickbooks/invoices", { method: "DELETE" })
+    setIsConnected(false)
+    setIsDemo(false)
+    setInvoices([])
+  }
+
   if (isLoading) {
     return (
       <Card className="glass border-glass-border p-6">
@@ -119,15 +126,16 @@ export function QuickBooksConnect({
           <CheckCircle2 className={`w-5 h-5 ${isDemo ? "text-yellow-500" : "text-success"}`} />
           <span className="font-medium">{isDemo ? "QuickBooks (Demo)" : "QuickBooks Connected"}</span>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleRefresh}
-          className="gap-2"
-        >
-          <RefreshCw className="w-4 h-4" />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" onClick={handleRefresh} className="gap-2">
+            <RefreshCw className="w-4 h-4" />
+            Refresh
+          </Button>
+          <Button variant="ghost" size="sm" onClick={handleDisconnect} className="gap-2 text-destructive hover:text-destructive">
+            <LogOut className="w-4 h-4" />
+            Disconnect
+          </Button>
+        </div>
       </div>
 
       {invoices.length === 0 ? (

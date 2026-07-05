@@ -7,6 +7,11 @@ export const dynamic = "force-dynamic"
 
 const SESSION_KEY = "default"
 
+export async function DELETE() {
+  clearQuickBooksTokens(SESSION_KEY)
+  return NextResponse.json({ success: true })
+}
+
 export async function GET() {
   try {
     if (!isQuickBooksConfigured()) {
