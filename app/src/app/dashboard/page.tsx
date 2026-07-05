@@ -142,8 +142,8 @@ export default function Dashboard() {
     inv.id.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const tvlFormatted = Number(formatUnits(BigInt(tvl || 0), 18))
-  const yieldFormatted = Number(formatUnits(BigInt(totalYield || 0), 18))
+  const tvlFormatted = parseFloat(tvl || "0")
+  const yieldFormatted = parseFloat(totalYield || "0")
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] bg-grid noise-overlay scan-line pb-8">

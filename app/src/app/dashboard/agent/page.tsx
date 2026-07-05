@@ -17,7 +17,6 @@ import { ArcSendPanel } from "@/components/arc/ArcSendPanel"
 import { ArcBridgePanel } from "@/components/arc/ArcBridgePanel"
 import { ArcSwapPanel } from "@/components/arc/ArcSwapPanel"
 import { ArcUnifiedBalancePanel } from "@/components/arc/ArcUnifiedBalancePanel"
-import { formatUnits } from "viem"
 
 export default function AgentPage() {
   const [autoExecute, setAutoExecute] = useState(true)
@@ -25,7 +24,7 @@ export default function AgentPage() {
   const { activeDepositsCount, totalYield } = useYieldVault()
   const { data: gwBalance, isLoading: gwLoading } = useGatewayBalance(30_000)
 
-  const yieldFormatted = Number(formatUnits(BigInt(totalYield || 0), 18))
+  const yieldFormatted = parseFloat(totalYield || "0")
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] bg-grid noise-overlay scan-line pb-8">
