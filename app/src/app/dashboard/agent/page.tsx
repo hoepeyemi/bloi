@@ -42,6 +42,50 @@ export default function AgentPage() {
     <div className="min-h-screen bg-[#0a0a0a] bg-grid noise-overlay scan-line pb-8">
       <TerminalNav />
 
+      {/* Low Balance Warning — persists until wallet is funded above $7 */}
+      {gwBalance?.lowBalance?.any && (
+        <div className="border-b border-[#ef4444]/40 bg-[#ef4444]/10 px-6 py-3">
+          <div className="max-w-6xl mx-auto flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px]">
+            <div className="flex items-center gap-2 text-[#ef4444] font-semibold">
+              <span className="w-2 h-2 rounded-full bg-[#ef4444] animate-pulse" />
+              AGENT WALLET LOW BALANCE
+            </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-1 text-[#e5e5e5]">
+              {gwBalance.lowBalance.eth && (
+                <span>
+                  ETH: <span className="text-[#ef4444] font-mono">{gwBalance.eth?.balance} ETH</span>
+                  <span className="text-[#666666]"> (≈${gwBalance.eth?.usdValue})</span>
+                  {" · "}
+                  <a
+                    href="https://www.alchemy.com/faucets/base-sepolia"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#10b981] underline"
+                  >
+                    get ETH →
+                  </a>
+                </span>
+              )}
+              {gwBalance.lowBalance.usdc && (
+                <span>
+                  USDC: <span className="text-[#ef4444] font-mono">${gwBalance.wallet?.usdValue}</span>
+                  {" · "}
+                  <a
+                    href="https://faucet.circle.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#10b981] underline"
+                  >
+                    get USDC →
+                  </a>
+                </span>
+              )}
+            </div>
+            <span className="text-[#666666] ml-auto">threshold: &lt;${gwBalance.lowBalance.threshold}</span>
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-6 py-8">
         {/* Header */}
@@ -135,16 +179,25 @@ export default function AgentPage() {
           {gwLoading ? (
             <div className="text-[12px] text-[#666666]">loading gateway balance...</div>
           ) : gwBalance?.configured && gwBalance.gateway ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-[12px]">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-[12px]">
               <div className="rounded border border-[#1f1f1f] bg-[#0a0a0a] p-3">
                 <div className="text-[10px] text-[#666666] uppercase tracking-wider mb-1">Gateway Available</div>
                 <div className="font-mono text-[#10b981] text-[15px]">${gwBalance.gateway.available}</div>
                 <div className="text-[10px] text-[#666666] mt-1">USDC (ready to collect)</div>
               </div>
-              <div className="rounded border border-[#1f1f1f] bg-[#0a0a0a] p-3">
-                <div className="text-[10px] text-[#666666] uppercase tracking-wider mb-1">Wallet Balance</div>
-                <div className="font-mono text-[#e5e5e5] text-[15px]">${gwBalance.wallet?.balance ?? '—'}</div>
-                <div className="text-[10px] text-[#666666] mt-1">USDC (EOA wallet)</div>
+              <div className={`rounded border bg-[#0a0a0a] p-3 ${gwBalance.lowBalance?.usdc ? 'border-[#ef4444]/50' : 'border-[#1f1f1f]'}`}>
+                <div className="text-[10px] text-[#666666] uppercase tracking-wider mb-1">USDC Balance</div>
+                <div className={`font-mono text-[15px] ${gwBalance.lowBalance?.usdc ? 'text-[#ef4444]' : 'text-[#e5e5e5]'}`}>
+                  ${gwBalance.wallet?.balance ?? '—'}
+                </div>
+                <div className="text-[10px] text-[#666666] mt-1">EOA wallet · Base Sepolia</div>
+              </div>
+              <div className={`rounded border bg-[#0a0a0a] p-3 ${gwBalance.lowBalance?.eth ? 'border-[#ef4444]/50' : 'border-[#1f1f1f]'}`}>
+                <div className="text-[10px] text-[#666666] uppercase tracking-wider mb-1">ETH Balance</div>
+                <div className={`font-mono text-[15px] ${gwBalance.lowBalance?.eth ? 'text-[#ef4444]' : 'text-[#e5e5e5]'}`}>
+                  {gwBalance.eth?.balance ?? '—'} ETH
+                </div>
+                <div className="text-[10px] text-[#666666] mt-1">≈${gwBalance.eth?.usdValue ?? '—'} · for gas</div>
               </div>
               <div className="rounded border border-[#1f1f1f] bg-[#0a0a0a] p-3">
                 <div className="text-[10px] text-[#666666] uppercase tracking-wider mb-1">Price per Request</div>

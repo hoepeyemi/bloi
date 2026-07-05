@@ -51,13 +51,14 @@ export async function GET() {
       transport: http(rpcUrl),
     });
 
-    const [walletBalanceRaw, gatewayRes] = await Promise.all([
+    const [walletBalanceRaw, ethBalanceRaw, gatewayRes, priceRes] = await Promise.all([
       publicClient.readContract({
         address: USDC_ADDRESS,
         abi: erc20BalanceOfAbi,
         functionName: 'balanceOf',
         args: [address],
       }),
+      publicClient.getBalance({ address }),
       fetch(`${GATEWAY_API}/balances`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -66,9 +67,26 @@ export async function GET() {
           sources: [{ depositor: address, domain: BASE_SEPOLIA_DOMAIN }],
         }),
       }),
+      fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd', {
+        next: { revalidate: 60 },
+      }).catch(() => null),
     ]);
 
     const walletFormatted = formatUnits(walletBalanceRaw as bigint, 6);
+    const ethFormatted = formatUnits(ethBalanceRaw as bigint, 18);
+
+    // ETH price in USD — fallback to 2000 if CoinGecko is unavailable
+    let ethPriceUsd = 2000;
+    if (priceRes?.ok) {
+      try {
+        const priceData = await priceRes.json() as { ethereum?: { usd?: number } };
+        ethPriceUsd = priceData.ethereum?.usd ?? 2000;
+      } catch { /* use fallback */ }
+    }
+
+    const ethUsdValue = parseFloat(ethFormatted) * ethPriceUsd;
+    const usdcUsdValue = parseFloat(walletFormatted);
+    const LOW_BALANCE_THRESHOLD = 7;
 
     let gateway = { available: '0.000000', pending: '0.000000', raw: '0' };
     if (gatewayRes.ok) {
@@ -92,6 +110,18 @@ export async function GET() {
       wallet: {
         balance: walletFormatted,
         raw: (walletBalanceRaw as bigint).toString(),
+        usdValue: usdcUsdValue.toFixed(2),
+      },
+      eth: {
+        balance: parseFloat(ethFormatted).toFixed(6),
+        priceUsd: ethPriceUsd,
+        usdValue: ethUsdValue.toFixed(2),
+      },
+      lowBalance: {
+        eth: ethUsdValue <= LOW_BALANCE_THRESHOLD,
+        usdc: usdcUsdValue <= LOW_BALANCE_THRESHOLD,
+        any: ethUsdValue <= LOW_BALANCE_THRESHOLD || usdcUsdValue <= LOW_BALANCE_THRESHOLD,
+        threshold: LOW_BALANCE_THRESHOLD,
       },
       network: 'Base Sepolia',
       usdcAddress: USDC_ADDRESS,

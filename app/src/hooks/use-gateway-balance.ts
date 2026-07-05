@@ -6,7 +6,9 @@ interface GatewayBalanceData {
   configured: boolean;
   sellerAddress?: string | null;
   gateway?: { available: string; pending: string };
-  wallet?: { balance: string };
+  wallet?: { balance: string; usdValue?: string };
+  eth?: { balance: string; priceUsd: number; usdValue: string };
+  lowBalance?: { eth: boolean; usdc: boolean; any: boolean; threshold: number };
   network?: string;
   message?: string;
   error?: string;
