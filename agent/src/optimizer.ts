@@ -355,14 +355,15 @@ export function shouldChangeStrategy(
   // Don't change if same strategy
   if (current === recommended) return false;
 
-  // Don't change if confidence is too low
-  if (confidence < minConfidence) return false;
+  // Downgrade (safer strategy): lower confidence bar — protecting capital is conservative by nature
+  if (recommended < current) {
+    return confidence >= minConfidence - 20; // e.g. 50% threshold for downgrades
+  }
 
-  // Always allow moving to safer strategy
-  if (recommended < current) return true;
-
-  // Require higher confidence to move to riskier strategy
-  if (recommended > current && confidence >= minConfidence + 10) return true;
+  // Upgrade (riskier strategy): require full confidence + extra margin
+  if (recommended > current) {
+    return confidence >= minConfidence + 10;
+  }
 
   return false;
 }
