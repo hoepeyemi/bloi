@@ -28,6 +28,7 @@ export interface AgentSendResult {
 export class ArcAgentKit {
   private kit: AppKit;
   private privateKey: string;
+  private adapter: ReturnType<typeof createViemAdapterFromPrivateKey> | null = null;
 
   constructor(privateKey: string) {
     this.kit = new AppKit();
@@ -35,7 +36,10 @@ export class ArcAgentKit {
   }
 
   private getAdapter() {
-    return createViemAdapterFromPrivateKey({ privateKey: this.privateKey });
+    if (!this.adapter) {
+      this.adapter = createViemAdapterFromPrivateKey({ privateKey: this.privateKey });
+    }
+    return this.adapter;
   }
 
   /**

@@ -24,8 +24,9 @@ export class VasmoAgent {
   private lastAnalysisTime: Map<string, number> = new Map();
   private readonly ANALYSIS_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
 
-  // Yield distribution: rate-limit distributions per invoice
+  // Yield distribution: rate-limit and track distributed amounts per invoice
   private yieldDistributionTime: Map<string, number> = new Map();
+  private lastDistributedYield: Map<string, bigint> = new Map();
   private readonly YIELD_DISTRIBUTION_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
   private readonly YIELD_DISTRIBUTION_THRESHOLD_USDC = 0.01; // $0.01 minimum
 
@@ -631,8 +632,16 @@ export class VasmoAgent {
     const lastDist = this.yieldDistributionTime.get(tokenId) ?? 0;
     if (Date.now() - lastDist < this.YIELD_DISTRIBUTION_COOLDOWN_MS) return;
 
-    // accruedYield is stored as 18-decimal bigint in the vault contract
-    const yieldFloat = Number(deposit.accruedYield) / 1e18;
+    // Only send the delta: yield accrued since the last distribution.
+    // accruedYield is cumulative in the contract and never reset by the agent,
+    // so without this delta tracking every cycle would re-send the full total.
+    const alreadyDistributed = this.lastDistributedYield.get(tokenId) ?? 0n;
+    const pendingYield = deposit.accruedYield - alreadyDistributed;
+    if (pendingYield <= 0n) return;
+
+    // Safe float conversion — pendingYield is the delta, which is much smaller
+    // than the cumulative total and well within JS safe-integer range for USDC amounts.
+    const yieldFloat = Number(pendingYield) / 1e18;
     if (yieldFloat < this.YIELD_DISTRIBUTION_THRESHOLD_USDC) return;
 
     const yieldFormatted = yieldFloat.toFixed(6);
@@ -640,12 +649,13 @@ export class VasmoAgent {
     this.broadcastThought({
       type: 'thinking',
       tokenId,
-      message: `💰 Invoice #${tokenId}: $${yieldFormatted} USDC yield accrued → distributing to issuer via Arc`,
+      message: `💰 Invoice #${tokenId}: $${yieldFormatted} USDC new yield → distributing to issuer via Arc`,
       timestamp: Date.now(),
       data: { yieldAmount: yieldFormatted, issuer: issuerAddress },
     });
 
     await this.sendYieldToIssuer(issuerAddress, yieldFormatted);
+    this.lastDistributedYield.set(tokenId, deposit.accruedYield);
     this.yieldDistributionTime.set(tokenId, Date.now());
   }
 
