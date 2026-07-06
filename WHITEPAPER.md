@@ -1,17 +1,17 @@
-﻿# bloi Protocol — Technical Whitepaper
+# bloi Protocol � Technical Whitepaper
 
 > Invoice Yield Optimization via Autonomous AI on Base
 
-**Version:** 1.0 — Lepton Agents Hackathon
+**Version:** 1.0 � Lepton Agents Hackathon
 **GitHub:** https://github.com/hoepeyemi/bloi
 **Live Demo:** https://bloi.vercel.app/
-**Demo Video:** https://www.youtube.com/watch?v=kJkpo2Gmft8
+**Demo Video:** https://vimeo.com/1207549307?share=copy&fl=sv&fe=ci#t=0
 
 ---
 
 ## Abstract
 
-bloi is a permissionless protocol that converts B2B invoice receivables into yield-bearing on-chain positions on Base Sepolia. Invoices are tokenized as ERC-721 NFTs using privacy-preserving cryptographic commitments, deposited into a yield vault integrated with Aave V3, and continuously managed by an autonomous AI agent powered by Anthropic GPT-4o mini. The agent monitors market conditions via Pyth Network oracle feeds, scores invoice risk, and executes strategy changes on-chain through the AgentRouter contract — without user intervention. Invoice details never appear in plaintext on-chain; only keccak256 commitment hashes are stored, enabling selective disclosure through Merkle proofs.
+bloi is a permissionless protocol that converts B2B invoice receivables into yield-bearing on-chain positions on Base Sepolia. Invoices are tokenized as ERC-721 NFTs using privacy-preserving cryptographic commitments, deposited into a yield vault integrated with Aave V3, and continuously managed by an autonomous AI agent powered by Anthropic GPT-4o mini. The agent monitors market conditions via Pyth Network oracle feeds, scores invoice risk, and executes strategy changes on-chain through the AgentRouter contract � without user intervention. Invoice details never appear in plaintext on-chain; only keccak256 commitment hashes are stored, enabling selective disclosure through Merkle proofs.
 
 ---
 
@@ -19,13 +19,13 @@ bloi is a permissionless protocol that converts B2B invoice receivables into yie
 
 ### 1.1 The Invoice Financing Gap
 
-Global B2B outstanding receivables exceed **$3 trillion** at any given time. Businesses routinely extend 30–90 day payment terms to clients, leaving earned revenue completely idle. For a company with $200,000 in outstanding invoices, this represents $10,000–$14,000 in lost DeFi yield annually at 5–7% APY.
+Global B2B outstanding receivables exceed **$3 trillion** at any given time. Businesses routinely extend 30�90 day payment terms to clients, leaving earned revenue completely idle. For a company with $200,000 in outstanding invoices, this represents $10,000�$14,000 in lost DeFi yield annually at 5�7% APY.
 
 Existing solutions fail in different ways:
 
 | Solution | Failure Mode |
 |----------|-------------|
-| Invoice factoring | 2–5% fees, credit checks, exposes client relationships |
+| Invoice factoring | 2�5% fees, credit checks, exposes client relationships |
 | Bank credit lines | Slow, require collateral, unavailable to SMBs/freelancers |
 | Manual DeFi | Requires separate crypto collateral; no connection to invoice lifecycle |
 | Net-30 financing platforms | Web2 solutions; not permissionless, not composable |
@@ -42,27 +42,27 @@ The intersection of DeFi yield infrastructure (Aave V3), real-world asset tokeni
 
 ```
 1. Invoice Created (off-chain: QuickBooks, manual)
-       │
-       ▼
+       �
+       ?
 2. InvoiceNFT.mint(dataCommitment, amountCommitment)
-   → ERC-721 minted; only keccak256 hashes stored on-chain
-       │
-       ▼
+   ? ERC-721 minted; only keccak256 hashes stored on-chain
+       �
+       ?
 3. YieldVault.deposit(tokenId, strategy)
-   → Invoice NFT transferred to vault
-   → USDC equivalent deployed to Aave V3 (or held)
-       │
-       ▼
+   ? Invoice NFT transferred to vault
+   ? USDC equivalent deployed to Aave V3 (or held)
+       �
+       ?
 4. AI Agent Loop (every 30 seconds)
-   → Reads active deposits
-   → Fetches Pyth oracle data
-   → GPT-4o mini generates recommendation
-   → AgentRouter.recordDecision() if confidence ≥ 70%
-       │
-       ▼
+   ? Reads active deposits
+   ? Fetches Pyth oracle data
+   ? GPT-4o mini generates recommendation
+   ? AgentRouter.recordDecision() if confidence = 70%
+       �
+       ?
 5. YieldVault.withdraw(tokenId)
-   → NFT returned to owner
-   → Principal + accrued Aave V3 yield paid out
+   ? NFT returned to owner
+   ? Principal + accrued Aave V3 yield paid out
 ```
 
 ### 2.2 Privacy Architecture
@@ -80,9 +80,9 @@ The `nonce` is known only to the invoice issuer, making the commitments non-reve
 
 | Strategy | Yield Source | Target APY | Risk Profile |
 |----------|-------------|------------|--------------|
-| Hold | None | 0% | Zero risk — principal preserved |
-| Conservative | Aave V3 USDC | ~3.5% | Low — Aave USDC lending pool |
-| Aggressive | Aave V3 high-yield | ~7% | Moderate — higher-yield Aave pool |
+| Hold | None | 0% | Zero risk � principal preserved |
+| Conservative | Aave V3 USDC | ~3.5% | Low � Aave USDC lending pool |
+| Aggressive | Aave V3 high-yield | ~7% | Moderate � higher-yield Aave pool |
 
 The vault enforces a `decisionCooldown` period between strategy changes (configurable by governance) to prevent gas-intensive oscillation.
 
@@ -172,28 +172,28 @@ function getBalance(address account) external view returns (uint256)
 
 ```
 AgentLoop (every 30s)
-    │
-    ├── blockchain.getActiveInvoices()       → tokenIds[]
-    │
-    ├── For each tokenId:
-    │   ├── blockchain.getInvoice(tokenId)   → Invoice data
-    │   ├── pythOracle.getPrice()            → Market data
-    │   ├── analyzer.score(invoice, market)  → { riskScore, paymentProb, daysUntilDue }
-    │   ├── optimizer.shouldChangeStrategy() → { recommended, confidence }
-    │   ├── llm.generateReasoning()          → Human-readable explanation
-    │   └── if confidence ≥ 70%:
-    │       blockchain.recordDecision(tokenId, strategy)
-    │
-    └── websocket.broadcast(events)          → Frontend clients
+    �
+    +-- blockchain.getActiveInvoices()       ? tokenIds[]
+    �
+    +-- For each tokenId:
+    �   +-- blockchain.getInvoice(tokenId)   ? Invoice data
+    �   +-- pythOracle.getPrice()            ? Market data
+    �   +-- analyzer.score(invoice, market)  ? { riskScore, paymentProb, daysUntilDue }
+    �   +-- optimizer.shouldChangeStrategy() ? { recommended, confidence }
+    �   +-- llm.generateReasoning()          ? Human-readable explanation
+    �   +-- if confidence = 70%:
+    �       blockchain.recordDecision(tokenId, strategy)
+    �
+    +-- websocket.broadcast(events)          ? Frontend clients
 ```
 
 ### 4.2 Risk Scoring
 
-The analyzer computes a composite risk score (0–100) per invoice:
+The analyzer computes a composite risk score (0�100) per invoice:
 
 ```typescript
 score = (
-  daysUntilDueScore * 0.4 +    // Urgency: 0 (1 day) → 100 (90+ days)
+  daysUntilDueScore * 0.4 +    // Urgency: 0 (1 day) ? 100 (90+ days)
   paymentProbScore  * 0.4 +    // History: estimated probability of on-time payment
   marketCondScore   * 0.2      // Pyth oracle: volatility and liquidity indicators
 )
@@ -205,16 +205,16 @@ Strategy selection uses asymmetric confidence thresholds:
 
 ```typescript
 if (recommended < current) {
-  // Downgrade (risky → safe): lower threshold, bias toward safety
+  // Downgrade (risky ? safe): lower threshold, bias toward safety
   return confidence >= 50
 }
 if (recommended > current) {
-  // Upgrade (safe → risky): higher threshold, require stronger signal
+  // Upgrade (safe ? risky): higher threshold, require stronger signal
   return confidence >= 80
 }
 ```
 
-This asymmetry means the agent is more willing to reduce risk than to increase it — protecting principal when uncertain.
+This asymmetry means the agent is more willing to reduce risk than to increase it � protecting principal when uncertain.
 
 ### 4.4 OpenAI Integration
 
@@ -237,8 +237,8 @@ The model's response is streamed to frontend clients via WebSocket in real-time.
 
 Two mechanisms prevent transaction failures:
 
-1. **Nonce serialization mutex** — blockchain writes are serialized via a promise-chain mutex, preventing nonce collisions when multiple invoices execute in the same cycle
-2. **Cooldown pre-flight** — the agent reads `lastAnalysis[tokenId] + decisionCooldown` before submitting; if the cooldown has not elapsed, the decision is deferred with a log message instead of reverting on-chain
+1. **Nonce serialization mutex** � blockchain writes are serialized via a promise-chain mutex, preventing nonce collisions when multiple invoices execute in the same cycle
+2. **Cooldown pre-flight** � the agent reads `lastAnalysis[tokenId] + decisionCooldown` before submitting; if the cooldown has not elapsed, the decision is deferred with a log message instead of reverting on-chain
 
 ---
 
@@ -277,7 +277,7 @@ ws.onmessage = (event) => {
 
 OAuth 2.0 flow with file-based token persistence:
 - Tokens stored at `.next/cache/quickbooks-tokens.json` (survives hot-reloads and server restarts)
-- Token refresh happens automatically on each invoice fetch when `expiresAt ≤ now + 60s`
+- Token refresh happens automatically on each invoice fetch when `expiresAt = now + 60s`
 - CSRF protection via httpOnly state cookie validated on callback
 - Demo fallback: if `QUICKBOOKS_CLIENT_ID` is not set, demo invoices are returned without requiring OAuth
 
@@ -321,12 +321,12 @@ Base L2 is uniquely suited for the bloi protocol:
 
 ### Roadmap
 
-1. **Mainnet deployment** — Base Mainnet after security audit
-2. **Multi-agent coordination** — distributed agent network with consensus for high-value decisions
-3. **ZK proof disclosure** — replace Merkle proofs with ZK proofs (Noir circuits) for trustless disclosure
-4. **Secondary market** — order book for trading invoice NFTs before maturity
-5. **Credit scoring oracle** — integrate off-chain credit data via TLS notary (TLSNotary/DECO)
-6. **Database persistence** — PostgreSQL for agent state, token storage, and historical analysis
+1. **Mainnet deployment** � Base Mainnet after security audit
+2. **Multi-agent coordination** � distributed agent network with consensus for high-value decisions
+3. **ZK proof disclosure** � replace Merkle proofs with ZK proofs (Noir circuits) for trustless disclosure
+4. **Secondary market** � order book for trading invoice NFTs before maturity
+5. **Credit scoring oracle** � integrate off-chain credit data via TLS notary (TLSNotary/DECO)
+6. **Database persistence** � PostgreSQL for agent state, token storage, and historical analysis
 
 ---
 
@@ -348,5 +348,5 @@ Base L2 is uniquely suited for the bloi protocol:
 
 ---
 
-*bloi — Turn Invoices into Yield. Automatically.*
+*bloi � Turn Invoices into Yield. Automatically.*
 *Lepton Agents Hackathon*

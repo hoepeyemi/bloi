@@ -1,4 +1,4 @@
-﻿# bloi — Deployment Guide
+# bloi � Deployment Guide
 
 > Lepton Agents Hackathon
 
@@ -46,8 +46,8 @@ npm run verify:base-sepolia
 
 After redeployment, update:
 1. `contracts/deployments/baseSepolia.json`
-2. `app/.env` — all `NEXT_PUBLIC_*_ADDRESS` values
-3. `agent/.env` — all `*_ADDRESS` values
+2. `app/.env` � all `NEXT_PUBLIC_*_ADDRESS` values
+3. `agent/.env` � all `*_ADDRESS` values
 
 ### Local Development Network
 
@@ -79,7 +79,7 @@ AGENT_ROUTER_ADDRESS=0xA8fDda52A8022610e94C49E54EF61D8ae9662BE0
 PYTH_ORACLE_ADDRESS=0x69a23dC9Ba9e5C965beCeF191850E5Cea74954C3
 AAVE_YIELD_ADDRESS=0xCE4E72C577031A96e4EAcA48028eE3d23C64eccE
 
-# Keys (server-side only — never expose to frontend)
+# Keys (server-side only � never expose to frontend)
 AGENT_PRIVATE_KEY=0x...
 OPENAI_API_KEY=sk-...
 ```
@@ -123,9 +123,9 @@ curl https://your-agent-domain/health
 
 | Platform | Command / Notes |
 |----------|----------------|
-| Railway | Connect repo → set env vars → deploy from `Dockerfile.mcp` |
-| Render | New Web Service → Docker → set root to `/` → `Dockerfile.mcp` |
-| Fly.io | `fly launch` → set secrets via `fly secrets set KEY=VALUE` |
+| Railway | Connect repo ? set env vars ? deploy from `Dockerfile.mcp` |
+| Render | New Web Service ? Docker ? set root to `/` ? `Dockerfile.mcp` |
+| Fly.io | `fly launch` ? set secrets via `fly secrets set KEY=VALUE` |
 | VPS | `docker run` as above, expose port 8080, add TLS via nginx/caddy |
 
 The agent exposes a single WebSocket endpoint. In production, use `wss://` (TLS required for browser connections).
@@ -169,7 +169,7 @@ GATEWAY_SELLER_ADDRESS=0x...
 GATEWAY_FACILITATOR_URL=https://gateway-api-testnet.circle.com
 GATEWAY_SELLER_PRIVATE_KEY=0x...
 
-# QuickBooks (optional — demo fallback if not set)
+# QuickBooks (optional � demo fallback if not set)
 QUICKBOOKS_CLIENT_ID=...
 QUICKBOOKS_CLIENT_SECRET=...
 QUICKBOOKS_REDIRECT_URI=https://your-domain/api/quickbooks/callback
@@ -197,7 +197,7 @@ pnpm build
 .next
 
 # Environment variables
-# Add all NEXT_PUBLIC_* vars in Netlify dashboard → Site settings → Environment variables
+# Add all NEXT_PUBLIC_* vars in Netlify dashboard ? Site settings ? Environment variables
 ```
 
 #### Vercel
@@ -213,7 +213,7 @@ vercel deploy --prod
 
 For real QuickBooks connections (not demo):
 
-1. Go to https://developer.intuit.com → My Apps → your app
+1. Go to https://developer.intuit.com ? My Apps ? your app
 2. Under **Keys & credentials**, add your redirect URI:
    - Dev: `http://localhost:3000/api/quickbooks/callback`
    - Prod: `https://your-domain.com/api/quickbooks/callback`
@@ -231,7 +231,7 @@ Without QuickBooks credentials set, the app automatically falls back to demo inv
 - [ ] Agent running with public WebSocket endpoint (`wss://`)
 - [ ] `NEXT_PUBLIC_AGENT_WS_URL` points to public agent URL
 - [ ] Agent successfully calls `AgentRouter.recordDecision()` on Base Sepolia
-- [x] Demo video — https://www.youtube.com/watch?v=kJkpo2Gmft8
+- [x] Demo video � https://vimeo.com/1207549307?share=copy&fl=sv&fe=ci#t=0
 - [ ] `contracts/deployments/baseSepolia.json` up to date
 - [ ] GitHub repository public
 

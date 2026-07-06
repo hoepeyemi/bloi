@@ -1,24 +1,24 @@
-ï»¿# bloi â€” Pitch
+# bloi — Pitch
 
 > Turn Invoices into Yield. Automatically.
 
 **Hackathon:** Lepton Agents Hackathon
 **GitHub:** https://github.com/hoepeyemi/bloi
 **Live Demo:** https://bloi.vercel.app/
-**Demo Video:** https://www.youtube.com/watch?v=kJkpo2Gmft8
+**Demo Video:** https://vimeo.com/1207549307?share=copy&fl=sv&fe=ci#t=0
 
 ---
 
 ## The Problem
 
-$3 trillion in B2B invoices sit unpaid globally at any given time. Businesses routinely wait 30â€“90 days for payment on work already delivered. That capital is completely idle.
+$3 trillion in B2B invoices sit unpaid globally at any given time. Businesses routinely wait 30–90 days for payment on work already delivered. That capital is completely idle.
 
-**A concrete example:** A consulting firm with $200,000 in outstanding receivables could earn $10,000â€“$14,000/year at 5â€“7% APY. Instead, that money earns nothing.
+**A concrete example:** A consulting firm with $200,000 in outstanding receivables could earn $10,000–$14,000/year at 5–7% APY. Instead, that money earns nothing.
 
 Traditional alternatives fail:
-- **Invoice factoring**: advances 80â€“90% cash but charges 2â€“5% fees, requires credit checks, and exposes sensitive client data
+- **Invoice factoring**: advances 80–90% cash but charges 2–5% fees, requires credit checks, and exposes sensitive client data
 - **Bank credit lines**: slow, require collateral, unavailable to many freelancers/SMBs
-- **DeFi lending**: requires posting crypto collateral â€” most businesses don't have it
+- **DeFi lending**: requires posting crypto collateral — most businesses don't have it
 
 ---
 
@@ -28,14 +28,14 @@ Traditional alternatives fail:
 
 ```
 Import Invoice (QuickBooks / Manual)
-  â†’ Mint NFT (invoice data stays private â€” only commitment hash on-chain)
-    â†’ Deposit to Yield Vault
-      â†’ AI Agent Optimizes Strategy 24/7 (Hold / Conservative / Aggressive)
-        â†’ Withdraw Principal + Real DeFi Yield When Client Pays
+  ? Mint NFT (invoice data stays private — only commitment hash on-chain)
+    ? Deposit to Yield Vault
+      ? AI Agent Optimizes Strategy 24/7 (Hold / Conservative / Aggressive)
+        ? Withdraw Principal + Real DeFi Yield When Client Pays
 ```
 
 **Key differentiators:**
-- Not invoice factoring â€” no credit checks, no lockups, no liquidity advances
+- Not invoice factoring — no credit checks, no lockups, no liquidity advances
 - Real yield from Aave V3, not simulated numbers
 - AI agent powered by GPT-4o mini for autonomous optimization
 - Invoice data is never stored in plaintext on-chain
@@ -51,7 +51,7 @@ The autonomous agent runs continuously and:
 2. Fetches real-time market data from Pyth oracle
 3. Scores each invoice: risk profile, days until due, current APY rates
 4. GPT-4o mini generates a strategy recommendation with a confidence score
-5. If confidence â‰¥ 70%, the agent submits the decision to `AgentRouter.recordDecision()` on-chain
+5. If confidence = 70%, the agent submits the decision to `AgentRouter.recordDecision()` on-chain
 6. The decision is executed on-chain and streamed to the frontend via WebSocket in real-time
 
 **Strategy tiers:**
@@ -61,13 +61,13 @@ The autonomous agent runs continuously and:
 | Conservative | ~3.5% | Low (Aave V3 USDC) |
 | Aggressive | ~7% | Moderate (Aave V3 higher-yield) |
 
-The agent automatically downgrades risk as invoice due dates approach and upgrades when market conditions are favorable â€” all without user intervention.
+The agent automatically downgrades risk as invoice due dates approach and upgrades when market conditions are favorable — all without user intervention.
 
 ---
 
 ## Why Base
 
-- **Low gas fees**: Base L2 makes micro-decisions economically viable â€” the agent can execute strategy changes on-chain without prohibitive gas costs
+- **Low gas fees**: Base L2 makes micro-decisions economically viable — the agent can execute strategy changes on-chain without prohibitive gas costs
 - **EVM compatible**: Full compatibility with Aave V3 and Pyth oracle contracts
 - **Growing ecosystem**: Base's DeFi ecosystem provides real yield sources for the protocol
 - **Testnet infrastructure**: Robust Base Sepolia testnet with faucet and block explorer
@@ -83,7 +83,7 @@ The agent automatically downgrades risk as invoice due dates approach and upgrad
 | Frontend | Next.js 15 + React 19 + wagmi v3 |
 | AI Agent | TypeScript + Node.js |
 | LLM | OpenAI GPT-4o mini |
-| Yield | Aave V3 (real DeFi yields, 3â€“7% APY) |
+| Yield | Aave V3 (real DeFi yields, 3–7% APY) |
 | Oracle | Pyth Network |
 | Privacy | keccak256 commitment hashes + Merkle trees |
 | Invoice Import | QuickBooks OAuth 2.0 |
@@ -108,7 +108,7 @@ All 6 contracts deployed and verified on Base Sepolia:
 ## Target Users
 
 **Primary:** Crypto-native freelancers, consultants, and small agencies
-- Issue B2B invoices with 30â€“90 day payment terms
+- Issue B2B invoices with 30–90 day payment terms
 - $20,000+ in outstanding receivables at any time
 - Already have a crypto wallet
 - Comfortable with DeFi but want automation, not manual management
@@ -143,11 +143,11 @@ All 6 contracts deployed and verified on Base Sepolia:
 
 ## Why bloi Wins
 
-1. **Real DeFi yield** â€” not a simulation; actual Aave V3 integration
-2. **On-chain AI decisions** â€” the agent writes to the blockchain, not just a dashboard
-3. **Privacy by design** â€” commitment scheme means no sensitive data on-chain
-4. **QuickBooks bridge** â€” real-world invoice import makes this immediately usable
-5. **Base-native** â€” designed for Base's low-fee, high-throughput environment
+1. **Real DeFi yield** — not a simulation; actual Aave V3 integration
+2. **On-chain AI decisions** — the agent writes to the blockchain, not just a dashboard
+3. **Privacy by design** — commitment scheme means no sensitive data on-chain
+4. **QuickBooks bridge** — real-world invoice import makes this immediately usable
+5. **Base-native** — designed for Base's low-fee, high-throughput environment
 
 ---
 

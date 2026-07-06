@@ -1,8 +1,8 @@
-﻿# bloi — Invoice Yield Protocol
+# bloi � Invoice Yield Protocol
 
 > Turn Invoices into Yield. Automatically.
 
-**bloi** tokenizes B2B invoices as Real-World Assets (RWAs) on Base Sepolia, then deploys an autonomous AI agent powered by GPT-4o mini to continuously optimize yield via Aave V3 — while protecting sensitive invoice data with cryptographic commitments.
+**bloi** tokenizes B2B invoices as Real-World Assets (RWAs) on Base Sepolia, then deploys an autonomous AI agent powered by GPT-4o mini to continuously optimize yield via Aave V3 � while protecting sensitive invoice data with cryptographic commitments.
 
 Built for the **Lepton Agents Hackathon**.
 
@@ -13,7 +13,7 @@ Built for the **Lepton Agents Hackathon**.
 | Resource | URL |
 |----------|-----|
 | Frontend | https://bloi.vercel.app/ |
-| Demo Video | https://www.youtube.com/watch?v=kJkpo2Gmft8 |
+| Demo Video | https://vimeo.com/1207549307?share=copy&fl=sv&fe=ci#t=0 |
 | GitHub | https://github.com/hoepeyemi/bloi |
 | Base Sepolia Explorer (Basescan) | https://sepolia.basescan.org |
 
@@ -21,61 +21,61 @@ Built for the **Lepton Agents Hackathon**.
 
 ## The Problem
 
-B2B businesses wait **30–90 days** for invoice payment. A company with $200,000 in outstanding receivables loses roughly $10,000–$14,000 per year in potential DeFi yield — capital that sits completely idle while payment clears.
+B2B businesses wait **30�90 days** for invoice payment. A company with $200,000 in outstanding receivables loses roughly $10,000�$14,000 per year in potential DeFi yield � capital that sits completely idle while payment clears.
 
-Traditional invoice factoring is expensive (2–5% fees), requires credit checks, and exposes sensitive business data to third parties.
+Traditional invoice factoring is expensive (2�5% fees), requires credit checks, and exposes sensitive business data to third parties.
 
 ## The Solution
 
 bloi turns the waiting period into a productive asset:
 
 ```
-Connect Wallet → Import Invoice (QuickBooks / Manual)
-→ Mint NFT → Deposit to Yield Vault
-→ AI Agent Optimizes Strategy 24/7
-→ Withdraw Principal + Yield When Client Pays
+Connect Wallet ? Import Invoice (QuickBooks / Manual)
+? Mint NFT ? Deposit to Yield Vault
+? AI Agent Optimizes Strategy 24/7
+? Withdraw Principal + Yield When Client Pays
 ```
 
-- **Real yield** from Aave V3 (3–7% APY) — not simulated
-- **Privacy-first** — invoice data stored as keccak256 commitment hashes, never in plaintext on-chain
-- **Autonomous AI** — GPT-4o mini monitors and rebalances positions automatically
-- **No lockups** — withdraw anytime
-- **No KYC** — permissionless; your wallet is your identity
-- **QuickBooks integration** — import real invoices directly with OAuth 2.0
+- **Real yield** from Aave V3 (3�7% APY) � not simulated
+- **Privacy-first** � invoice data stored as keccak256 commitment hashes, never in plaintext on-chain
+- **Autonomous AI** � GPT-4o mini monitors and rebalances positions automatically
+- **No lockups** � withdraw anytime
+- **No KYC** � permissionless; your wallet is your identity
+- **QuickBooks integration** � import real invoices directly with OAuth 2.0
 
 ---
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    bloi Protocol                                │
-│                                                                 │
-│  ┌──────────────┐   WebSocket    ┌────────────────────────┐    │
-│  │  Next.js 15  │◄──────────────►│  AI Agent (Node.js)    │    │
-│  │  Frontend    │                │  GPT-4o mini       │    │
-│  └──────┬───────┘                └──────────┬─────────────┘    │
-│         │ wagmi/viem                        │ ethers.js         │
-│         ▼                                   ▼                   │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │              Base Sepolia (Chain ID: 84532)              │  │
-│  │                                                          │  │
-│  │  InvoiceNFT → YieldVault → AgentRouter                  │  │
-│  │       ↕              ↕                                   │  │
-│  │  PrivacyRegistry  AaveV3YieldSource ← PythOracle        │  │
-│  └──────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------+
+�                    bloi Protocol                                �
+�                                                                 �
+�  +--------------+   WebSocket    +------------------------+    �
+�  �  Next.js 15  �?--------------?�  AI Agent (Node.js)    �    �
+�  �  Frontend    �                �  GPT-4o mini       �    �
+�  +--------------+                +------------------------+    �
+�         � wagmi/viem                        � ethers.js         �
+�         ?                                   ?                   �
+�  +----------------------------------------------------------+  �
+�  �              Base Sepolia (Chain ID: 84532)              �  �
+�  �                                                          �  �
+�  �  InvoiceNFT ? YieldVault ? AgentRouter                  �  �
+�  �       ?              ?                                   �  �
+�  �  PrivacyRegistry  AaveV3YieldSource ? PythOracle        �  �
+�  +----------------------------------------------------------+  �
++-----------------------------------------------------------------+
 ```
 
 | Component | Description |
 |-----------|-------------|
-| `app/` | Next.js 15 + React 19 frontend — minting, portfolio, agent monitoring, issuer controls |
-| `agent/` | Autonomous TypeScript service — analyzes invoices, executes strategy changes on-chain via AgentRouter |
-| `contracts/` | Hardhat workspace — 6 Solidity contracts deployed and verified on Base Sepolia |
+| `app/` | Next.js 15 + React 19 frontend � minting, portfolio, agent monitoring, issuer controls |
+| `agent/` | Autonomous TypeScript service � analyzes invoices, executes strategy changes on-chain via AgentRouter |
+| `contracts/` | Hardhat workspace � 6 Solidity contracts deployed and verified on Base Sepolia |
 
 ---
 
-## Deployed Contracts — Base Sepolia (Chain ID: 84532)
+## Deployed Contracts � Base Sepolia (Chain ID: 84532)
 
 | Contract | Address | Status |
 |----------|---------|--------|
@@ -100,7 +100,7 @@ Deployment manifest: [`contracts/deployments/baseSepolia.json`](contracts/deploy
 | Wallet / Web3 | wagmi v3 + viem v2 |
 | AI Agent | TypeScript + Node.js + WebSocket (ws) |
 | LLM | OpenAI GPT-4o mini |
-| Yield Source | Aave V3 (real DeFi, 3–7% APY) |
+| Yield Source | Aave V3 (real DeFi, 3�7% APY) |
 | Oracle | Pyth Network (real-time price feeds) |
 | Privacy | keccak256 commitment hashes + Merkle trees |
 | Invoice Import | QuickBooks OAuth 2.0 |
@@ -174,7 +174,7 @@ cd contracts && npm run build && npm test
 - [x] Frontend publicly accessible (Vercel)
 - [x] Deployed addresses documented (above + deployment manifest)
 - [x] Architecture documented
-- [x] Demo video — https://www.youtube.com/watch?v=kJkpo2Gmft8
+- [x] Demo video � https://vimeo.com/1207549307?share=copy&fl=sv&fe=ci#t=0
 
 ---
 
