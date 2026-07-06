@@ -1,6 +1,6 @@
 ﻿# bloi — 2-Minute Demo Script
 
-> Mantle Global Hackathon 2025
+> Lepton Agents Hackathon
 
 ---
 
@@ -61,7 +61,7 @@
 
 **Show: Agent page — live reasoning stream**
 
-> "This is where it gets interesting. The AI agent is watching my positions 24/7. It just read my new deposit, pulled Pyth oracle data for risk scoring, and Claude Haiku is generating its analysis."
+> "This is where it gets interesting. The AI agent is watching my positions 24/7. It just read my new deposit, pulled Pyth oracle data for risk scoring, and GPT-4o mini is generating its analysis."
 
 **Point to confidence score and strategy recommendation**
 
@@ -77,7 +77,7 @@
 
 **Show: Explorer link or portfolio with updated strategy**
 
-> "bloi. Real yield on real invoices. Autonomous AI. Privacy-preserving. Built natively for Mantle. Thank you."
+> "bloi. Real yield on real invoices. Autonomous AI. Privacy-preserving. Built natively for Base. Thank you."
 
 ---
 

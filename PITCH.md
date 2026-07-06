@@ -2,7 +2,7 @@
 
 > Turn Invoices into Yield. Automatically.
 
-**Hackathon:** Mantle Global Hackathon 2025
+**Hackathon:** Lepton Agents Hackathon
 **GitHub:** https://github.com/hoepeyemi/bloi
 **Live Demo:** https://bloi.vercel.app/
 
@@ -64,11 +64,11 @@ The agent automatically downgrades risk as invoice due dates approach and upgrad
 
 ---
 
-## Why Mantle
+## Why Base
 
 - **Low gas fees**: Base L2 makes micro-decisions economically viable — the agent can execute strategy changes on-chain without prohibitive gas costs
 - **EVM compatible**: Full compatibility with Aave V3 and Pyth oracle contracts
-- **Growing ecosystem**: Mantle's DeFi ecosystem provides real yield sources for the protocol
+- **Growing ecosystem**: Base's DeFi ecosystem provides real yield sources for the protocol
 - **Testnet infrastructure**: Robust Base Sepolia testnet with faucet and block explorer
 
 ---
@@ -95,12 +95,12 @@ All 6 contracts deployed and verified on Base Sepolia:
 
 | Contract | Address |
 |----------|---------|
-| InvoiceNFT | `0x018ee8F363421016177DbC8F9492fe2a1C720e29` |
-| YieldVault | `0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6` |
-| AgentRouter | `0x4430248F3b2304F946f08c43A06C3451657FD658` |
-| PrivacyRegistry | `0x2DA4B52913A928263a405dE3b42a5768a4dCa3b0` |
-| PythOracle | `0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3` |
-| AaveV3YieldSource | `0x5a179d261fD322ecaED06FA9Aa2973980D74322c` |
+| InvoiceNFT | `0x1045c1fFf861D9f6F6D00F30eCf6075832d998Ec` |
+| YieldVault | `0x271a64E069E683627C23712156EDC804ac6a2CD7` |
+| AgentRouter | `0xA8fDda52A8022610e94C49E54EF61D8ae9662BE0` |
+| PrivacyRegistry | `0xb0e21917954138e84681C3792b9B31D892Bb1670` |
+| PythOracle | `0x69a23dC9Ba9e5C965beCeF191850E5Cea74954C3` |
+| AaveV3YieldSource | `0xCE4E72C577031A96e4EAcA48028eE3d23C64eccE` |
 
 ---
 
@@ -146,8 +146,8 @@ All 6 contracts deployed and verified on Base Sepolia:
 2. **On-chain AI decisions** — the agent writes to the blockchain, not just a dashboard
 3. **Privacy by design** — commitment scheme means no sensitive data on-chain
 4. **QuickBooks bridge** — real-world invoice import makes this immediately usable
-5. **Mantle-native** — designed for Mantle's low-fee, high-throughput environment
+5. **Base-native** — designed for Base's low-fee, high-throughput environment
 
 ---
 
-*Previously awarded $3K at Cronos x402 PayTech Hackathon. Rebuilt and extended for Mantle Global Hackathon 2025.*
+*Built for the Lepton Agents Hackathon on Base Sepolia.*

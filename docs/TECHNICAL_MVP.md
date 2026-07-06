@@ -33,12 +33,12 @@ Small businesses and freelancers face a $3T+ global cash flow problem: invoices 
 
 ### 1.2 Solution
 
-vasmo tokenizes invoices as Real-World Assets (RWAs) on Base Sepolia, then deploys an autonomous AI agent to:
+bloi tokenizes invoices as Real-World Assets (RWAs) on Base Sepolia, then deploys an autonomous AI agent to:
 
 - **Optimize yield** on tokenized invoices (3-8% APY)
 - **Protect privacy** using cryptographic commitments
 - **Automate management** with continuous AI-driven strategy optimization
-- **Reduce costs** by leveraging Mantle's low gas fees
+- **Reduce costs** by leveraging Base's low gas fees
 
 ### 1.3 Key Innovation
 
@@ -769,11 +769,10 @@ cd /Users/yonko/invoiceagent/contracts
 
 # 2. Set environment
 export PRIVATE_KEY=your_private_key_here
-export MANTLE_SEPOLIA_RPC=https://84532.rpc.thirdweb.com/
+export BASE_SEPOLIA_RPC=https://sepolia.base.org
 
 # 3. Deploy
-forge script script/Deploy.s.sol \
-  --rpc-url $MANTLE_SEPOLIA_RPC \
+npx hardhat run scripts/deploy.js --network baseSepolia \
   --broadcast \
   --verify
 
@@ -795,9 +794,9 @@ cd /Users/yonko/invoiceagent/agent
 cp .env.example .env
 
 # 3. Edit .env with deployed addresses
-BASE_SEPOLIA_RPC_URL=https://84532.rpc.thirdweb.com/
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
 AGENT_PRIVATE_KEY=your_agent_wallet_private_key
-OPENAI_API_KEY=your_anthropic_key  # Optional
+OPENAI_API_KEY=your_openai_key
 WS_PORT=8080
 
 INVOICE_NFT_ADDRESS=0x...
@@ -809,7 +808,7 @@ MOCK_ORACLE_ADDRESS=0x...
 cast send $AGENT_ROUTER_ADDRESS \
   "authorizeAgent(address)" \
   $AGENT_WALLET_ADDRESS \
-  --rpc-url $MANTLE_SEPOLIA_RPC \
+  --rpc-url $BASE_SEPOLIA_RPC \
   --private-key $DEPLOYER_PRIVATE_KEY
 ```
 
@@ -1036,10 +1035,10 @@ pnpm build
 | recordDecision() | ~150,000 | ~0.000003 ETH |
 | changeStrategy() | ~100,000 | ~0.000002 ETH |
 
-*Mantle's low gas costs enable frequent agent execution*
+*Base's low gas costs enable frequent agent execution*
 
 ---
 
 **Document Version**: 1.0.0
 **Last Updated**: December 2024
-**Authors**: Built with AI assistance for Mantle Global Hackathon 2025
+**Authors**: Built with AI assistance for Lepton Agents Hackathon

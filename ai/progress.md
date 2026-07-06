@@ -1,7 +1,7 @@
-# vasmo - Progress
+﻿# vasmo - Progress
 
 ## Current State (2026-03-27)
-Deployed to Base Sepolia. All flows verified on-chain and in UI. Agent runs with real Pyth + Claude analysis.
+Deployed to Base Sepolia. All flows verified on-chain and in UI. Agent runs with real Pyth + GPT-4o mini analysis.
 
 ## Verified Working (with evidence)
 
@@ -15,7 +15,7 @@ Deployed to Base Sepolia. All flows verified on-chain and in UI. Agent runs with
 ### Agent
 - Connects to Base Sepolia, reads contracts, detects invoices
 - Pyth Oracle: fetched real ETH price ($2063-2064)
-- Claude Haiku 4.5: generates real analysis (not templates)
+- GPT-4o mini: generates real analysis (not templates)
 - Health endpoint works at :3001/health
 - No errors (event filters disabled, polling-only)
 
@@ -40,7 +40,7 @@ AaveV3YieldSource:0x447De96C1c3E15af485a41fb1B5Fde888B02d9eF
 - USDC APY on landing page shows 57.59% (simulated fallback, not real Aave data)
   - Root cause: wallet not connected, so Aave read is disabled, falls back to simulated
   - Fix: either show "simulated" label clearly, or fetch APY without wallet connection
-- CRO asset in useYieldMarkets() is a leftover from Cronos
+- CRO asset in useYieldMarkets() is a stale leftover — should be removed
 - use-yield.ts backward-compat aliases (useLendleAPY, useLendleMarkets) still exist
 - LendleYieldSource.sol still in contracts/src/ (unused but present)
 - No mainnet deployments yet

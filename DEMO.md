@@ -1,6 +1,6 @@
 ﻿# bloi — Demo Guide
 
-> Mantle Global Hackathon 2025
+> Lepton Agents Hackathon
 
 This guide walks through the full bloi demo on Base Sepolia.
 
@@ -89,7 +89,7 @@ Click any invoice row to open the **Invoice Detail** page, which shows the full 
 **What to observe:**
 - The agent reads all active deposits every 30 seconds
 - It evaluates risk using Pyth oracle data and the invoice due date
-- Claude generates a human-readable explanation for each decision
+- GPT-4o mini generates a human-readable explanation for each decision
 - Decisions ≥ 70% confidence are submitted to `AgentRouter` on-chain
 - You can verify the transaction on Base Sepolia Explorer (Basescan)
 

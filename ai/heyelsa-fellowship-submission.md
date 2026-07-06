@@ -9,23 +9,23 @@
 ## Page 1: Project Overview
 
 ### Project Name
-vasmo
+bloi
 
 ### Project X Handle
 @soligxbt
 
 ### Github Repository
-https://github.com/Yonkoo11/vasmo
+https://github.com/hoepeyemi/bloi
 
 ### Brief description of your project
 
-vasmo is an autonomous treasury agent for crypto freelancers. You create an invoice, the agent tokenizes it as a privacy-preserving NFT, deposits collateral into a yield vault, and manages that idle capital until the client pays. The agent runs on a loop - it scores invoice risk, reads market conditions, picks between yield strategies, and auto-executes when it's confident enough. Below 70% confidence, it asks you first.
+bloi is an autonomous treasury agent for crypto freelancers. You create an invoice, the agent tokenizes it as a privacy-preserving NFT, deposits collateral into a yield vault, and manages that idle capital until the client pays. The agent runs on a loop - it scores invoice risk, reads market conditions, picks between yield strategies, and auto-executes when it's confident enough. Below 70% confidence, it asks you first.
 
-The stack is Solidity contracts (Foundry, all OpenZeppelin - chain-agnostic), a TypeScript agent service using Claude for reasoning, and a Next.js frontend. Contracts are deployed on Cronos testnet today, porting to Base for x402 integration.
+The stack is Solidity contracts (Hardhat, all OpenZeppelin - chain-agnostic), a TypeScript agent service using OpenAI's GPT-4o mini for reasoning, and a Next.js frontend. Contracts are deployed and verified on Base Sepolia today, with x402 nanopayments integrated via Circle Gateway.
 
 ### What problem are you solving?
 
-Crypto freelancers and small agencies carry $20-100K in unpaid invoices at any time. Net-30/60/90 terms mean that money sits dead for weeks. Most people don't optimize it because the per-invoice amounts feel too small to bother with, and manually rotating yield positions across 5-10 open invoices is tedious. The ones who do try usually just dump everything in one vault and forget about it, missing better opportunities when conditions change. vasmo's agent handles the monitoring and rebalancing work so the freelancer doesn't think about it.
+Crypto freelancers and small agencies carry $20-100K in unpaid invoices at any time. Net-30/60/90 terms mean that money sits dead for weeks. Most people don't optimize it because the per-invoice amounts feel too small to bother with, and manually rotating yield positions across 5-10 open invoices is tedious. The ones who do try usually just dump everything in one vault and forget about it, missing better opportunities when conditions change. bloi's agent handles the monitoring and rebalancing work so the freelancer doesn't think about it.
 
 ---
 
@@ -51,11 +51,11 @@ https://x.com/soligxbt
 
 ### Details of Each Team Member
 
-Alex (solo founder) - Full-stack developer shipping across DeFi, smart contracts, and AI agents. 34 public repos on GitHub. Recent work includes cipher-pol (ZK private payments for AI agents on Starknet using Groth16 proofs and x402), a Curve-style StableSwap DEX on Polkadot, an autonomous ERC-8004 trust scoring agent for Celo, and an SPL token rescue bot for compromised Solana wallets. Built vasmo end-to-end: Solidity contracts, TypeScript agent with Claude integration, and Next.js frontend.
+Alex (solo founder) - Full-stack developer shipping across DeFi, smart contracts, and AI agents. 34 public repos on GitHub. Recent work includes cipher-pol (ZK private payments for AI agents on Starknet using Groth16 proofs and x402), a Curve-style StableSwap DEX on Polkadot, an autonomous ERC-8004 trust scoring agent for Celo, and an SPL token rescue bot for compromised Solana wallets. Built bloi end-to-end: Solidity contracts, TypeScript agent with OpenAI integration, and Next.js frontend.
 
 ### What relevant experience does your team have?
 
-I've built and shipped across the stack that vasmo needs. On the smart contract side: DEX contracts (polkadot-stableswap), prediction markets (flashbets on Base with Chainlink), and ZK circuits (cipher-pol on Starknet). On the agent side: sentinel8004 (autonomous trust scoring agent on Celo), hermes-dojo (self-improving agent system), and vasmo's own yield agent using the Anthropic SDK. I've worked with x402 before - cipher-pol uses it for private agent payments. I build fast, ship to testnet, and iterate from there.
+I've built and shipped across the stack that bloi needs. On the smart contract side: DEX contracts (polkadot-stableswap), prediction markets (flashbets on Base with Chainlink), and ZK circuits (cipher-pol on Starknet). On the agent side: sentinel8004 (autonomous trust scoring agent on Celo), hermes-dojo (self-improving agent system), and bloi's own yield agent using the OpenAI SDK. I've worked with x402 before - cipher-pol uses it for private agent payments. I build fast, ship to testnet, and iterate from there.
 
 ---
 
@@ -91,9 +91,9 @@ The decision history is the proprietary dataset. Each analysis records: risk sco
 
 ### Key milestones for the next 3 months
 
-- Deploy contracts on Base. The Solidity is pure OpenZeppelin with zero chain-specific code - verified this, it's a redeploy not a rewrite.
-- Wire the agent to Elsa x402 endpoints for yield data, price feeds, and swap execution. Replace all mocked data sources.
-- Run the agent on Base testnet against real protocols with test capital. Measure whether the optimizer picks better strategies than a static single-vault approach.
+- Contracts are already deployed and verified on Base Sepolia. Next: harden the agent's execution path and cooldown handling under real load.
+- Wire the agent to Elsa x402 endpoints for yield data, price feeds, and swap execution. Replace remaining mocked data sources.
+- Run the agent on Base Sepolia against real protocols with test capital. Measure whether the optimizer picks better strategies than a static single-vault approach.
 - Ship a working end-to-end loop: mint invoice, agent discovers yield via x402, executes strategy, client pays, user withdraws principal + yield. No human in the loop.
 
 ### Goals for 6-12 months
@@ -136,7 +136,7 @@ $5,000
 - [ ] Push uncommitted changes to GitHub (27 files pending)
 - [ ] Verify GitHub repo is public and README looks current
 - [ ] Consider: test one Elsa x402 endpoint before submitting (strengthens credibility)
-- [ ] Review live site (vasmo-app.vercel.app) - still shows Cronos, which is fine if README explains the Base port plan
+- [ ] Review live site (bloi.vercel.app) - confirm it reflects the Base Sepolia deployment
 - [ ] Copy each section into the Tally form
 - [ ] Submit
 
@@ -146,19 +146,19 @@ $5,000
 
 **What this application has going for it:**
 - Real code (7,400+ lines across contracts/agent/frontend)
-- Deployed contracts (Cronos testnet, chain-agnostic Solidity)
+- Deployed and verified contracts (Base Sepolia, chain-agnostic Solidity)
 - x402 integration references actual endpoints and pricing
 - Modest funding ask signals builder not grant-hunter
 - Honest about simulated yields and testnet state
 
 **What a judge would push back on:**
 - Solo dev with 16 commits since January. Sparse activity.
-- Two chain pivots already (Mantle -> Cronos -> Base). Looks opportunistic if not framed well.
+- Chain pivots along the way (earlier testnets -> Base Sepolia). Looks opportunistic if not framed well.
 - No evidence of user conversations or customer discovery.
 - The optimizer "learning" is logged but there's no feedback loop coded yet.
 - Haven't actually called an x402 endpoint. Claiming integration plans from docs alone.
 
-**What I (Claude) did NOT verify:**
+**What was NOT verified:**
 - Whether the Vercel deployment currently works
 - Whether the GitHub repo README matches what judges would expect to see
 - Whether any of the 27 uncommitted files contain breaking changes

@@ -1,56 +1,61 @@
-# vasmo Protocol - AI Memory
+# bloi - AI Memory
 
-## What This Project Is
-
-Autonomous AI Treasury Agent for B2B Commerce on Cronos. Freelancers mint invoices as NFTs, deposit to yield vaults, AI agent monitors and optimizes yield strategies, clients pay via x402 on-chain settlement.
+## Project Overview
+bloi is an AI treasury agent for B2B commerce that tokenizes invoices as NFTs on Base Sepolia and deposits them into yield-generating DeFi strategies.
 
 ## Key Decisions
+- **UI Style:** Terminal/Bloomberg aesthetic with monospace fonts, green accents (#10b981), dark theme (#0a0a0a)
+- **Video Tool:** Remotion for programmatic video generation
+- **Voiceover:** ElevenLabs with Brian voice
+- **Tracks Selected:** x402 Agentic Finance/Payment Track + Base Sepolia Integrations
+- **Privacy:** Invoice data stored as keccak256 hashes, not plaintext on-chain
+- **70% confidence threshold:** Agent auto-executes above this, asks user below
 
-- **Light theme UI** - Breaks from dark crypto aesthetic, Stripe/Linear inspired
-- **Simulated yields for hackathon** - Real DeFi integration exists in architecture but uses hardcoded APY (3.5%/7%) for demo
-- **Privacy via hash commitments** - Invoice data stored as keccak256 hashes, not plaintext
-- **70% confidence threshold** - Agent auto-executes above this, human approves below
-- **Cronos Testnet deployment** - Originally built for Mantle, pivoted to Cronos for x402 hackathon
+## Tech Stack
+- Next.js 15 + React 19 (frontend)
+- wagmi v3 + viem v2 for Web3
+- TypeScript agent service with OpenAI GPT-4o mini
+- Hardhat for contract compilation and deployment
+- Network: Base Sepolia (Chain ID 84532)
+- Tailwind CSS 4
+- pnpm monorepo (workspaces: app, agent, contracts)
 
-## Architecture
-
-```
-vasmo/
-├── app/          # Next.js 15 + React 19 frontend
-├── agent/        # TypeScript AI agent service (port 8080)
-├── contracts/    # Solidity smart contracts (Foundry)
-└── ai/           # Project memory (this folder)
-```
-
-### Smart Contracts (Cronos Testnet):
-- InvoiceNFT - ERC721 with privacy commitments
-- YieldVault - Deposit/withdraw + yield accrual
-- AgentRouter - AI decision recording + execution
-- PrivacyRegistry - Hash-based privacy layer
-- MockOracle - Price feeds (simulated)
-
-### Tech Stack:
-- Frontend: Next.js 15, React 19, wagmi, viem, Tailwind
-- Agent: TypeScript, ethers.js, Anthropic SDK, WebSocket
-- Contracts: Solidity 0.8.24, Foundry
-- Network: Cronos Testnet (Chain ID 338)
+## Deployed Contracts (Base Sepolia)
+- InvoiceNFT: 0x1045c1fFf861D9f6F6D00F30eCf6075832d998Ec
+- YieldVault: 0x271a64E069E683627C23712156EDC804ac6a2CD7
+- AgentRouter: 0xA8fDda52A8022610e94C49E54EF61D8ae9662BE0
+- PrivacyRegistry: 0xb0e21917954138e84681C3792b9B31D892Bb1670
+- PythOracle: 0x69a23dC9Ba9e5C965beCeF191850E5Cea74954C3
+- AaveV3YieldSource: 0xCE4E72C577031A96e4EAcA48028eE3d23C64eccE
 
 ## Learned Context
-
+- Remotion `staticFile()` serves from `/public` folder
+- ElevenLabs voiceover needs `...` for pauses to extend duration
+- Puppeteer doesn't support `:has-text()` selector (use evaluateHandle instead)
+- pnpm works better than npm for this project (npm had null property errors)
+- Lower CRF value = higher quality video (use --crf 18 for HQ)
 - wagmi config is in `/app/src/lib/wagmi.ts`
 - Contract addresses centralized in `/app/src/lib/contracts/addresses.ts`
 - Agent runs as standalone Node.js service, communicates via WebSocket
-- Vercel deployment at vasmo-app.vercel.app
-- Has Remotion setup for potential video generation
+- QuickBooks tokens stored in httpOnly cookies (Vercel serverless compatible)
+- QB SQL does not support `>` operator — filter client-side in JS
 
 ## Gotchas & Warnings
-
-- PITCH.md and DEMO.md still reference Mantle (old hackathon) - need updating
-- Live Vercel deployment shows Mantle, not Cronos - needs redeploy
-- Yields are SIMULATED - don't promise real DeFi returns
+- YouTube takes time to process HD - may show low quality initially
+- Yields are SIMULATED for demo — architecture wired to real Aave V3
 - Contracts NOT audited - testnet only
+- KEYBOARD_SHORTCUTS must be exported from use-keyboard-shortcuts.ts
+- Use `sleep()` helper instead of `page.waitForTimeout()` in newer Puppeteer
+
+## File Locations
+- Remotion compositions: `src/remotion/`
+- Demo screenshots: `public/demo/`
+- Voiceover audio: `public/audio/voiceover.mp3`
+- Rendered videos: `out/`
+- Capture script: `capture-interactive-demo.js`
+- Deployment manifest: `contracts/deployments/baseSepolia.json`
 
 ## Reflections
-
-- The pivot from Mantle to Cronos went smoothly at code level, but documentation/deployment lags behind
-- Having centralized contract addresses made the chain switch easy
+- Remotion is great for programmatic videos but render times are slow (~3 min for 90s video)
+- Screenshot-based demo works but lacks animation smoothness of real screen recording
+- For future: consider using actual screen recording + voiceover in post for more authentic demos

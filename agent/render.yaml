@@ -11,17 +11,19 @@ services:
         value: production
       - key: WS_PORT
         value: 8080
-      - key: MANTLE_RPC_URL
-        value: https://rpc.sepolia.mantle.xyz
+      - key: BASE_SEPOLIA_RPC_URL
+        value: https://sepolia.base.org
       - key: INVOICE_NFT_ADDRESS
-        value: 0x018ee8F363421016177DbC8F9492fe2a1C720e29
+        value: 0x1045c1fFf861D9f6F6D00F30eCf6075832d998Ec
       - key: YIELD_VAULT_ADDRESS
-        value: 0x7f51D3B234E4c20959A1f6e91D3B852EE16c65A6
+        value: 0x271a64E069E683627C23712156EDC804ac6a2CD7
       - key: AGENT_ROUTER_ADDRESS
-        value: 0x4430248F3b2304F946f08c43A06C3451657FD658
+        value: 0xA8fDda52A8022610e94C49E54EF61D8ae9662BE0
       - key: PYTH_ORACLE_ADDRESS
-        value: 0x7CfdF0580C87d0c379c4a5cDbC46A036E8AF71E3
+        value: 0x69a23dC9Ba9e5C965beCeF191850E5Cea74954C3
+      - key: AAVE_YIELD_ADDRESS
+        value: 0xCE4E72C577031A96e4EAcA48028eE3d23C64eccE
       - key: AGENT_PRIVATE_KEY
         sync: false  # Will be set via Render dashboard (sensitive)
-      - key: ANTHROPIC_API_KEY
+      - key: OPENAI_API_KEY
         sync: false  # Will be set via Render dashboard (sensitive)

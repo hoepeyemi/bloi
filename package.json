@@ -1,7 +1,7 @@
 {
   "name": "bloi",
   "version": "1.0.0",
-  "description": "Turn Invoices into Yield. Automatically. Built for Mantle Global Hackathon 2025.",
+  "description": "Turn Invoices into Yield. Automatically. Built for Lepton Agents Hackathon on Base Sepolia.",
   "private": true,
   "workspaces": [
     "app",
@@ -24,8 +24,8 @@
     "lint": "pnpm --filter bloi-app lint && npm --prefix contracts run build",
     "deploy:local": "npm --prefix contracts run deploy:local",
     "deploy:factory": "npm --prefix contracts run deploy:factory",
-    "deploy:mantle-sepolia": "npm --prefix contracts run deploy:mantle-sepolia",
-    "verify:mantle-sepolia": "npm --prefix contracts run verify:mantle-sepolia"
+    "deploy:base-sepolia": "npm --prefix contracts run deploy:base-sepolia",
+    "verify:base-sepolia": "npm --prefix contracts run verify:base-sepolia"
   },
   "devDependencies": {
     "puppeteer": "^24.34.0"

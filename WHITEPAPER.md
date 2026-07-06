@@ -1,8 +1,8 @@
 ﻿# bloi Protocol — Technical Whitepaper
 
-> Invoice Yield Optimization via Autonomous AI on Mantle
+> Invoice Yield Optimization via Autonomous AI on Base
 
-**Version:** 1.0 — Mantle Global Hackathon 2025
+**Version:** 1.0 — Lepton Agents Hackathon
 **GitHub:** https://github.com/hoepeyemi/bloi
 **Live Demo:** https://bloi.vercel.app/
 
@@ -10,7 +10,7 @@
 
 ## Abstract
 
-bloi is a permissionless protocol that converts B2B invoice receivables into yield-bearing on-chain positions on Base Sepolia. Invoices are tokenized as ERC-721 NFTs using privacy-preserving cryptographic commitments, deposited into a yield vault integrated with Aave V3, and continuously managed by an autonomous AI agent powered by Anthropic Claude Haiku 4.5. The agent monitors market conditions via Pyth Network oracle feeds, scores invoice risk, and executes strategy changes on-chain through the AgentRouter contract — without user intervention. Invoice details never appear in plaintext on-chain; only keccak256 commitment hashes are stored, enabling selective disclosure through Merkle proofs.
+bloi is a permissionless protocol that converts B2B invoice receivables into yield-bearing on-chain positions on Base Sepolia. Invoices are tokenized as ERC-721 NFTs using privacy-preserving cryptographic commitments, deposited into a yield vault integrated with Aave V3, and continuously managed by an autonomous AI agent powered by Anthropic GPT-4o mini. The agent monitors market conditions via Pyth Network oracle feeds, scores invoice risk, and executes strategy changes on-chain through the AgentRouter contract — without user intervention. Invoice details never appear in plaintext on-chain; only keccak256 commitment hashes are stored, enabling selective disclosure through Merkle proofs.
 
 ---
 
@@ -55,7 +55,7 @@ The intersection of DeFi yield infrastructure (Aave V3), real-world asset tokeni
 4. AI Agent Loop (every 30 seconds)
    → Reads active deposits
    → Fetches Pyth oracle data
-   → Claude Haiku 4.5 generates recommendation
+   → GPT-4o mini generates recommendation
    → AgentRouter.recordDecision() if confidence ≥ 70%
        │
        ▼
@@ -215,9 +215,9 @@ if (recommended > current) {
 
 This asymmetry means the agent is more willing to reduce risk than to increase it — protecting principal when uncertain.
 
-### 4.4 Claude Integration
+### 4.4 OpenAI Integration
 
-Each analysis cycle sends a structured prompt to Claude Haiku 4.5:
+Each analysis cycle sends a structured prompt to GPT-4o mini:
 
 ```
 Invoice #<tokenId>
@@ -230,7 +230,7 @@ Confidence: <pct>%
 Explain this recommendation in 2-3 sentences for a non-technical user.
 ```
 
-Claude's response is streamed to frontend clients via WebSocket in real-time.
+The model's response is streamed to frontend clients via WebSocket in real-time.
 
 ### 4.5 Transaction Safety
 
@@ -295,7 +295,7 @@ OAuth 2.0 flow with file-based token persistence:
 
 ---
 
-## 7. Why Mantle
+## 7. Why Base
 
 Base L2 is uniquely suited for the bloi protocol:
 
@@ -348,4 +348,4 @@ Base L2 is uniquely suited for the bloi protocol:
 ---
 
 *bloi — Turn Invoices into Yield. Automatically.*
-*Mantle Global Hackathon 2025*
+*Lepton Agents Hackathon*
