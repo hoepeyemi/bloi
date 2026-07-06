@@ -5,6 +5,7 @@
 **Hackathon:** Lepton Agents Hackathon
 **GitHub:** https://github.com/hoepeyemi/bloi
 **Live Demo:** https://bloi.vercel.app/
+**Demo Video:** https://www.youtube.com/watch?v=kJkpo2Gmft8
 
 ---
 

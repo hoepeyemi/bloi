@@ -13,6 +13,7 @@ Built for the **Lepton Agents Hackathon**.
 | Resource | URL |
 |----------|-----|
 | Frontend | https://bloi.vercel.app/ |
+| Demo Video | https://www.youtube.com/watch?v=kJkpo2Gmft8 |
 | GitHub | https://github.com/hoepeyemi/bloi |
 | Base Sepolia Explorer (Basescan) | https://sepolia.basescan.org |
 
@@ -173,7 +174,7 @@ cd contracts && npm run build && npm test
 - [x] Frontend publicly accessible (Vercel)
 - [x] Deployed addresses documented (above + deployment manifest)
 - [x] Architecture documented
-- [ ] Demo video (2+ minutes, core use case walkthrough)
+- [x] Demo video — https://www.youtube.com/watch?v=kJkpo2Gmft8
 
 ---
 

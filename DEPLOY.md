@@ -231,7 +231,7 @@ Without QuickBooks credentials set, the app automatically falls back to demo inv
 - [ ] Agent running with public WebSocket endpoint (`wss://`)
 - [ ] `NEXT_PUBLIC_AGENT_WS_URL` points to public agent URL
 - [ ] Agent successfully calls `AgentRouter.recordDecision()` on Base Sepolia
-- [ ] Demo video recorded (2+ minutes, walks through core flow)
+- [x] Demo video — https://www.youtube.com/watch?v=kJkpo2Gmft8
 - [ ] `contracts/deployments/baseSepolia.json` up to date
 - [ ] GitHub repository public
 

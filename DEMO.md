@@ -12,6 +12,7 @@ This guide walks through the full bloi demo on Base Sepolia.
 - Connected to **Base Sepolia** (Chain ID: 84532)
 - ETH test tokens for gas — get them at https://www.alchemy.com/faucets/base-sepolia
 - Live frontend: https://bloi.vercel.app/ (or `localhost:3000` for local)
+- Demo video: https://www.youtube.com/watch?v=kJkpo2Gmft8
 - Agent running locally or at your public WebSocket endpoint
 
 ---
